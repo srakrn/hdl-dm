@@ -11,5 +11,25 @@
     "food_pairing": 0.3,
     "balance": 0.2
   },
-  "expected_llm_judges": 3
+  "expected_llm_judges": 3,
+  "review_import": {
+    "csv_url": "https://docs.google.com/spreadsheets/d/1XTwDBI1GEohPCYllu2yhoVVMMrGEJqHng0A0JRkHGrs/export?format=csv",
+    "source": "human",
+    "review_id_column": "(ระบบกรอกอัตโนมัติ ห้ามแก้ช่องนี้) โมเดลไหน สูตรอะไร",
+    "response_id_column": "Timestamp",
+    "score_divisor": 2,
+    "columns": {
+      "overall": "ให้คะแนนได้เลย! (0 คือกินไม่ได้เลย 5 คือเฉยๆ 10 คืออร่อยมากๆๆๆ)",
+      "notes": "ความคิดเห็นเพิ่มเติม (อย่ากรอกข้อมูลส่วนตัว)"
+    }
+  },
+  "rating_contracts": {
+    "human": {
+      "metrics": [
+        "overall"
+      ],
+      "minimum": 0,
+      "maximum": 5
+    }
+  }
 }

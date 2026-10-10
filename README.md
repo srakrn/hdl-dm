@@ -299,16 +299,49 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory web
 
 แล้วเปิด `http://127.0.0.1:8765` ต้องเปิดผ่าน HTTP เพื่อโหลด JSON ห้ามเปิด `index.html` แบบ `file://`
 
-### GitHub Pages
+### GitHub Actions และ Pages
 
-มี workflow [`pages.yml`](.github/workflows/pages.yml) พร้อม deploy **เฉพาะ `web/`** ไป GitHub Pages เมื่อกด Run workflow ด้วยตัวเอง การ push จะไม่ publish เว็บอัตโนมัติ
+มีสอง Actions:
 
-1. Commit และ push ไฟล์โปรเจกต์ที่ต้องการขึ้น repository โดย `.env`, `.local/` และ `results/` ถูก ignore ไว้แล้ว
-2. ใน GitHub repository ไป **Settings → Pages → Build and deployment → Source → GitHub Actions**
-3. ไป **Actions → Deploy review site to GitHub Pages → Run workflow** เลือก branch `main`
-4. เปิด URL จาก deployment ที่สำเร็จ สำหรับ repository นี้ URL ปกติคือ `https://srakrn.github.io/haidilao-decisions-model-benchmark/`
+| Action | เริ่มเมื่อ | ทำอะไร |
+|---|---|---|
+| **Regenerate Recipes** | กด Run workflow บน `main` | เรียก OpenRouter สร้างสูตร practical ทุกโมเดล/สามโปรไฟล์ ส่งออกข้อมูลเว็บ แล้ว commit และ push เฉพาะ `web/data/` |
+| **Refresh Site** | ทุก push เข้า `main`, หลัง Regenerate Recipes สำเร็จ หรือกด Run workflow | ดึง CSV รีวิวล่าสุด คำนวณคะแนน และ build เว็บเป็น artifact `review-site` โดยไม่เรียกโมเดล |
 
-เว็บใช้ path แบบ relative จึงใช้กับ repository subpath ได้ Workflow ไม่เรียก OpenRouter และไม่ refresh benchmark อัตโนมัติ อ้างอิง [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+ตั้ง repository secret **`OPENROUTER_API_KEY`** ที่ **Settings → Secrets and variables → Actions** ก่อนกด Regenerate Recipes ค่าเริ่มต้นคือหนึ่งรอบต่อโมเดล/โปรไฟล์และสามงานพร้อมกัน ปรับ `repeats` ได้ 1–5 และ `workers` ได้ 1–8 การสร้างสูตรใช้เครดิตจริง ไม่รันอัตโนมัติตอน push
+
+Regenerate Recipes ยอมรับรันที่ครบทุกงานและมีสูตรสำเร็จอย่างน้อยหนึ่งสูตร แม้บางโมเดลจะ error; แสดง warning และเก็บผลดิบเป็น artifact `benchmark-results` เจ็ดวัน รันที่ไม่ครบหรือไม่มีสูตรสำเร็จจะไม่แทนสูตรเดิม ไม่ commit `.env`, `.local/` หรือ `results/` และไม่ force push หาก `main` เปลี่ยนระหว่างรัน push จะ fail เพื่อไม่เขียนทับงานใหม่
+
+Refresh Site ใช้สูตรสาธารณะที่ commit ไว้ จึงทำงานใน fresh checkout ได้โดยไม่ต้องมี `results/` และเก็บเว็บที่ build แล้ว 14 วัน การ push โดย `GITHUB_TOKEN` ไม่ทำให้เกิด push workflow อีกรอบ จึงใช้ `workflow_run` ต่อจาก Regenerate Recipes ตาม [GitHub workflow triggers](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow)
+
+ค่าเริ่มต้น **build อัตโนมัติ แต่ publish เอง**:
+
+1. ตั้ง **Settings → Pages → Build and deployment → Source → GitHub Actions**
+2. ไป **Actions → Refresh Site → Run workflow** เลือก `main` และติ๊ก `publish`
+3. เปิด URL จาก deployment ที่สำเร็จ ปกติคือ `https://srakrn.github.io/hdl-dm/`
+
+หากต้องการ publish ทุกครั้งที่ Refresh Site ทำงาน ตั้ง repository variable **`PAGES_AUTO_DEPLOY`** เป็น `true` เว็บใช้ relative paths รองรับ repository subpath และ deploy เฉพาะ `web/`
+
+### ดึงรีวิวและ build เว็บ
+
+```bash
+python3 scripts/build_site.py
+```
+
+คำสั่งนี้อัปเดตข้อมูลฟอร์มจาก config และดาวน์โหลด CSV ของ Google Sheet ที่ให้มาใน `review_import.csv_url` ของ [`config/review.json`](config/review.json) โดยไม่ต้อง login ซึ่งตรวจแล้วว่าอ่านได้ หากเปลี่ยนแหล่งข้อมูล ใช้ environment variable / repository secret **`REVIEW_CSV_URL`** แทน URL ใน config; URL ต้องเป็น HTTPS และเปิดอ่าน CSV ได้จาก runner โดยไม่มี Google session ไม่ใช้ URL `viewform` เป็นแหล่งคำตอบ
+
+ฟอร์มปัจจุบันมีคะแนนรวมช่องเดียว **0–10** จึงหารสองเป็น **0–5 ดาว** (`0` คือกินไม่ได้, `2.5` คือเฉย ๆ, `5` คืออร่อยมาก) ไม่สร้างคะแนนความเข้ากันกับอาหาร/สมดุลรสที่ฟอร์มไม่ได้ถาม รหัสชุดสูตรและสูตรอ่านจาก JSON ในช่องที่ฟอร์มกรอกอัตโนมัติ ไม่มีรหัสผู้ชิม จึงนับจำนวน **รีวิว** ไม่อ้างว่าเป็นจำนวนคนที่ไม่ซ้ำ รหัสคำตอบภายในมาจาก hash ของลำดับแถว timestamp และรหัสสูตร (สองรีวิวที่เวลาเดียวกันยังนับแยกกัน)
+
+ชื่อคอลัมน์จริงของ Sheet ถูก map ใน `review_import.columns`, `review_id_column` และ `response_id_column` ตั้งไว้แล้ว หากแก้คำถามในฟอร์มให้แก้ mapping นี้ด้วย รีวิวชุดสูตรเก่าจะถูกข้าม ส่วนรหัสสูตรผิดของชุดปัจจุบัน คะแนนเกินช่วง และรหัสผู้ประเมินซ้ำใน CSV มาตรฐานจะทำให้ build fail เพื่อไม่เผยแพร่คะแนนผิด เมื่อดึง source ใดใหม่จะคำนวณ source นั้นจากข้อมูลทั้งหมดแทนของเดิม; source ที่ไม่ได้ส่งเข้ามาจะคงคะแนนเดิมไว้ การเปลี่ยน weights ต้องมี raw ratings ครบทุก source ที่มีคะแนน
+
+ดึงรีวิวไม่สำเร็จจะหยุด build และไม่ deploy คะแนนเก่าเป็นข้อมูลใหม่ ไม่บันทึกหรือ upload CSV คำตอบส่วนบุคคลลง artifact เว็บ ส่งออกเฉพาะคะแนนรวมและจำนวนรีวิว ส่วน LLM baseline ยังไม่เปิดใช้
+
+ทดสอบด้วย CSV ในเครื่องหรือเพิ่ม baseline ที่เตรียมไว้แล้ว:
+
+```bash
+python3 scripts/build_site.py --reviews-csv .local/form-responses.csv
+python3 scripts/build_site.py --ratings .local/llm-ratings.csv
+```
 
 ### Refresh ข้อมูลเว็บ
 
@@ -348,7 +381,7 @@ dataset_id,recipe_id,source,judge_id,overall,food_pairing,balance,notes
 - `dataset_id`, `recipe_id`: ใช้ค่าจาก template ห้ามสลับสูตรเฉลี่ยกับสูตรของรอบใดรอบหนึ่ง
 - `source`: `llm` หรือ `human`
 - `judge_id`: รหัสผู้ประเมิน เช่น `judge-a` / `judge-b` / `judge-c` สำหรับ LLM; ใช้รหัสคนชิมโดยไม่ใส่ชื่อหรืออีเมล
-- `overall`, `food_pairing`, `balance`: คะแนน 1–5 ครบทั้งสามช่อง; แถวที่คะแนนทั้งสามช่องว่างถือว่ายังไม่มีคะแนน ไม่ถือเป็นศูนย์ หากเริ่มกรอกต้องกรอกครบทั้งสามช่อง
+- `overall`, `food_pairing`, `balance`: คะแนน LLM 1–5 ครบทั้งสามช่อง; คะแนน human ใช้ `overall` 0–5 ตามฟอร์มปัจจุบัน (หารสองจาก 0–10 ก่อน) แถวที่คะแนนทั้งสามช่องว่างถือว่ายังไม่มีคะแนน ไม่ถือเป็นศูนย์ หากเริ่มกรอกต้องกรอกครบทั้งสามช่อง
 
 คำนวณจากไฟล์ที่กรอกแล้วโดยไม่เรียกบริการภายนอก:
 
@@ -362,8 +395,8 @@ python3 scripts/calculate_scores.py --ratings .local/llm-ratings.csv .local/huma
 python3 scripts/refresh_site.py --ratings .local/llm-ratings.csv .local/human-ratings.csv
 ```
 
-สูตรคะแนนเริ่มต้น: `overall × 0.5 + food_pairing × 0.3 + balance × 0.2` แล้วเฉลี่ยคะแนนผู้ประเมินภายใน source เดียวกัน **ไม่รวม baseline LLM กับคะแนนคนชิม** ปรับ weights และจำนวน LLM judges ที่คาดหวังได้ใน [`config/review.json`](config/review.json) baseline จะระบุว่ายังไม่ครบหากมีผู้ประเมินน้อยกว่า 3 ตัว แถวซ้ำ `(recipe_id, source, judge_id)`, คะแนนผิดช่วง หรือ dataset เก่าจะถูกปฏิเสธ ไฟล์คะแนนเว็บมีเพียงค่าเฉลี่ยและจำนวนผู้ประเมิน ไม่เผย `judge_id` หรือ notes
+สูตรคะแนน LLM เริ่มต้น: `overall × 0.5 + food_pairing × 0.3 + balance × 0.2` แล้วเฉลี่ยคะแนนผู้ประเมินภายใน source เดียวกัน; รีวิวคนชิมปัจจุบันใช้ `overall` ช่องเดียวตาม `rating_contracts.human` **ไม่รวม baseline LLM กับคะแนนคนชิม** ปรับ weights และจำนวน LLM judges ที่คาดหวังได้ใน [`config/review.json`](config/review.json) baseline จะระบุว่ายังไม่ครบหากมีผู้ประเมินน้อยกว่า 3 ตัว แถวซ้ำ `(recipe_id, source, judge_id)`, คะแนนผิดช่วง หรือ dataset เก่าจะถูกปฏิเสธ ไฟล์คะแนนเว็บมีเพียงค่าเฉลี่ยและจำนวนผู้ประเมิน ไม่เผย `judge_id` หรือ notes
 
 Google Forms ที่ผู้ใช้ให้มาเชื่อมแล้วผ่าน `form_fields.review_id = entry.1302023336` ใน `config/review.json` ปุ่ม “ให้คะแนนสูตรนี้” แทนค่า prefill ด้วยสตริง JSON เช่น `{"dataset_id":"…","recipe_id":"176e96f9c165-thai_spicy-average"}` โดย `recipe_id` ระบุ alias โมเดล + สูตร + รอบที่เลือก และ `dataset_id` ระบุชุดข้อมูล ปุ่มเปลี่ยนค่าตามสูตร/รอบที่แสดงเสมอ ชื่อจริงไม่อยู่ในค่าที่ส่ง เพื่อรักษา blind review
 
-เมื่อนำคำตอบกลับมาคำนวณคะแนน ให้ adapter parse JSON ในช่องนี้เพื่อได้ `dataset_id` และ `recipe_id` แล้ว map alias ผ่าน `web/data/reveal.json` เมื่อต้องการชื่อโมเดลจริง ปรับหัวคอลัมน์คะแนนเป็น contract ข้างต้นก่อนเรียก `calculate_scores.py` ยังไม่ได้ส่งคำตอบไปยังฟอร์มหรือดึงคำตอบอัตโนมัติ หากเปลี่ยนฟอร์ม ใส่ `form_url` และ entry ใน config แล้ว refresh; ยังรองรับ `form_fields.dataset_id` / `form_fields.recipe_id` สำหรับฟอร์มที่แยกสองช่อง
+เมื่อนำคำตอบกลับมาคำนวณคะแนน ให้ adapter parse JSON ในช่องนี้เพื่อได้ `dataset_id` และ `recipe_id` แล้ว map alias ผ่าน `web/data/reveal.json` เมื่อต้องการชื่อโมเดลจริง ปรับหัวคอลัมน์คะแนนเป็น contract ข้างต้นก่อนเรียก `calculate_scores.py` ยังไม่ได้ส่งคำตอบไปยังฟอร์ม ส่วนการดึงคำตอบอัตโนมัติทำผ่าน `build_site.py` และ Refresh Site แล้ว หากเปลี่ยนฟอร์ม ใส่ `form_url` และ entry ใน config แล้ว refresh; ยังรองรับ `form_fields.dataset_id` / `form_fields.recipe_id` สำหรับฟอร์มที่แยกสองช่อง

@@ -39,10 +39,18 @@ def calculate_scores(dataset, rating_paths, config):
                 if key in seen:
                     raise ValueError("Duplicate recipe/source/judge rating")
                 seen.add(key)
-                values = {metric: float(row[metric]) for metric in METRICS}
-                if any(not math.isfinite(v) or not 1 <= v <= 5 for v in values.values()):
-                    raise ValueError("All rating values must be finite numbers in [1, 5]")
-                weighted = sum(values[m] * weights[m] for m in METRICS) / sum(weights.values())
+                contract = config.get("rating_contracts", {}).get(source, {})
+                metrics = contract.get("metrics", list(METRICS))
+                low, high = contract.get("minimum", 1), contract.get("maximum", 5)
+                if (not metrics or len(set(metrics)) != len(metrics) or not set(metrics).issubset(METRICS)
+                        or type(low) not in (int, float) or type(high) not in (int, float)
+                        or not math.isfinite(low) or not math.isfinite(high) or not 0 <= low < high <= 5
+                        or sum(weights[m] for m in metrics) <= 0):
+                    raise ValueError("Invalid rating contract")
+                values = {metric: float(row[metric]) for metric in metrics}
+                if any(not math.isfinite(v) or not low <= v <= high for v in values.values()):
+                    raise ValueError("Rating values are outside the configured score range")
+                weighted = sum(values[m] * weights[m] for m in metrics) / sum(weights[m] for m in metrics)
                 grouped.setdefault(recipe_id, {}).setdefault(source, []).append((judge, values, weighted))
                 if source == "llm" and len(grouped[recipe_id][source]) > expected:
                     raise ValueError("More LLM judges than expected; update expected_llm_judges in config")
@@ -53,7 +61,7 @@ def calculate_scores(dataset, rating_paths, config):
             output[recipe_id][source] = {
                 "stars": statistics.mean(entry[2] for entry in entries),
                 "count": len(entries),
-                "metrics": {metric: statistics.mean(e[1][metric] for e in entries) for metric in METRICS},
+                "metrics": {metric: statistics.mean(e[1][metric] for e in entries) for metric in entries[0][1]},
                 "expected_judges": expected if source == "llm" else None,
                 "complete": len(entries) == expected if source == "llm" else True,
             }

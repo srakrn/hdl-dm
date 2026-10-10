@@ -1,0 +1,64 @@
+name: Regenerate Recipes
+on:
+  workflow_dispatch:
+    inputs:
+      repeats:
+        description: Rounds per model and profile (1–5; uses OpenRouter credits)
+        type: number
+        default: 1
+        required: true
+      workers:
+        description: Concurrent recipes (1–8)
+        type: number
+        default: 3
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: regenerate-recipes
+  cancel-in-progress: false
+jobs:
+  regenerate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check API key
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          if [ -z "$OPENROUTER_API_KEY" ]; then
+            echo '::error::Set the OPENROUTER_API_KEY repository secret first.'
+            exit 1
+          fi
+      - name: Test
+        run: python -m unittest discover -s tests -v
+      - name: Generate recipes and export public data
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          REPEATS: ${{ inputs.repeats }}
+          WORKERS: ${{ inputs.workers }}
+        run: python scripts/regenerate_recipes.py --out results/ci --repeats "$REPEATS" --workers "$WORKERS"
+      - name: Save benchmark diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: results/ci/
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Commit generated public recipes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add web/data/recipes.json web/data/reveal.json web/data/ratings-template.csv web/data/scores.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Regenerate decision model recipes'
+            git push origin HEAD:main
+          fi

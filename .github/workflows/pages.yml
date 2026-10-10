@@ -1,14 +1,57 @@
-name: Deploy review site to GitHub Pages
+name: Refresh Site
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the refreshed site to GitHub Pages
+        type: boolean
+        default: false
+  workflow_run:
+    workflows: [Regenerate Recipes]
+    types: [completed]
+    branches: [main]
 permissions:
   contents: read
 concurrency:
-  group: pages
+  group: refresh-site
   cancel-in-progress: false
 jobs:
+  build:
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_repository.full_name == github.repository))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test
+        run: python -m unittest discover -s tests -v
+      - name: Fetch reviews and rebuild scores and site data
+        env:
+          REVIEW_CSV_URL: ${{ secrets.REVIEW_CSV_URL }}
+        run: python scripts/build_site.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: review-site
+          path: web/
+          include-hidden-files: true
+          retention-days: 14
+      - uses: actions/upload-pages-artifact@v3
+        if: inputs.publish == true || vars.PAGES_AUTO_DEPLOY == 'true'
+        with:
+          path: web
   deploy:
-    if: github.ref == 'refs/heads/main'
+    needs: build
+    if: inputs.publish == true || vars.PAGES_AUTO_DEPLOY == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -17,11 +60,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: web
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

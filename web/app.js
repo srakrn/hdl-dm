@@ -61,7 +61,7 @@ function showScore(source, prefix, recipeId) {
     return;
   }
   $(`${prefix}-stars`).textContent = `★ ${format(score.stars)} / 5`;
-  $(`${prefix}-note`).textContent = source === "llm" ? `ผู้ประเมิน ${score.count}/${score.expected_judges} ตัว${score.complete ? "" : " · ยังไม่ครบ"}` : `จากคนชิม ${score.count} คน`;
+  $(`${prefix}-note`).textContent = source === "llm" ? `ผู้ประเมิน ${score.count}/${score.expected_judges} ตัว${score.complete ? "" : " · ยังไม่ครบ"}` : `จากรีวิว ${score.count} รายการ`;
 }
 function renderForm(recipeId) {
   const review = state.data.review;
