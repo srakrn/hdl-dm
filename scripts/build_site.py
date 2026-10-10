@@ -8,6 +8,7 @@ import hashlib
 import math
 import json
 import os
+import re
 from pathlib import Path
 import tempfile
 from urllib.error import URLError
@@ -149,6 +150,13 @@ def main():
         dataset['review'] = {'form_url': config.get('form_url'), 'form_fields': config.get('form_fields', {})}
         write_json(args.data_dir / 'recipes.json', dataset)
         write_json(old_path, scores)
+        index_path = args.data_dir.parent / 'index.html'
+        if index_path.exists():
+            html = index_path.read_text(encoding='utf-8')
+            for asset in ('app.js', 'styles.css'):
+                version = hashlib.sha256((index_path.parent / asset).read_bytes()).hexdigest()[:12]
+                html = re.sub(r'\./' + re.escape(asset) + r'(?:\?v=[^"]*)?', f'./{asset}?v={version}', html)
+            index_path.write_text(html, encoding='utf-8')
     except (OSError, ValueError, KeyError, TypeError) as exc:
         parser.error(str(exc))
     print(f"Built site data: {len(scores['recipes'])} scored recipes; skipped {skipped} retired-dataset reviews")
