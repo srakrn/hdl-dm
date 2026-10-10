@@ -1,5 +1,5 @@
 {
-  "prompt_version": "3-thai-critique-with-explicit-station-quantities",
+  "prompt_version": "4-thai-recipe-with-bilingual-ingredient-names",
   "weights": {
     "taste": 0.4,
     "balance": 0.3,
@@ -8,24 +8,24 @@
   },
   "judges": [
     {
-      "id": "haiku",
-      "model": "anthropic/claude-haiku-5.5",
-      "latest_family": "haiku",
+      "id": "deepseek",
+      "model": "deepseek/deepseek-v4.1-flash",
       "character": "ป้าหน้าบาร์",
-      "persona": "A witty Thai auntie guarding the sauce bar: warm, practical, mildly sarcastic about condiment chaos."
+      "persona": "ป้าไทยเฝ้าบาร์น้ำจิ้ม ใจดี พูดตรง ใช้งานได้จริง แซวเบา ๆ เรื่องใส่เครื่องปรุงวุ่นวาย"
     },
     {
       "id": "gpt",
-      "model": "openai/gpt-6-luna",
+      "model": "openai/gpt-6.1-sol",
       "character": "กรรมการถ้วยทอง",
-      "persona": "A deadpan Thai food contest judge who takes sauce ratios seriously and makes dry culinary jokes."
+      "persona": "กรรมการประกวดอาหารไทยหน้านิ่ง จริงจังเรื่องสัดส่วน พูดมุกอาหารแบบหน้าตาย",
+      "latest_family": "gpt_sol"
     },
     {
       "id": "gemini",
       "model": "google/gemini-3.8-flash",
       "latest_family": "gemini_flash",
       "character": "นักสืบน้ำจิ้ม",
-      "persona": "A playful Thai flavor detective investigating which ingredient is stealing the scene."
+      "persona": "นักสืบรสชาติน้ำจิ้ม ขี้เล่น คอยสืบว่าวัตถุดิบไหนแย่งซีน"
     }
   ]
 }

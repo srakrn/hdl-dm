@@ -31,7 +31,7 @@ class JudgeTests(unittest.TestCase):
         self.catalog = read_json(ROOT / 'config/ingredients.json')
         self.config = read_json(ROOT / 'config/judges.json')
 
-    def test_inputs_are_blind_english_and_preserve_station_doses(self):
+    def test_inputs_are_blind_thai_bilingual_and_preserve_station_doses(self):
         recipe_id, recipe = next(recipe_inputs(self.data, self.catalog))
         raw = json.dumps(recipe, ensure_ascii=False)
         self.assertNotIn(recipe_id, raw)
@@ -45,6 +45,13 @@ class JudgeTests(unittest.TestCase):
                 self.assertIsNone(ingredient['approximate_volume_ml'])
             else:
                 self.assertEqual(ingredient['approximate_volume_ml'], ingredient['amount'] * 25)
+        by_id = {i['id']: i for i in self.catalog}
+        for ingredient in recipe['allowed_ingredients']:
+            item = by_id[ingredient['id']]
+            self.assertEqual(ingredient['name'], f"{item['thai_name']} ({item['name']})")
+            self.assertRegex(ingredient['flavor'], r'[ก-๙]')
+        self.assertRegex(recipe['cooking_context'], r'[ก-๙]')
+        self.assertTrue(all('ช้อนใหญ่' in i['measurement_explanation'] or 'เขย่า' in i['measurement_explanation'] for i in recipe['ingredients']))
         payload = build_payload(self.config['judges'][0], recipe)
         self.assertEqual(payload['response_format']['type'], 'json_schema')
         self.assertIn('ภาษาไทย', payload['messages'][0]['content'])
@@ -66,16 +73,19 @@ class JudgeTests(unittest.TestCase):
 
     def test_latest_families_exclude_batch_lite_and_preview(self):
         catalog = [
-            {'id': 'anthropic/claude-haiku-4.5', 'name': 'Haiku 4.5', 'created': 1},
-            {'id': 'anthropic/claude-haiku-5.5', 'name': 'Haiku 5.5', 'created': 2},
-            {'id': 'anthropic/claude-haiku-5.5:batch', 'name': 'Batch', 'created': 3},
+            {'id': 'openai/gpt-6-sol', 'name': 'Sol 6', 'created': 1},
+            {'id': 'openai/gpt-6.1-sol', 'name': 'Sol 6.1', 'created': 2},
+            {'id': 'openai/gpt-6.1-sol-pro', 'name': 'Pro', 'created': 3},
+            {'id': 'openai/gpt-6.1-sol:batch', 'name': 'Batch', 'created': 4},
+            {'id': 'openai/gpt-6.1-sol-decisions', 'name': 'Decisions', 'created': 4},
             {'id': 'google/gemini-3.8-flash', 'name': 'Flash', 'created': 2},
             {'id': 'google/gemini-4-flash-lite', 'name': 'Lite', 'created': 4},
             {'id': 'google/gemini-4-flash-preview', 'name': 'Preview', 'created': 4},
-            {'id': self.config['judges'][1]['model'], 'name': 'GPT', 'created': 2},
+            {'id': self.config['judges'][0]['model'], 'name': 'DeepSeek', 'created': 2},
         ]
         resolved = resolve_judges(self.config, catalog)
-        self.assertEqual(resolved[0]['model'], 'anthropic/claude-haiku-5.5')
+        self.assertEqual(resolved[0]['model'], 'deepseek/deepseek-v4.1-flash')
+        self.assertEqual(resolved[1]['model'], 'openai/gpt-6.1-sol')
         self.assertEqual(resolved[2]['model'], 'google/gemini-3.8-flash')
 
     def public(self, count=3):
