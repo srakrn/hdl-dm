@@ -31,6 +31,15 @@ class PracticalTests(unittest.TestCase):
         self.assertFalse(set(selected) & set(self.profile["excluded"]))
         self.assertNotIn("lime_juice", selected)
 
+    def test_selection_threshold_includes_boundary_and_rejects_lower(self):
+        config = {**self.config, "selection_threshold": .7}
+        noul = {name: 0 for name in b.INGREDIENTS}
+        noul.update(lime_juice=.7, fish_sauce=.699999, sugar=.71)
+        selected = shortlist(noul, self.profile, config)
+        self.assertIn("lime_juice", selected)
+        self.assertIn("sugar", selected)
+        self.assertNotIn("fish_sauce", selected)
+
     def test_ladle_tongs_squeeze_and_uncalibrated_shaker(self):
         choices = dose_options("lime_juice", self.config)
         self.assertIn("ladle_eighths_1", choices)

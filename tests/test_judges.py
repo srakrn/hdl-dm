@@ -97,7 +97,7 @@ class JudgeTests(unittest.TestCase):
     def test_four_axis_average_and_partial_coverage(self):
         public = self.public()
         scores = next(iter(aggregate_judgments(self.data, public, self.config).values()))
-        self.assertAlmostEqual(scores['stars'], 3.0)
+        self.assertAlmostEqual(scores['stars'], 3.3)
         self.assertEqual(scores['count'], 3)
         self.assertTrue(scores['complete'])
         self.assertEqual(set(scores['metrics']), set(AXES))
@@ -106,6 +106,17 @@ class JudgeTests(unittest.TestCase):
         self.assertEqual(partial['count'], 2)
         stale = {**public, 'dataset_id': 'old'}
         self.assertEqual(aggregate_judgments(self.data, stale, self.config), {})
+
+    def test_zero_scores_survive_validation_and_aggregation(self):
+        zero = review({axis: 0 for axis in AXES})
+        self.assertEqual(parse_review(response(zero)), zero)
+        public = self.public()
+        for rows in public['recipes'].values():
+            for row in rows:
+                row.update(zero)
+        score = next(iter(aggregate_judgments(self.data, public, self.config).values()))
+        self.assertEqual(score['stars'], 0)
+        self.assertTrue(score['complete'])
 
     def test_duplicate_judge_wrong_model_or_changed_rubric_rejected(self):
         for kind in ('duplicate', 'model', 'rubric'):

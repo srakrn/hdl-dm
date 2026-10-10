@@ -9,7 +9,7 @@
     1,
     2
   ],
-  "selection_threshold": 0.5,
+  "selection_threshold": 0.7,
   "dispensers": {
     "fish_sauce": "squeeze",
     "fermented_bean_curd": "squeeze",

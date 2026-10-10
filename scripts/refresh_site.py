@@ -134,7 +134,7 @@ def main():
         write_json(args.out / "reveal.json", reveal)
         write_json(args.out / "scores.json", scores)
         with (args.out / "ratings-template.csv").open("w", encoding="utf-8-sig", newline="") as f:
-            writer = csv.writer(f)
+            writer = csv.writer(f, lineterminator="\n")
             writer.writerow(["dataset_id", "recipe_id", "source", "judge_id", "overall", "food_pairing", "balance", "notes"])
             for model in public["models"]:
                 for recipe in model["recipes"]:
