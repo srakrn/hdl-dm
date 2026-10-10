@@ -34,7 +34,10 @@ function updateURL() {
 function renderModels() {
   $("model-select").replaceChildren(...state.data.models.filter(model => model.recipes.length).map(model => {
     const realName = modelName(model);
-    const option = node("option", "", realName ? `${model.nickname} — ${realName}` : model.nickname);
+    const scores = state.scores?.dataset_id === state.data.dataset_id ? model.recipes.flatMap(recipe => recipe.variants.map(variant => state.scores.recipes[variant.recipe_id]?.llm)).filter(score => score?.complete && Number.isFinite(score.stars)) : [];
+    const average = scores.length ? scores.reduce((sum, score) => sum + score.stars, 0) / scores.length : null;
+    const rating = average === null ? "ยังไม่มีคะแนนเฉลี่ย" : `★ ${format(Math.round(average * 10) / 10)} / 5`;
+    const option = node("option", "", `${model.nickname} · ${rating}${realName ? ` — ${realName}` : ""}`);
     option.value = model.id;
     option.selected = model.id === state.model;
     return option;
