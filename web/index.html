@@ -21,28 +21,10 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <h1 id="hero-title">ให้เอไอปรุงน้ำจิ้มไหตี่เลา<br><span>อร่อยไหมไม่รู้ ลองเอง</span></h1>
-          <p class="intro">เราให้ AI ตระกูลทำหน้าที่ตัดสินใจ (<a href="https://openrouter.ai/blog/insights/what-is-jev/" target="_blank" rel="noopener noreferrer">decision models</a>) ปรุงน้ำจิ้มไหตี่เลาให้สามสูตร มาลุ้นกันว่าจะอร่อยไหม</p>
-          <div class="hero-stats" id="hero-stats"><span>กำลังเปิดสมุดสูตร…</span></div>
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <svg viewBox="0 0 330 260" class="bowl-art">
-            <ellipse cx="166" cy="220" rx="108" ry="15" fill="#d8dfd0"/>
-            <path d="M223 91 L277 25" stroke="#976845" stroke-width="11" stroke-linecap="round"/>
-            <path d="M242 93 L299 29" stroke="#976845" stroke-width="11" stroke-linecap="round"/>
-            <path d="M58 125 C61 211 100 228 165 228 C229 228 266 200 273 125Z" fill="#f2a08e" stroke="#263d32" stroke-width="3.5"/>
-            <path d="M74 143 C83 183 107 208 149 212" fill="none" stroke="#ffd0bf" stroke-width="7" stroke-linecap="round"/>
-            <ellipse cx="165" cy="126" rx="108" ry="32" fill="#fff9e6" stroke="#263d32" stroke-width="3.5"/>
-            <ellipse cx="165" cy="129" rx="94" ry="23" fill="#d57c46"/>
-            <path d="M99 122 l17 -6 12 8 -17 6Z M187 137 l13 -9 15 3 -8 11Z M213 116 l13 -5 10 7 -14 5Z" fill="#427a51"/>
-            <g fill="#ffe4ad"><ellipse cx="140" cy="122" rx="4" ry="2"/><ellipse cx="167" cy="138" rx="4" ry="2"/><ellipse cx="191" cy="115" rx="4" ry="2"/><ellipse cx="116" cy="137" rx="4" ry="2"/></g>
-            <circle cx="131" cy="174" r="4.5" fill="#263d32"/><circle cx="194" cy="174" r="4.5" fill="#263d32"/>
-            <path d="M153 181 Q163 192 174 181" fill="none" stroke="#263d32" stroke-width="3" stroke-linecap="round"/>
-            <ellipse cx="114" cy="185" rx="10" ry="5" fill="#e77e77"/><ellipse cx="210" cy="185" rx="10" ry="5" fill="#e77e77"/>
-            <path d="M112 70 Q96 51 111 34 M154 63 Q138 41 157 21 M195 69 Q182 52 195 40" fill="none" stroke="#b7c8ae" stroke-width="5" stroke-linecap="round"/>
-            <path d="M45 61 l5 11 12 4 -12 5 -5 12 -4 -12 -12 -5 12 -4Z" fill="#d5a23e"/>
-          </svg>
+          <p class="intro">เราให้ AI ตระกูลทำหน้าที่ตัดสินใจ (<a href="https://openrouter.ai/blog/insights/what-is-jev/" target="_blank" rel="noopener noreferrer">decision models</a>) ปรุงน้ำจิ้มไหตี่เลาให้สามสูตร มาลุ้นกันว่าจะอร่อยไหม <a id="process-link" href="#recipe-process" aria-haspopup="dialog" aria-controls="recipe-process">ดูว่าสร้างสูตรมาได้ไง</a></p>
         </div>
       </section>
+      <p id="loading-status" class="muted" role="status">กำลังเปิดสมุดสูตร…</p>
       <div id="load-error" class="error-box" role="alert" hidden></div>
       <div id="workspace" class="workspace" hidden>
         <aside class="model-panel" aria-label="เลือกโมเดล">
@@ -66,7 +48,7 @@
               <button id="share-button" class="text-button" type="button">คัดลอกลิงก์</button>
             </div>
             <p id="share-status" class="muted share-status" role="status"></p>
-            <div id="empty-recipe" class="empty-recipe" hidden><span aria-hidden="true">🥣</span><h3>ถ้วยนี้ยังว่างอยู่</h3><p>โมเดลนี้ยังไม่มีผลสำเร็จสำหรับสูตรที่เลือก<br>ลองชิมสูตรของเพื่อนคนอื่นก่อนได้เลย</p></div>
+            <div id="empty-recipe" class="empty-recipe" hidden><h3>ถ้วยนี้ยังว่างอยู่</h3><p>โมเดลนี้ยังไม่มีผลสำเร็จสำหรับสูตรที่เลือก<br>ลองชิมสูตรของเพื่อนคนอื่นก่อนได้เลย</p></div>
             <div id="recipe-content">
               <p id="preparation-note" class="preparation-note"></p>
               <div class="ingredient-heading"><span>วัตถุดิบ</span><span>ปริมาณ</span></div>
@@ -94,6 +76,21 @@
     </main>
     <footer><span>Haidilao x Decisions Model</span><span>อาหารลวกน้ำเปล่า · สูตรจากโมเดล · ความชอบจากคุณ</span></footer>
   </div>
+  <dialog id="recipe-process" class="process-dialog" aria-labelledby="process-title" aria-describedby="process-intro">
+    <div class="process-header">
+      <h2 id="process-title">สูตรนี้มาได้ไง?</h2>
+      <form method="dialog"><button class="process-close" type="submit" autofocus>ปิด</button></form>
+    </div>
+    <p id="process-intro">เริ่มจากบอกโจทย์กับของที่มีที่บาร์น้ำจิ้ม แล้วให้ AI เลือกวัตถุดิบและปริมาณเอง ทีละขั้นแบบนี้เลย</p>
+    <ol class="process-steps">
+      <li><h3>บอกก่อนว่าจะจิ้มอะไร</h3><p>อาหารลวกน้ำเปล่า ไม่ได้อาศัยรสจากน้ำซุป แล้วแยกโจทย์เป็นสามสูตร: เผ็ดได้ ไม่เผ็ด และไม่ใส่ผัก ทุกโมเดลได้โจทย์เดียวกัน ผ่าน OpenRouter</p></li>
+      <li><h3>ให้รู้จักของที่มี</h3><p>เราส่งรายชื่อวัตถุดิบเป็นอังกฤษ พร้อมอธิบายรสและเนื้อสัมผัส เช่น น้ำจิ้มไก่หวานและข้น ซอสเห็ดเค็ม หอมเห็ด และมีน้ำมัน จะได้มีข้อมูลให้คิดก่อนปรุง</p></li>
+      <li><h3>เลือกก่อนว่าอยากใส่อะไร</h3><p>AI ให้ค่าตั้งแต่ 0 ถึง 1 ว่าแต่ละอย่างควรใส่ไหม เราเก็บตัวที่ได้ตั้งแต่ 0.5 ขึ้นไป และตัดของที่โจทย์ห้ามออก ตัวเลขนี้ใช้เลือกวัตถุดิบ ยังไม่ใช่จำนวนช้อน ไม่จำกัดว่าต้องใช้กี่อย่าง</p></li>
+      <li><h3>ค่อยถามว่าจะใส่เท่าไหร่</h3><p>ถามทีละอย่าง โดยให้เห็นปริมาณที่เลือกไปแล้ว เลือกได้ว่าจะไม่ใส่ หรือใส่ ⅛, ¼, ½, 1 หรือ 2 ช้อนใหญ่ ช้อนหนึ่งประมาณ 25 mL ขวดบีบก็กะเทียบช้อน ผักใช้ที่คีบแล้วกะปริมาณ ส่วนเกลือ น้ำตาล และพริกไทยให้เขย่าเบา ๆ 1–2 ครั้ง</p></li>
+      <li><h3>เอาคำตอบจริงมาให้ลอง</h3><p>เราแสดงสูตรของรอบนั้น ไม่เฉลี่ยหลายรอบจนตักตามยาก ตั้งชื่อเล่นสุ่มให้แต่ละโมเดล เพื่อให้เลือกลองโดยไม่ติดชื่อค่าย ถ้าอยากรู้ว่าใครปรุง ค่อยเปิดชื่อจริงได้</p></li>
+      <li><h3>ให้กรรมการอ่าน แล้วให้คุณชิม</h3><p>Claude Haiku, GPT-6 Luna และ Gemini Flash อ่านสูตรแล้วให้ดาวเรื่องความอร่อย ความกลมกล่อม ความซับซ้อน และความแปลกใหม่ พร้อมแซวกันนิดหน่อย แต่ AI ยังไม่ได้ชิมจริงนะ รีวิวจากคนลองจิ้มจึงแยกไว้อีกช่อง กดให้คะแนนหลังลองได้เลย</p></li>
+    </ol>
+  </dialog>
   <noscript><p>เปิด JavaScript เพื่อเลือกโมเดลและสูตรน้ำจิ้ม</p></noscript>
 </body>
 </html>

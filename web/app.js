@@ -203,13 +203,13 @@ async function init() {
     state.round = params.get("r") || "r1";
     state.unit = state.data.unit_ml;
     $("unit-ml").value = state.unit;
-    $("hero-stats").replaceChildren(...[`${available.length} โมเดล`, `${state.data.profiles.length} สูตร`, `${state.data.ingredients.length} วัตถุดิบ`].map(text => node("span", "", text)));
+    $("loading-status").hidden = true;
     $("workspace").hidden = false;
     render();
   } catch {
+    $("loading-status").hidden = true;
     $("load-error").hidden = false;
     $("load-error").textContent = "เปิดสมุดสูตรไม่สำเร็จ ลองโหลดหน้าใหม่อีกครั้ง หากเปิดจากไฟล์โดยตรง ให้เปิดเว็บผ่าน HTTP server หรือ GitHub Pages";
-    $("hero-stats").replaceChildren(node("span", "", "รอเปิดสมุดสูตร"));
   }
 }
 $("model-select").addEventListener("change", event => {state.model = event.target.value; state.round = "r1"; render();});
@@ -240,4 +240,15 @@ $("reveal-toggle").addEventListener("change", async event => {
   }
   renderModels(); renderRecipe();
 });
+const processDialog = $("recipe-process");
+$("process-link").addEventListener("click", event => {
+  event.preventDefault();
+  if (!processDialog.open) processDialog.showModal();
+});
+processDialog.addEventListener("click", event => {
+  if (event.target !== processDialog) return;
+  const bounds = processDialog.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) processDialog.close();
+});
+processDialog.addEventListener("close", () => $("process-link").focus());
 init();
