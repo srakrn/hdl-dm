@@ -171,16 +171,11 @@ function renderRecipe() {
   $("show-zero").setAttribute("aria-expanded", String(state.showZero));
   if (practical) {
     const measured = items.filter(i => i.dose.volume_ml !== null).reduce((sum,i) => sum + i.dose.volume_ml / state.data.unit_ml,0);
-    const unmeasured = items.some(i => i.dose.volume_ml === null && included(i));
     $("total-label").textContent = "รวมส่วนที่กะเป็นช้อน";
     $("total-volume").textContent = `${ladleAmount(measured)} ช้อนใหญ่`;
-    $("recipe-note").textContent = `คนให้เข้ากันก่อนจิ้ม อาหารลวกน้ำเปล่า · สูตรนี้ใช้ ${items.filter(included).length} วัตถุดิบ${unmeasured ? " · ยังไม่รวมปริมาตรจาก shaker" : ""}`;
-    $("technical-note").textContent = `ช้อนใหญ่ ${format(state.data.unit_ml)} mL; ⅛ ช้อน ≈ ${format(state.data.unit_ml / 8)} mL. ส่วนที่กะเป็นช้อนรวมประมาณ ${format(measured * state.data.unit_ml)} mL. ขวดบีบกะปริมาณเทียบช้อนใหญ่ ปริมาตรต่อครั้งของ shaker ยังไม่ได้วัด จึงไม่แปลงจำนวนครั้งเป็น mL. สูตรเป็นคำตอบของรอบที่เลือก ไม่เฉลี่ยข้ามรอบ.`;
   } else {
     $("total-label").textContent = "รวมหนึ่งถ้วย";
     $("total-volume").textContent = `${format(items.reduce((sum,i) => sum + i.units * state.unit, 0))} mL`;
-    $("recipe-note").textContent = "ตัวเลขเดิมเป็นค่า Noul ที่นำมาใช้เป็นปริมาตร ยังต้องลองชิมจริง";
-    $("technical-note").textContent = "ผลเดิมไม่ได้เลือกจำนวนช้อนด้วย Choice; อย่าเปลี่ยนหน่วยเดิมเป็นช้อน 25 mL โดยตรง เพราะจะเปลี่ยนสูตร ต้องรันด้วย --method practical เพื่อสร้างสูตรใหม่";
   }
   const excluded = items.filter(i => profile.excluded.includes(i.id) && included(i));
   $("constraint-note").hidden = !excluded.length;
