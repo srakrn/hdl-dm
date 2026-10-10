@@ -37,14 +37,14 @@ class BenchmarkTests(unittest.TestCase):
     def test_native_contract_and_exact_ingredients(self):
         profile = b.read_json(b.ROOT / "config/profiles.json")[0]
         payload = b.build_payload("typesafe/jev-1.13", profile, 5)
-        self.assertEqual(len(payload["questions"]), 28)
+        self.assertEqual(len(payload["questions"]), 26)
         self.assertTrue(all(q["type"] == "noul" for q in payload["questions"].values()))
         self.assertEqual(set(payload["questions"]), set(b.INGREDIENTS))
         self.assertEqual(b.parse_answers(response())["lime_juice"], .7)
 
     def test_english_prompt_flavors_and_exclusions(self):
-        self.assertEqual(len(set(b.INGREDIENTS)), 28)
-        self.assertTrue({"garlic", "chopped_scallions", "chopped_cilantro", "cilantro", "crushed_garlic"}.issubset(b.INGREDIENTS))
+        self.assertEqual(len(set(b.INGREDIENTS)), 26)
+        self.assertTrue({"chopped_scallions", "chopped_cilantro", "crushed_garlic"}.issubset(b.INGREDIENTS))
         profiles = b.read_json(b.ROOT / "config/profiles.json")
         for profile in profiles:
             payload = b.build_payload("test/model", profile, 5)
@@ -58,7 +58,7 @@ class BenchmarkTests(unittest.TestCase):
                 self.assertIn(descriptions[ingredient]["flavor"], question["instructions"])
                 self.assertTrue(descriptions[ingredient]["name"])
         no_cilantro = next(p for p in profiles if p["id"] == "thai_no_vegetables")
-        self.assertEqual(set(no_cilantro["excluded"]), {"cilantro", "chopped_cilantro", "chopped_scallions"})
+        self.assertEqual(set(no_cilantro["excluded"]), {"chopped_cilantro", "chopped_scallions"})
 
     def test_reject_malformed_nouls(self):
         for value in (True, "0.7", None, -0.01, 1.01, float("nan"), float("inf")):
@@ -100,6 +100,14 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual(request.get_header("Authorization"), "Bearer secret-test")
         self.assertEqual(json.loads(request.data), {"model": "test"})
 
+    def test_respan_text_state_preserves_complete_context(self):
+        original = {"model": "respan/span-01", "state": {"evaluation_rubric": {"taste": .4}, "doses_already_chosen": {"lime_juice": .125}}}
+        adapted = b.wire_payload(original)
+        self.assertEqual(json.loads(adapted["state"]), original["state"])
+        self.assertIsInstance(original["state"], dict)
+        other = {**original, "model": "other/model"}
+        self.assertIs(b.wire_payload(other), other)
+
     def test_no_retry_on_auth_or_ambiguous_transport(self):
         for error in (HTTPError(b.ENDPOINT, 401, "Unauthorized", {}, None), URLError("timeout")):
             with patch.object(b, "urlopen", side_effect=error) as call:
@@ -122,14 +130,14 @@ class BenchmarkTests(unittest.TestCase):
                 self.assertEqual(b.main(), 1)
             records = [json.loads(line) for line in (out / "results.jsonl").read_text().splitlines()]
             self.assertEqual(records[0]["volume_ml"]["lime_juice"], 3.5)
-            self.assertAlmostEqual(records[0]["excluded_volume_units"], 2.1)
+            self.assertAlmostEqual(records[0]["excluded_volume_units"], 1.4)
             rows = b.read_json(out / "summary.json")
             self.assertEqual(sum(row["valid"] for row in rows), 1)
             self.assertIsNone(rows[1]["reported_cost_usd"])
             self.assertNotIn("secret-test", (out / "results.jsonl").read_text())
             with (out / "recipes.csv").open(encoding="utf-8-sig") as f:
                 recipes = list(csv.DictReader(f))
-                self.assertEqual(len(recipes), 28)
+                self.assertEqual(len(recipes), 26)
                 self.assertEqual({r["ingredient"] for r in recipes}, set(b.THAI_NAMES.values()))
             recipe = b.read_json(out / "recipes.json")[0]
             self.assertEqual(recipe["volume_ml"]["น้ำมะนาว"], 3.5)

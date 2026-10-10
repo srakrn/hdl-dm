@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "prompt_version": "7-practical-uncapped-ladle-equivalents",
+  "prompt_version": "8-v2-rubric-aware-deduplicated",
   "method": "practical",
   "preparation": {
-    "version": "2-uncapped-ladle-equivalents",
+    "version": "v2-rubric-aware-deduplicated",
     "ladle_ml": 25,
     "ladle_amounts": [
       0,
@@ -20,7 +20,6 @@
       "salt": "shake",
       "sugar": "shake",
       "sichuan_pepper": "shake",
-      "cilantro": "tongs",
       "chopped_cilantro": "tongs",
       "chopped_scallions": "tongs"
     },
@@ -28,13 +27,28 @@
       0,
       1,
       2
-    ]
+    ],
+    "evaluation_rubric": {
+      "weights": {
+        "taste": 0.4,
+        "balance": 0.3,
+        "complexity": 0.15,
+        "novelty": 0.15
+      },
+      "scale": "Each criterion is scored from 0 to 5: 0 fails or has none of the property; 1 poor; 2 needs major improvement; 3 usable; 4 good; 5 exceptional. No consolation points.",
+      "taste": "Predict enjoyable flavor for Thai diners in the requested profile, paired with unseasoned food blanched in plain water. Deliciousness comes first.",
+      "balance": "Seasoning proportions, acidity, salt, sweetness, heat, richness and aroma should cooperate. Not every flavor must be present. Avoid overwhelming or clashing flavors.",
+      "complexity": "Reward distinct, complementary layers of flavor, aroma and texture with useful roles. Ingredient count alone earns nothing; a coherent simple dip can still taste excellent.",
+      "novelty": "Reward an interesting, plausible and edible flavor idea beyond a basic Thai lime-and-fish-sauce dip. Novelty alone must not rescue a bad or unbalanced dip.",
+      "validity": "First assess whether this actually functions as a seasoned dipping sauce for unseasoned food. Lightly seasoned minced pork alone is not a dipping sauce and receives zero across all criteria. A ready-made sauce alone may function as a dip, so one ingredient does not automatically mean failure.",
+      "opportunities": "Mala oil sauce, Shiitake sauce, Flavoured bean sauce, Barbecue sauce (shacha), Chilli oil and Fermented bean curd offer opportunities for distinctive numbing spice, mushroom umami, fermented depth, roasted savoriness or aromatic heat. Use only when allowed by the profile and in suitable doses. These are opportunities, not requirements or automatic complexity/novelty bonuses."
+    }
   },
   "unit_ml": 25,
   "threshold": null,
   "planned": 57,
   "completed": 57,
-  "successful": 37,
+  "successful": 34,
   "profiles": [
     {
       "id": "thai_spicy",
@@ -64,7 +78,6 @@
       "icon": "🥣",
       "description": "ไม่มีผักชีและต้นหอม ยังใช้กระเทียม พริก เห็ด และซอสได้",
       "excluded": [
-        "cilantro",
         "chopped_cilantro",
         "chopped_scallions"
       ]
@@ -90,11 +103,6 @@
       "id": "dark_soy_sauce",
       "label": "ซีอิ๊วดำ",
       "dispenser": "ladle"
-    },
-    {
-      "id": "cilantro",
-      "label": "ผักชี",
-      "dispenser": "tongs"
     },
     {
       "id": "chinese_barbecue_sauce",
@@ -192,11 +200,6 @@
       "dispenser": "ladle"
     },
     {
-      "id": "garlic",
-      "label": "กระเทียม",
-      "dispenser": "ladle"
-    },
-    {
       "id": "chopped_scallions",
       "label": "ต้นหอมซอย",
       "dispenser": "tongs"
@@ -238,7 +241,6 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
@@ -258,8 +260,7 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0.25,
+                "chopped_scallions": 0.125,
                 "chopped_cilantro": 0.25,
                 "sugar": null
               },
@@ -284,11 +285,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -384,15 +380,10 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
                   "amount": 0.25,
@@ -417,40 +408,38 @@
               "label": "รอบที่ 1",
               "samples": 1,
               "units": {
-                "salt": null,
+                "salt": 0,
                 "white_sesame_seeds": 0.25,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
                 "lime_juice": 0.25,
                 "vinegar": 0,
-                "crushed_peanuts": 0.25,
+                "crushed_peanuts": 0,
                 "sweet_chili_sauce": 0,
                 "sesame_oil_blend": 0.25,
                 "crushed_garlic": 0,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
-                "fried_garlic": 0,
+                "fried_garlic": 0.25,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0.25,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
-                "mushroom_sauce": 0,
-                "garlic": 0,
+                "mushroom_sauce": 0.25,
                 "chopped_scallions": 0.25,
                 "chopped_cilantro": 0,
                 "sugar": null
               },
               "servings": {
                 "salt": {
-                  "amount": 1,
+                  "amount": 0,
                   "unit": "shake",
-                  "volume_ml": null
+                  "volume_ml": 0
                 },
                 "white_sesame_seeds": {
                   "amount": 0.25,
@@ -466,11 +455,6 @@
                   "amount": 0.25,
                   "unit": "ladle",
                   "volume_ml": 6.25
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
@@ -498,9 +482,9 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0.25,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 0
                 },
                 "sweet_chili_sauce": {
                   "amount": 0,
@@ -528,9 +512,9 @@
                   "volume_ml": 0
                 },
                 "fried_garlic": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "fermented_bean_curd": {
                   "amount": 0,
@@ -563,14 +547,9 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "chopped_scallions": {
                   "amount": 0.25,
@@ -602,29 +581,27 @@
               "units": {
                 "salt": 0,
                 "white_sesame_seeds": 0,
-                "sichuan_pepper": 0,
+                "sichuan_pepper": null,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0,
+                "chinese_barbecue_sauce": 0.25,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
                 "lime_juice": 0.25,
                 "vinegar": 0,
-                "crushed_peanuts": 0.25,
+                "crushed_peanuts": 0,
                 "sweet_chili_sauce": 0,
                 "sesame_oil_blend": 0,
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
-                "fried_garlic": 0,
+                "fried_garlic": 0.125,
                 "fermented_bean_curd": 0.25,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
                 "chili_oil": 0,
-                "mala_sauce": 0,
+                "mala_sauce": 0.25,
                 "lao_gan_ma": 0.25,
-                "mushroom_sauce": 0,
-                "garlic": 0,
+                "mushroom_sauce": 0.25,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
@@ -641,24 +618,19 @@
                   "volume_ml": 0
                 },
                 "sichuan_pepper": {
-                  "amount": 0,
+                  "amount": 1,
                   "unit": "shake",
-                  "volume_ml": 0
+                  "volume_ml": null
                 },
                 "dark_soy_sauce": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "cooked_minced_pork": {
                   "amount": 0,
@@ -681,9 +653,9 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0.25,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 0
                 },
                 "sweet_chili_sauce": {
                   "amount": 0,
@@ -711,9 +683,9 @@
                   "volume_ml": 0
                 },
                 "fried_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "fermented_bean_curd": {
                   "amount": 0.25,
@@ -736,9 +708,9 @@
                   "volume_ml": 0
                 },
                 "mala_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "lao_gan_ma": {
                   "amount": 0.25,
@@ -746,14 +718,9 @@
                   "volume_ml": 6.25
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "chopped_scallions": {
                   "amount": 0,
@@ -779,557 +746,7 @@
     {
       "id": "ae4f48945107",
       "nickname": "จิ้งจอกจิ๋ว",
-      "recipes": [
-        {
-          "profile_id": "thai_spicy",
-          "variants": [
-            {
-              "recipe_id": "ae4f48945107-thai_spicy-r1",
-              "id": "r1",
-              "label": "รอบที่ 1",
-              "samples": 1,
-              "units": {
-                "salt": 0,
-                "white_sesame_seeds": 0,
-                "sichuan_pepper": null,
-                "dark_soy_sauce": 0,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0.125,
-                "crushed_chili": 0,
-                "lime_juice": 0.125,
-                "vinegar": 0,
-                "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0,
-                "crushed_garlic": 0,
-                "chili_powder": 0,
-                "sesame_sauce": 0,
-                "fried_garlic": 0,
-                "fermented_bean_curd": 0.125,
-                "fish_sauce": 0.125,
-                "oyster_sauce": 0,
-                "chili_oil": 0,
-                "mala_sauce": 0.125,
-                "lao_gan_ma": 0,
-                "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
-                "sugar": 0
-              },
-              "servings": {
-                "salt": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "white_sesame_seeds": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sichuan_pepper": {
-                  "amount": 1,
-                  "unit": "shake",
-                  "volume_ml": null
-                },
-                "dark_soy_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cooked_minced_pork": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "crushed_chili": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lime_juice": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "vinegar": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_peanuts": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sweet_chili_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_oil_blend": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_powder": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fried_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fermented_bean_curd": {
-                  "amount": 0.125,
-                  "unit": "squeeze",
-                  "volume_ml": 3.125
-                },
-                "fish_sauce": {
-                  "amount": 0.125,
-                  "unit": "squeeze",
-                  "volume_ml": 3.125
-                },
-                "oyster_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_oil": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mala_sauce": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "lao_gan_ma": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chopped_scallions": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "sugar": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "profile_id": "thai_mild",
-          "variants": [
-            {
-              "recipe_id": "ae4f48945107-thai_mild-r1",
-              "id": "r1",
-              "label": "รอบที่ 1",
-              "samples": 1,
-              "units": {
-                "salt": 0,
-                "white_sesame_seeds": 0,
-                "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.125,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0.125,
-                "crushed_chili": 0,
-                "lime_juice": 0,
-                "vinegar": 0,
-                "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0,
-                "crushed_garlic": 0,
-                "chili_powder": 0,
-                "sesame_sauce": 0,
-                "fried_garlic": 0,
-                "fermented_bean_curd": 0.125,
-                "fish_sauce": 0,
-                "oyster_sauce": 0,
-                "chili_oil": 0,
-                "mala_sauce": 0,
-                "lao_gan_ma": 0,
-                "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
-                "sugar": 0
-              },
-              "servings": {
-                "salt": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "white_sesame_seeds": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sichuan_pepper": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "dark_soy_sauce": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cooked_minced_pork": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "crushed_chili": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lime_juice": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "vinegar": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_peanuts": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sweet_chili_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_oil_blend": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_powder": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fried_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fermented_bean_curd": {
-                  "amount": 0.125,
-                  "unit": "squeeze",
-                  "volume_ml": 3.125
-                },
-                "fish_sauce": {
-                  "amount": 0,
-                  "unit": "squeeze",
-                  "volume_ml": 0
-                },
-                "oyster_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_oil": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mala_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lao_gan_ma": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chopped_scallions": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "sugar": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                }
-              }
-            }
-          ]
-        },
-        {
-          "profile_id": "thai_no_vegetables",
-          "variants": [
-            {
-              "recipe_id": "ae4f48945107-thai_no_vegetables-r1",
-              "id": "r1",
-              "label": "รอบที่ 1",
-              "samples": 1,
-              "units": {
-                "salt": 0,
-                "white_sesame_seeds": 0,
-                "sichuan_pepper": 0,
-                "dark_soy_sauce": 0,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0.125,
-                "crushed_chili": 0,
-                "lime_juice": 0.125,
-                "vinegar": 0,
-                "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0,
-                "crushed_garlic": 0,
-                "chili_powder": 0,
-                "sesame_sauce": 0,
-                "fried_garlic": 0,
-                "fermented_bean_curd": 0,
-                "fish_sauce": 0.125,
-                "oyster_sauce": 0,
-                "chili_oil": 0,
-                "mala_sauce": 0,
-                "lao_gan_ma": 0,
-                "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
-                "sugar": 0
-              },
-              "servings": {
-                "salt": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "white_sesame_seeds": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sichuan_pepper": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "dark_soy_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cooked_minced_pork": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "crushed_chili": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lime_juice": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "vinegar": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_peanuts": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sweet_chili_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_oil_blend": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_powder": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fried_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fermented_bean_curd": {
-                  "amount": 0,
-                  "unit": "squeeze",
-                  "volume_ml": 0
-                },
-                "fish_sauce": {
-                  "amount": 0.125,
-                  "unit": "squeeze",
-                  "volume_ml": 3.125
-                },
-                "oyster_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_oil": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mala_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lao_gan_ma": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chopped_scallions": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "sugar": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                }
-              }
-            }
-          ]
-        }
-      ]
+      "recipes": []
     },
     {
       "id": "d0bc96d27c78",
@@ -1348,7 +765,6 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
@@ -1360,7 +776,7 @@
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
-                "fried_garlic": 0,
+                "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
@@ -1368,7 +784,6 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.25,
                 "chopped_cilantro": 0.25,
                 "sugar": null
@@ -1394,11 +809,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -1455,9 +865,9 @@
                   "volume_ml": 0
                 },
                 "fried_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "fermented_bean_curd": {
                   "amount": 0,
@@ -1490,11 +900,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -1531,7 +936,6 @@
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
@@ -1551,7 +955,6 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.25,
                 "chopped_cilantro": 0.25,
                 "sugar": null
@@ -1575,11 +978,6 @@
                 "dark_soy_sauce": {
                   "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
                   "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
@@ -1673,11 +1071,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -1714,27 +1107,25 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
                 "lime_juice": 0.5,
                 "vinegar": 0,
-                "crushed_peanuts": 0,
+                "crushed_peanuts": 0.25,
                 "sweet_chili_sauce": 0.25,
                 "sesame_oil_blend": 0,
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
-                "fried_garlic": 0,
+                "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
-                "chili_oil": 0,
+                "chili_oil": 0.25,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
@@ -1758,11 +1149,6 @@
                 "dark_soy_sauce": {
                   "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
                   "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
@@ -1791,9 +1177,9 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sweet_chili_sauce": {
                   "amount": 0.25,
@@ -1821,9 +1207,9 @@
                   "volume_ml": 0
                 },
                 "fried_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "fermented_bean_curd": {
                   "amount": 0,
@@ -1841,9 +1227,9 @@
                   "volume_ml": 0
                 },
                 "chili_oil": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -1856,11 +1242,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -1903,8 +1284,7 @@
                 "white_sesame_seeds": 0.25,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0.5,
-                "chinese_barbecue_sauce": 0,
+                "chinese_barbecue_sauce": 0.25,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
                 "lime_juice": 0.5,
@@ -1914,7 +1294,7 @@
                 "sesame_oil_blend": 0.25,
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
-                "sesame_sauce": 0.25,
+                "sesame_sauce": 0,
                 "fried_garlic": 0.25,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
@@ -1923,9 +1303,8 @@
                 "mala_sauce": 0.25,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.25,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.25,
                 "sugar": null
               },
               "servings": {
@@ -1949,15 +1328,10 @@
                   "unit": "ladle",
                   "volume_ml": 6.25
                 },
-                "cilantro": {
-                  "amount": 0.5,
-                  "unit": "tongs",
-                  "volume_ml": 12.5
-                },
                 "chinese_barbecue_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "cooked_minced_pork": {
                   "amount": 0,
@@ -2005,9 +1379,9 @@
                   "volume_ml": 0
                 },
                 "sesame_sauce": {
-                  "amount": 0.25,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 0
                 },
                 "fried_garlic": {
                   "amount": 0.25,
@@ -2049,20 +1423,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0.25,
                   "unit": "tongs",
                   "volume_ml": 6.25
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sugar": {
                   "amount": 1,
@@ -2086,9 +1455,8 @@
                 "white_sesame_seeds": 0.25,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0.25,
                 "chinese_barbecue_sauce": 0.25,
-                "cooked_minced_pork": 0.25,
+                "cooked_minced_pork": 0,
                 "crushed_chili": 0,
                 "lime_juice": 0.5,
                 "vinegar": 0,
@@ -2106,9 +1474,8 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.25,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.25,
                 "sugar": null
               },
               "servings": {
@@ -2132,20 +1499,15 @@
                   "unit": "ladle",
                   "volume_ml": 6.25
                 },
-                "cilantro": {
-                  "amount": 0.25,
-                  "unit": "tongs",
-                  "volume_ml": 6.25
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0.25,
                   "unit": "ladle",
                   "volume_ml": 6.25
                 },
                 "cooked_minced_pork": {
-                  "amount": 0.25,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 0
                 },
                 "crushed_chili": {
                   "amount": 0,
@@ -2232,203 +1594,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0.25,
                   "unit": "tongs",
                   "volume_ml": 6.25
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "sugar": {
-                  "amount": 1,
-                  "unit": "shake",
-                  "volume_ml": null
-                }
-              }
-            }
-          ]
-        },
-        {
-          "profile_id": "thai_no_vegetables",
-          "variants": [
-            {
-              "recipe_id": "ffd8a477fbc4-thai_no_vegetables-r1",
-              "id": "r1",
-              "label": "รอบที่ 1",
-              "samples": 1,
-              "units": {
-                "salt": 0,
-                "white_sesame_seeds": 0.25,
-                "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.25,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0.25,
-                "cooked_minced_pork": 0,
-                "crushed_chili": 0.25,
-                "lime_juice": 0.5,
-                "vinegar": 0,
-                "crushed_peanuts": 0.25,
-                "sweet_chili_sauce": 0.25,
-                "sesame_oil_blend": 0.25,
-                "crushed_garlic": 0.25,
-                "chili_powder": 0,
-                "sesame_sauce": 0.25,
-                "fried_garlic": 0.25,
-                "fermented_bean_curd": 0,
-                "fish_sauce": 0.25,
-                "oyster_sauce": 0.25,
-                "chili_oil": 0.25,
-                "mala_sauce": 0.25,
-                "lao_gan_ma": 0.25,
-                "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
-                "sugar": null
-              },
-              "servings": {
-                "salt": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "white_sesame_seeds": {
-                  "amount": 0.25,
-                  "unit": "ladle",
                   "volume_ml": 6.25
-                },
-                "sichuan_pepper": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "dark_soy_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "cooked_minced_pork": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_chili": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "lime_juice": {
-                  "amount": 0.5,
-                  "unit": "ladle",
-                  "volume_ml": 12.5
-                },
-                "vinegar": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_peanuts": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "sweet_chili_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "sesame_oil_blend": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "crushed_garlic": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "chili_powder": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "fried_garlic": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "fermented_bean_curd": {
-                  "amount": 0,
-                  "unit": "squeeze",
-                  "volume_ml": 0
-                },
-                "fish_sauce": {
-                  "amount": 0.25,
-                  "unit": "squeeze",
-                  "volume_ml": 6.25
-                },
-                "oyster_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "chili_oil": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "mala_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "lao_gan_ma": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chopped_scallions": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
                 },
                 "sugar": {
                   "amount": 1,
@@ -2458,29 +1632,27 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
-                "lime_juice": 0.5,
+                "lime_juice": 0.25,
                 "vinegar": 0,
                 "crushed_peanuts": 0,
                 "sweet_chili_sauce": 0.25,
                 "sesame_oil_blend": 0,
-                "crushed_garlic": 0,
+                "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
-                "chili_oil": 0.25,
+                "chili_oil": 0.125,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.125,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.25,
                 "sugar": 0
               },
               "servings": {
@@ -2504,11 +1676,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -2525,9 +1692,9 @@
                   "volume_ml": 6.25
                 },
                 "lime_juice": {
-                  "amount": 0.5,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 12.5
+                  "volume_ml": 6.25
                 },
                 "vinegar": {
                   "amount": 0,
@@ -2550,9 +1717,9 @@
                   "volume_ml": 0
                 },
                 "crushed_garlic": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "chili_powder": {
                   "amount": 0,
@@ -2585,9 +1752,9 @@
                   "volume_ml": 0
                 },
                 "chili_oil": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -2604,20 +1771,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0.125,
                   "unit": "tongs",
                   "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sugar": {
                   "amount": 0,
@@ -2640,8 +1802,7 @@
                 "salt": 0,
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.25,
-                "cilantro": 0,
+                "dark_soy_sauce": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
@@ -2649,8 +1810,8 @@
                 "vinegar": 0,
                 "crushed_peanuts": 0,
                 "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0.25,
-                "crushed_garlic": 0,
+                "sesame_oil_blend": 0.125,
+                "crushed_garlic": 0.125,
                 "chili_powder": 0,
                 "sesame_sauce": 0.25,
                 "fried_garlic": 0,
@@ -2661,7 +1822,6 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
@@ -2683,13 +1843,8 @@
                   "volume_ml": 0
                 },
                 "dark_soy_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "cilantro": {
                   "amount": 0,
-                  "unit": "tongs",
+                  "unit": "ladle",
                   "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
@@ -2728,14 +1883,14 @@
                   "volume_ml": 0
                 },
                 "sesame_oil_blend": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "crushed_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chili_powder": {
                   "amount": 0,
@@ -2783,11 +1938,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -2824,27 +1974,25 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
-                "lime_juice": 0.5,
+                "lime_juice": 0.25,
                 "vinegar": 0,
-                "crushed_peanuts": 0,
+                "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0.25,
                 "sesame_oil_blend": 0,
-                "crushed_garlic": 0,
+                "crushed_garlic": 0.125,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
-                "chili_oil": 0.25,
+                "chili_oil": 0.125,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": 0
@@ -2870,11 +2018,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -2891,9 +2034,9 @@
                   "volume_ml": 6.25
                 },
                 "lime_juice": {
-                  "amount": 0.5,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 12.5
+                  "volume_ml": 6.25
                 },
                 "vinegar": {
                   "amount": 0,
@@ -2901,9 +2044,9 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sweet_chili_sauce": {
                   "amount": 0.25,
@@ -2916,9 +2059,9 @@
                   "volume_ml": 0
                 },
                 "crushed_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chili_powder": {
                   "amount": 0,
@@ -2951,9 +2094,9 @@
                   "volume_ml": 0
                 },
                 "chili_oil": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -2966,11 +2109,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -2999,17 +2137,12 @@
     {
       "id": "5a07b4d597e4",
       "nickname": "น้องมุ้งมิ้ง",
-      "recipes": []
-    },
-    {
-      "id": "a96858e72ef7",
-      "nickname": "น้องละมุน",
       "recipes": [
         {
           "profile_id": "thai_spicy",
           "variants": [
             {
-              "recipe_id": "a96858e72ef7-thai_spicy-r1",
+              "recipe_id": "5a07b4d597e4-thai_spicy-r1",
               "id": "r1",
               "label": "รอบที่ 1",
               "samples": 1,
@@ -3018,15 +2151,14 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.5,
                 "lime_juice": 0.5,
                 "vinegar": 0,
                 "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0.5,
-                "sesame_oil_blend": 0,
+                "sweet_chili_sauce": 0,
+                "sesame_oil_blend": 0.25,
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
@@ -3038,9 +2170,8 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
-                "chopped_cilantro": 0.25,
+                "chopped_cilantro": 0,
                 "sugar": 0
               },
               "servings": {
@@ -3064,11 +2195,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -3100,14 +2226,14 @@
                   "volume_ml": 0
                 },
                 "sweet_chili_sauce": {
-                  "amount": 0.5,
-                  "unit": "ladle",
-                  "volume_ml": 12.5
-                },
-                "sesame_oil_blend": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
+                },
+                "sesame_oil_blend": {
+                  "amount": 0.25,
+                  "unit": "ladle",
+                  "volume_ml": 6.25
                 },
                 "crushed_garlic": {
                   "amount": 0.25,
@@ -3164,7 +2290,173 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
+                "chopped_scallions": {
+                  "amount": 0,
+                  "unit": "tongs",
+                  "volume_ml": 0
+                },
+                "chopped_cilantro": {
+                  "amount": 0,
+                  "unit": "tongs",
+                  "volume_ml": 0
+                },
+                "sugar": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "profile_id": "thai_mild",
+          "variants": [
+            {
+              "recipe_id": "5a07b4d597e4-thai_mild-r1",
+              "id": "r1",
+              "label": "รอบที่ 1",
+              "samples": 1,
+              "units": {
+                "salt": 0,
+                "white_sesame_seeds": 0,
+                "sichuan_pepper": 0,
+                "dark_soy_sauce": 0,
+                "chinese_barbecue_sauce": 0,
+                "cooked_minced_pork": 0,
+                "crushed_chili": 0,
+                "lime_juice": 0,
+                "vinegar": 0,
+                "crushed_peanuts": 0,
+                "sweet_chili_sauce": 0,
+                "sesame_oil_blend": 0.5,
+                "crushed_garlic": 0,
+                "chili_powder": 0,
+                "sesame_sauce": 0,
+                "fried_garlic": 0.25,
+                "fermented_bean_curd": 0,
+                "fish_sauce": 0.25,
+                "oyster_sauce": 0,
+                "chili_oil": 0,
+                "mala_sauce": 0,
+                "lao_gan_ma": 0,
+                "mushroom_sauce": 0,
+                "chopped_scallions": 0,
+                "chopped_cilantro": 0,
+                "sugar": 0
+              },
+              "servings": {
+                "salt": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                },
+                "white_sesame_seeds": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sichuan_pepper": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                },
+                "dark_soy_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chinese_barbecue_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "cooked_minced_pork": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_chili": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "lime_juice": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "vinegar": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_peanuts": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sweet_chili_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sesame_oil_blend": {
+                  "amount": 0.5,
+                  "unit": "ladle",
+                  "volume_ml": 12.5
+                },
+                "crushed_garlic": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chili_powder": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sesame_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "fried_garlic": {
+                  "amount": 0.25,
+                  "unit": "ladle",
+                  "volume_ml": 6.25
+                },
+                "fermented_bean_curd": {
+                  "amount": 0,
+                  "unit": "squeeze",
+                  "volume_ml": 0
+                },
+                "fish_sauce": {
+                  "amount": 0.25,
+                  "unit": "squeeze",
+                  "volume_ml": 6.25
+                },
+                "oyster_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chili_oil": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "mala_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "lao_gan_ma": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "mushroom_sauce": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -3175,9 +2467,357 @@
                   "volume_ml": 0
                 },
                 "chopped_cilantro": {
+                  "amount": 0,
+                  "unit": "tongs",
+                  "volume_ml": 0
+                },
+                "sugar": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "profile_id": "thai_no_vegetables",
+          "variants": [
+            {
+              "recipe_id": "5a07b4d597e4-thai_no_vegetables-r1",
+              "id": "r1",
+              "label": "รอบที่ 1",
+              "samples": 1,
+              "units": {
+                "salt": 0,
+                "white_sesame_seeds": 0,
+                "sichuan_pepper": 0,
+                "dark_soy_sauce": 0,
+                "chinese_barbecue_sauce": 0,
+                "cooked_minced_pork": 0,
+                "crushed_chili": 0.25,
+                "lime_juice": 0.5,
+                "vinegar": 0,
+                "crushed_peanuts": 0,
+                "sweet_chili_sauce": 0,
+                "sesame_oil_blend": 0.25,
+                "crushed_garlic": 0.25,
+                "chili_powder": 0,
+                "sesame_sauce": 0,
+                "fried_garlic": 0.125,
+                "fermented_bean_curd": 0,
+                "fish_sauce": 0.25,
+                "oyster_sauce": 0,
+                "chili_oil": 0,
+                "mala_sauce": 0,
+                "lao_gan_ma": 0,
+                "mushroom_sauce": 0,
+                "chopped_scallions": 0,
+                "chopped_cilantro": 0,
+                "sugar": 0
+              },
+              "servings": {
+                "salt": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                },
+                "white_sesame_seeds": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sichuan_pepper": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                },
+                "dark_soy_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chinese_barbecue_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "cooked_minced_pork": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_chili": {
+                  "amount": 0.25,
+                  "unit": "ladle",
+                  "volume_ml": 6.25
+                },
+                "lime_juice": {
+                  "amount": 0.5,
+                  "unit": "ladle",
+                  "volume_ml": 12.5
+                },
+                "vinegar": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_peanuts": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sweet_chili_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sesame_oil_blend": {
+                  "amount": 0.25,
+                  "unit": "ladle",
+                  "volume_ml": 6.25
+                },
+                "crushed_garlic": {
+                  "amount": 0.25,
+                  "unit": "ladle",
+                  "volume_ml": 6.25
+                },
+                "chili_powder": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sesame_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "fried_garlic": {
+                  "amount": 0.125,
+                  "unit": "ladle",
+                  "volume_ml": 3.125
+                },
+                "fermented_bean_curd": {
+                  "amount": 0,
+                  "unit": "squeeze",
+                  "volume_ml": 0
+                },
+                "fish_sauce": {
+                  "amount": 0.25,
+                  "unit": "squeeze",
+                  "volume_ml": 6.25
+                },
+                "oyster_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chili_oil": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "mala_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "lao_gan_ma": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "mushroom_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chopped_scallions": {
+                  "amount": 0,
+                  "unit": "tongs",
+                  "volume_ml": 0
+                },
+                "chopped_cilantro": {
+                  "amount": 0,
+                  "unit": "tongs",
+                  "volume_ml": 0
+                },
+                "sugar": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a96858e72ef7",
+      "nickname": "น้องละมุน",
+      "recipes": [
+        {
+          "profile_id": "thai_spicy",
+          "variants": [
+            {
+              "recipe_id": "a96858e72ef7-thai_spicy-r1",
+              "id": "r1",
+              "label": "รอบที่ 1",
+              "samples": 1,
+              "units": {
+                "salt": 0,
+                "white_sesame_seeds": 0,
+                "sichuan_pepper": 0,
+                "dark_soy_sauce": 0,
+                "chinese_barbecue_sauce": 0,
+                "cooked_minced_pork": 0,
+                "crushed_chili": 0.5,
+                "lime_juice": 0.5,
+                "vinegar": 0,
+                "crushed_peanuts": 0,
+                "sweet_chili_sauce": 0,
+                "sesame_oil_blend": 0,
+                "crushed_garlic": 0.25,
+                "chili_powder": 0,
+                "sesame_sauce": 0,
+                "fried_garlic": 0,
+                "fermented_bean_curd": 0,
+                "fish_sauce": 0.5,
+                "oyster_sauce": 0,
+                "chili_oil": 0,
+                "mala_sauce": 0,
+                "lao_gan_ma": 0,
+                "mushroom_sauce": 0,
+                "chopped_scallions": 0.25,
+                "chopped_cilantro": 0.5,
+                "sugar": 0
+              },
+              "servings": {
+                "salt": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                },
+                "white_sesame_seeds": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sichuan_pepper": {
+                  "amount": 0,
+                  "unit": "shake",
+                  "volume_ml": 0
+                },
+                "dark_soy_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chinese_barbecue_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "cooked_minced_pork": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_chili": {
+                  "amount": 0.5,
+                  "unit": "ladle",
+                  "volume_ml": 12.5
+                },
+                "lime_juice": {
+                  "amount": 0.5,
+                  "unit": "ladle",
+                  "volume_ml": 12.5
+                },
+                "vinegar": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_peanuts": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sweet_chili_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sesame_oil_blend": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_garlic": {
+                  "amount": 0.25,
+                  "unit": "ladle",
+                  "volume_ml": 6.25
+                },
+                "chili_powder": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "sesame_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "fried_garlic": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "fermented_bean_curd": {
+                  "amount": 0,
+                  "unit": "squeeze",
+                  "volume_ml": 0
+                },
+                "fish_sauce": {
+                  "amount": 0.5,
+                  "unit": "squeeze",
+                  "volume_ml": 12.5
+                },
+                "oyster_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chili_oil": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "mala_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "lao_gan_ma": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "mushroom_sauce": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "chopped_scallions": {
                   "amount": 0.25,
                   "unit": "tongs",
                   "volume_ml": 6.25
+                },
+                "chopped_cilantro": {
+                  "amount": 0.5,
+                  "unit": "tongs",
+                  "volume_ml": 12.5
                 },
                 "sugar": {
                   "amount": 0,
@@ -3198,10 +2838,9 @@
               "samples": 1,
               "units": {
                 "salt": 0,
-                "white_sesame_seeds": 0,
+                "white_sesame_seeds": 0.25,
                 "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.25,
-                "cilantro": 0,
+                "dark_soy_sauce": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
@@ -3209,7 +2848,7 @@
                 "vinegar": 0,
                 "crushed_peanuts": 0,
                 "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0,
+                "sesame_oil_blend": 0.25,
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0.5,
@@ -3221,8 +2860,7 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
+                "chopped_scallions": 0.25,
                 "chopped_cilantro": 0,
                 "sugar": null
               },
@@ -3233,9 +2871,9 @@
                   "volume_ml": 0
                 },
                 "white_sesame_seeds": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sichuan_pepper": {
                   "amount": 0,
@@ -3243,13 +2881,8 @@
                   "volume_ml": 0
                 },
                 "dark_soy_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "cilantro": {
                   "amount": 0,
-                  "unit": "tongs",
+                  "unit": "ladle",
                   "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
@@ -3288,9 +2921,9 @@
                   "volume_ml": 0
                 },
                 "sesame_oil_blend": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "crushed_garlic": {
                   "amount": 0.25,
@@ -3347,15 +2980,10 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "chopped_cilantro": {
                   "amount": 0,
@@ -3384,27 +3012,25 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
-                "crushed_chili": 0.25,
+                "crushed_chili": 0.5,
                 "lime_juice": 0.5,
                 "vinegar": 0,
                 "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0.5,
+                "sweet_chili_sauce": 0,
                 "sesame_oil_blend": 0,
                 "crushed_garlic": 0.25,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0,
-                "fish_sauce": 0.25,
+                "fish_sauce": 0.5,
                 "oyster_sauce": 0,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": 0
@@ -3430,11 +3056,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -3446,9 +3067,9 @@
                   "volume_ml": 0
                 },
                 "crushed_chili": {
-                  "amount": 0.25,
+                  "amount": 0.5,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 12.5
                 },
                 "lime_juice": {
                   "amount": 0.5,
@@ -3466,9 +3087,9 @@
                   "volume_ml": 0
                 },
                 "sweet_chili_sauce": {
-                  "amount": 0.5,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 12.5
+                  "volume_ml": 0
                 },
                 "sesame_oil_blend": {
                   "amount": 0,
@@ -3501,9 +3122,9 @@
                   "volume_ml": 0
                 },
                 "fish_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.5,
                   "unit": "squeeze",
-                  "volume_ml": 6.25
+                  "volume_ml": 12.5
                 },
                 "oyster_sauce": {
                   "amount": 0,
@@ -3526,11 +3147,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -3580,14 +3196,13 @@
               "samples": 1,
               "units": {
                 "salt": 0,
-                "white_sesame_seeds": 0,
+                "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0.125,
-                "chinese_barbecue_sauce": 0,
+                "chinese_barbecue_sauce": 0.125,
                 "cooked_minced_pork": 0,
-                "crushed_chili": 0.125,
-                "lime_juice": 0.5,
+                "crushed_chili": 0,
+                "lime_juice": 0.25,
                 "vinegar": 0,
                 "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0,
@@ -3599,13 +3214,12 @@
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.125,
                 "oyster_sauce": 0,
-                "chili_oil": 0,
+                "chili_oil": 0.125,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0.25,
-                "chopped_cilantro": 0,
+                "chopped_scallions": 0.125,
+                "chopped_cilantro": 0.125,
                 "sugar": null
               },
               "servings": {
@@ -3615,9 +3229,9 @@
                   "volume_ml": 0
                 },
                 "white_sesame_seeds": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sichuan_pepper": {
                   "amount": 0,
@@ -3629,15 +3243,10 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0.125,
-                  "unit": "tongs",
-                  "volume_ml": 3.125
-                },
                 "chinese_barbecue_sauce": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "cooked_minced_pork": {
                   "amount": 0,
@@ -3645,14 +3254,14 @@
                   "volume_ml": 0
                 },
                 "crushed_chili": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "lime_juice": {
-                  "amount": 0.5,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 12.5
+                  "volume_ml": 6.25
                 },
                 "vinegar": {
                   "amount": 0,
@@ -3710,9 +3319,9 @@
                   "volume_ml": 0
                 },
                 "chili_oil": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -3729,20 +3338,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sugar": {
                   "amount": 1,
@@ -3766,7 +3370,6 @@
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0.125,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
@@ -3775,9 +3378,9 @@
                 "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0,
                 "sesame_oil_blend": 0.125,
-                "crushed_garlic": 0,
+                "crushed_garlic": 0.125,
                 "chili_powder": 0,
-                "sesame_sauce": 0.125,
+                "sesame_sauce": 0.25,
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.125,
@@ -3786,9 +3389,8 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.25,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.125,
                 "sugar": null
               },
               "servings": {
@@ -3811,11 +3413,6 @@
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0.125,
-                  "unit": "tongs",
-                  "volume_ml": 3.125
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
@@ -3858,9 +3455,9 @@
                   "volume_ml": 3.125
                 },
                 "crushed_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chili_powder": {
                   "amount": 0,
@@ -3868,9 +3465,9 @@
                   "volume_ml": 0
                 },
                 "sesame_sauce": {
-                  "amount": 0.125,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 6.25
                 },
                 "fried_garlic": {
                   "amount": 0.125,
@@ -3912,20 +3509,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0.25,
                   "unit": "tongs",
                   "volume_ml": 6.25
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sugar": {
                   "amount": 1,
@@ -3949,27 +3541,25 @@
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0.125,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
                 "lime_juice": 0.25,
                 "vinegar": 0,
-                "crushed_peanuts": 0.25,
-                "sweet_chili_sauce": 0.125,
-                "sesame_oil_blend": 0.125,
+                "crushed_peanuts": 0.125,
+                "sweet_chili_sauce": 0,
+                "sesame_oil_blend": 0,
                 "crushed_garlic": 0.125,
                 "chili_powder": 0,
                 "sesame_sauce": 0.125,
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.125,
-                "oyster_sauce": 0.125,
+                "oyster_sauce": 0,
                 "chili_oil": 0.125,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0.125,
-                "mushroom_sauce": 0,
-                "garlic": 0,
+                "mushroom_sauce": 0.125,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
@@ -3995,11 +3585,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0.125,
                   "unit": "ladle",
@@ -4026,19 +3611,19 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "sweet_chili_sauce": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "sesame_oil_blend": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_garlic": {
                   "amount": 0.125,
@@ -4071,9 +3656,9 @@
                   "volume_ml": 3.125
                 },
                 "oyster_sauce": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "chili_oil": {
                   "amount": 0.125,
@@ -4091,14 +3676,9 @@
                   "volume_ml": 3.125
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chopped_scallions": {
                   "amount": 0,
@@ -4148,15 +3728,14 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0.25,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
                 "lime_juice": 0.5,
                 "vinegar": 0,
                 "crushed_peanuts": 0.25,
-                "sweet_chili_sauce": 0.25,
-                "sesame_oil_blend": 0,
+                "sweet_chili_sauce": 0.125,
+                "sesame_oil_blend": 0.125,
                 "crushed_garlic": 0.125,
                 "chili_powder": 0,
                 "sesame_sauce": 0,
@@ -4164,13 +3743,12 @@
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
-                "chili_oil": 0.25,
+                "chili_oil": 0.125,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.25,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.25,
                 "sugar": null
               },
               "servings": {
@@ -4193,11 +3771,6 @@
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0.25,
-                  "unit": "tongs",
-                  "volume_ml": 6.25
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
@@ -4230,14 +3803,14 @@
                   "volume_ml": 6.25
                 },
                 "sweet_chili_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "sesame_oil_blend": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "crushed_garlic": {
                   "amount": 0.125,
@@ -4275,9 +3848,9 @@
                   "volume_ml": 0
                 },
                 "chili_oil": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -4294,20 +3867,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0.25,
                   "unit": "tongs",
                   "volume_ml": 6.25
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sugar": {
                   "amount": 1,
@@ -4331,28 +3899,26 @@
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0.125,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
-                "lime_juice": 0.5,
+                "lime_juice": 0.25,
                 "vinegar": 0,
-                "crushed_peanuts": 0.25,
+                "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0,
                 "sesame_oil_blend": 0.125,
                 "crushed_garlic": 0,
                 "chili_powder": 0,
-                "sesame_sauce": 0.25,
+                "sesame_sauce": 0.125,
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
-                "fish_sauce": 0.25,
-                "oyster_sauce": 0.25,
+                "fish_sauce": 0.125,
+                "oyster_sauce": 0.125,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0.25,
+                "chopped_scallions": 0.125,
                 "chopped_cilantro": 0,
                 "sugar": null
               },
@@ -4377,11 +3943,6 @@
                   "unit": "ladle",
                   "volume_ml": 3.125
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -4398,9 +3959,9 @@
                   "volume_ml": 0
                 },
                 "lime_juice": {
-                  "amount": 0.5,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 12.5
+                  "volume_ml": 6.25
                 },
                 "vinegar": {
                   "amount": 0,
@@ -4408,9 +3969,9 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "sweet_chili_sauce": {
                   "amount": 0,
@@ -4433,9 +3994,9 @@
                   "volume_ml": 0
                 },
                 "sesame_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "fried_garlic": {
                   "amount": 0.125,
@@ -4448,14 +4009,14 @@
                   "volume_ml": 0
                 },
                 "fish_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "squeeze",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "oyster_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "chili_oil": {
                   "amount": 0,
@@ -4477,198 +4038,10 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
-                  "amount": 0.25,
-                  "unit": "tongs",
-                  "volume_ml": 6.25
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "sugar": {
-                  "amount": 1,
-                  "unit": "shake",
-                  "volume_ml": null
-                }
-              }
-            }
-          ]
-        },
-        {
-          "profile_id": "thai_no_vegetables",
-          "variants": [
-            {
-              "recipe_id": "de50d90918e4-thai_no_vegetables-r1",
-              "id": "r1",
-              "label": "รอบที่ 1",
-              "samples": 1,
-              "units": {
-                "salt": 0,
-                "white_sesame_seeds": 0,
-                "sichuan_pepper": 0,
-                "dark_soy_sauce": 0,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0,
-                "crushed_chili": 0.25,
-                "lime_juice": 0.5,
-                "vinegar": 0,
-                "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0,
-                "crushed_garlic": 0.125,
-                "chili_powder": 0,
-                "sesame_sauce": 0,
-                "fried_garlic": 0.125,
-                "fermented_bean_curd": 0,
-                "fish_sauce": 0.25,
-                "oyster_sauce": 0,
-                "chili_oil": 0.125,
-                "mala_sauce": 0,
-                "lao_gan_ma": 0,
-                "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
-                "sugar": null
-              },
-              "servings": {
-                "salt": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "white_sesame_seeds": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sichuan_pepper": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "dark_soy_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cooked_minced_pork": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_chili": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "lime_juice": {
-                  "amount": 0.5,
-                  "unit": "ladle",
-                  "volume_ml": 12.5
-                },
-                "vinegar": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_peanuts": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sweet_chili_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_oil_blend": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_garlic": {
                   "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "chili_powder": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fried_garlic": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "fermented_bean_curd": {
-                  "amount": 0,
-                  "unit": "squeeze",
-                  "volume_ml": 0
-                },
-                "fish_sauce": {
-                  "amount": 0.25,
-                  "unit": "squeeze",
-                  "volume_ml": 6.25
-                },
-                "oyster_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_oil": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "mala_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lao_gan_ma": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chopped_scallions": {
-                  "amount": 0,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
                   "amount": 0,
@@ -4689,191 +4062,7 @@
     {
       "id": "845ee390b3c6",
       "nickname": "วาฬน้อย",
-      "recipes": [
-        {
-          "profile_id": "thai_mild",
-          "variants": [
-            {
-              "recipe_id": "845ee390b3c6-thai_mild-r1",
-              "id": "r1",
-              "label": "รอบที่ 1",
-              "samples": 1,
-              "units": {
-                "salt": null,
-                "white_sesame_seeds": 0.125,
-                "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.125,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0.125,
-                "cooked_minced_pork": 0.125,
-                "crushed_chili": 0,
-                "lime_juice": 0.125,
-                "vinegar": 0,
-                "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0.125,
-                "crushed_garlic": 0,
-                "chili_powder": 0,
-                "sesame_sauce": 0.125,
-                "fried_garlic": 0,
-                "fermented_bean_curd": 0.125,
-                "fish_sauce": 0.125,
-                "oyster_sauce": 0.125,
-                "chili_oil": 0,
-                "mala_sauce": 0,
-                "lao_gan_ma": 0,
-                "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
-                "sugar": 0
-              },
-              "servings": {
-                "salt": {
-                  "amount": 1,
-                  "unit": "shake",
-                  "volume_ml": null
-                },
-                "white_sesame_seeds": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "sichuan_pepper": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                },
-                "dark_soy_sauce": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "cooked_minced_pork": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "crushed_chili": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lime_juice": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "vinegar": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "crushed_peanuts": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sweet_chili_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_oil_blend": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "crushed_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_powder": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "sesame_sauce": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "fried_garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "fermented_bean_curd": {
-                  "amount": 0.125,
-                  "unit": "squeeze",
-                  "volume_ml": 3.125
-                },
-                "fish_sauce": {
-                  "amount": 0.125,
-                  "unit": "squeeze",
-                  "volume_ml": 3.125
-                },
-                "oyster_sauce": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
-                "chili_oil": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mala_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "lao_gan_ma": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chopped_scallions": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "sugar": {
-                  "amount": 0,
-                  "unit": "shake",
-                  "volume_ml": 0
-                }
-              }
-            }
-          ]
-        }
-      ]
+      "recipes": []
     },
     {
       "id": "080e06f4b12c",
@@ -4892,9 +4081,8 @@
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": null,
                 "dark_soy_sauce": 0.125,
-                "cilantro": 0.125,
                 "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0.125,
+                "cooked_minced_pork": 0,
                 "crushed_chili": 0.125,
                 "lime_juice": 0.25,
                 "vinegar": 0,
@@ -4905,14 +4093,13 @@
                 "chili_powder": 0,
                 "sesame_sauce": 0,
                 "fried_garlic": 0.125,
-                "fermented_bean_curd": 0,
+                "fermented_bean_curd": 0.125,
                 "fish_sauce": 0.125,
                 "oyster_sauce": 0.125,
-                "chili_oil": 0.125,
+                "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.125,
                 "chopped_cilantro": 0.125,
                 "sugar": null
@@ -4938,20 +4125,15 @@
                   "unit": "ladle",
                   "volume_ml": 3.125
                 },
-                "cilantro": {
-                  "amount": 0.125,
-                  "unit": "tongs",
-                  "volume_ml": 3.125
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
                 },
                 "cooked_minced_pork": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_chili": {
                   "amount": 0.125,
@@ -5004,9 +4186,9 @@
                   "volume_ml": 3.125
                 },
                 "fermented_bean_curd": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "squeeze",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "fish_sauce": {
                   "amount": 0.125,
@@ -5019,9 +4201,9 @@
                   "volume_ml": 3.125
                 },
                 "chili_oil": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -5034,11 +4216,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -5071,40 +4248,38 @@
               "label": "รอบที่ 1",
               "samples": 1,
               "units": {
-                "salt": null,
+                "salt": 0,
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.25,
-                "cilantro": 0.125,
+                "dark_soy_sauce": 0.125,
                 "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0.125,
+                "cooked_minced_pork": 0,
                 "crushed_chili": 0,
                 "lime_juice": 0.125,
-                "vinegar": 0.125,
+                "vinegar": 0,
                 "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0,
-                "sesame_oil_blend": 0.25,
+                "sesame_oil_blend": 0.125,
                 "crushed_garlic": 0.125,
                 "chili_powder": 0,
-                "sesame_sauce": 0.125,
+                "sesame_sauce": 0,
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.125,
-                "oyster_sauce": 0.25,
+                "oyster_sauce": 0.125,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.125,
                 "chopped_cilantro": 0,
                 "sugar": null
               },
               "servings": {
                 "salt": {
-                  "amount": 1,
+                  "amount": 0,
                   "unit": "shake",
-                  "volume_ml": null
+                  "volume_ml": 0
                 },
                 "white_sesame_seeds": {
                   "amount": 0.125,
@@ -5117,13 +4292,8 @@
                   "volume_ml": 0
                 },
                 "dark_soy_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "cilantro": {
                   "amount": 0.125,
-                  "unit": "tongs",
+                  "unit": "ladle",
                   "volume_ml": 3.125
                 },
                 "chinese_barbecue_sauce": {
@@ -5132,9 +4302,9 @@
                   "volume_ml": 0
                 },
                 "cooked_minced_pork": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_chili": {
                   "amount": 0,
@@ -5147,9 +4317,9 @@
                   "volume_ml": 3.125
                 },
                 "vinegar": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_peanuts": {
                   "amount": 0.125,
@@ -5162,9 +4332,9 @@
                   "volume_ml": 0
                 },
                 "sesame_oil_blend": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "crushed_garlic": {
                   "amount": 0.125,
@@ -5177,9 +4347,9 @@
                   "volume_ml": 0
                 },
                 "sesame_sauce": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "fried_garlic": {
                   "amount": 0.125,
@@ -5197,9 +4367,9 @@
                   "volume_ml": 3.125
                 },
                 "oyster_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "chili_oil": {
                   "amount": 0,
@@ -5217,11 +4387,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -5257,13 +4422,12 @@
                 "salt": null,
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": null,
-                "dark_soy_sauce": 0.25,
-                "cilantro": 0,
-                "chinese_barbecue_sauce": 0,
-                "cooked_minced_pork": 0.125,
-                "crushed_chili": 0.25,
+                "dark_soy_sauce": 0.125,
+                "chinese_barbecue_sauce": 0.125,
+                "cooked_minced_pork": 0,
+                "crushed_chili": 0.125,
                 "lime_juice": 0.25,
-                "vinegar": 0.125,
+                "vinegar": 0,
                 "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0.125,
                 "sesame_oil_blend": 0.125,
@@ -5273,12 +4437,11 @@
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0.125,
                 "fish_sauce": 0.125,
-                "oyster_sauce": 0.25,
-                "chili_oil": 0.125,
+                "oyster_sauce": 0.125,
+                "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0.125,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
@@ -5300,29 +4463,24 @@
                   "volume_ml": null
                 },
                 "dark_soy_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
-                "chinese_barbecue_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cooked_minced_pork": {
                   "amount": 0.125,
                   "unit": "ladle",
                   "volume_ml": 3.125
                 },
-                "crushed_chili": {
-                  "amount": 0.25,
+                "chinese_barbecue_sauce": {
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
+                },
+                "cooked_minced_pork": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
+                },
+                "crushed_chili": {
+                  "amount": 0.125,
+                  "unit": "ladle",
+                  "volume_ml": 3.125
                 },
                 "lime_juice": {
                   "amount": 0.25,
@@ -5330,9 +4488,9 @@
                   "volume_ml": 6.25
                 },
                 "vinegar": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_peanuts": {
                   "amount": 0.125,
@@ -5380,14 +4538,14 @@
                   "volume_ml": 3.125
                 },
                 "oyster_sauce": {
-                  "amount": 0.25,
-                  "unit": "ladle",
-                  "volume_ml": 6.25
-                },
-                "chili_oil": {
                   "amount": 0.125,
                   "unit": "ladle",
                   "volume_ml": 3.125
+                },
+                "chili_oil": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -5400,11 +4558,6 @@
                   "volume_ml": 3.125
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -5443,13 +4596,12 @@
               "label": "รอบที่ 1",
               "samples": 1,
               "units": {
-                "salt": null,
+                "salt": 0,
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": null,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0.125,
-                "chinese_barbecue_sauce": 0.125,
-                "cooked_minced_pork": 0.125,
+                "chinese_barbecue_sauce": 0,
+                "cooked_minced_pork": 0,
                 "crushed_chili": 0.125,
                 "lime_juice": 0.25,
                 "vinegar": 0,
@@ -5464,19 +4616,18 @@
                 "fish_sauce": 0.125,
                 "oyster_sauce": 0,
                 "chili_oil": 0,
-                "mala_sauce": 0,
+                "mala_sauce": 0.125,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0.125,
-                "chopped_cilantro": 0,
+                "chopped_scallions": 0.25,
+                "chopped_cilantro": 0.125,
                 "sugar": null
               },
               "servings": {
                 "salt": {
-                  "amount": 1,
+                  "amount": 0,
                   "unit": "shake",
-                  "volume_ml": null
+                  "volume_ml": 0
                 },
                 "white_sesame_seeds": {
                   "amount": 0.125,
@@ -5493,20 +4644,15 @@
                   "unit": "ladle",
                   "volume_ml": 6.25
                 },
-                "cilantro": {
-                  "amount": 0.125,
-                  "unit": "tongs",
-                  "volume_ml": 3.125
-                },
                 "chinese_barbecue_sauce": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "cooked_minced_pork": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_chili": {
                   "amount": 0.125,
@@ -5579,9 +4725,9 @@
                   "volume_ml": 0
                 },
                 "mala_sauce": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "lao_gan_ma": {
                   "amount": 0,
@@ -5593,20 +4739,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
+                  "amount": 0.25,
+                  "unit": "tongs",
+                  "volume_ml": 6.25
+                },
+                "chopped_cilantro": {
                   "amount": 0.125,
                   "unit": "tongs",
                   "volume_ml": 3.125
-                },
-                "chopped_cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
                 },
                 "sugar": {
                   "amount": 1,
@@ -5626,40 +4767,38 @@
               "label": "รอบที่ 1",
               "samples": 1,
               "units": {
-                "salt": null,
+                "salt": 0,
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
-                "dark_soy_sauce": 0.5,
-                "cilantro": 0.125,
+                "dark_soy_sauce": 0.25,
                 "chinese_barbecue_sauce": 0.125,
-                "cooked_minced_pork": 0.125,
+                "cooked_minced_pork": 0,
                 "crushed_chili": 0,
                 "lime_juice": 0.125,
                 "vinegar": 0,
                 "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0,
                 "sesame_oil_blend": 0.125,
-                "crushed_garlic": 0,
+                "crushed_garlic": 0.125,
                 "chili_powder": 0,
                 "sesame_sauce": 0.125,
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0.125,
                 "fish_sauce": 0.125,
-                "oyster_sauce": 0.125,
+                "oyster_sauce": 0,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0.25,
+                "chopped_scallions": 0.125,
                 "chopped_cilantro": 0,
                 "sugar": null
               },
               "servings": {
                 "salt": {
-                  "amount": 1,
+                  "amount": 0,
                   "unit": "shake",
-                  "volume_ml": null
+                  "volume_ml": 0
                 },
                 "white_sesame_seeds": {
                   "amount": 0.125,
@@ -5672,14 +4811,9 @@
                   "volume_ml": 0
                 },
                 "dark_soy_sauce": {
-                  "amount": 0.5,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 12.5
-                },
-                "cilantro": {
-                  "amount": 0.125,
-                  "unit": "tongs",
-                  "volume_ml": 3.125
+                  "volume_ml": 6.25
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0.125,
@@ -5687,9 +4821,9 @@
                   "volume_ml": 3.125
                 },
                 "cooked_minced_pork": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_chili": {
                   "amount": 0,
@@ -5722,9 +4856,9 @@
                   "volume_ml": 3.125
                 },
                 "crushed_garlic": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chili_powder": {
                   "amount": 0,
@@ -5752,9 +4886,9 @@
                   "volume_ml": 3.125
                 },
                 "oyster_sauce": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "chili_oil": {
                   "amount": 0,
@@ -5776,15 +4910,10 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
                   "amount": 0,
@@ -5809,22 +4938,21 @@
               "label": "รอบที่ 1",
               "samples": 1,
               "units": {
-                "salt": null,
+                "salt": 0,
                 "white_sesame_seeds": 0.125,
                 "sichuan_pepper": null,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0.125,
-                "cooked_minced_pork": 0.125,
+                "cooked_minced_pork": 0,
                 "crushed_chili": 0.125,
-                "lime_juice": 0.25,
+                "lime_juice": 0.125,
                 "vinegar": 0,
                 "crushed_peanuts": 0.125,
                 "sweet_chili_sauce": 0.125,
                 "sesame_oil_blend": 0.125,
                 "crushed_garlic": 0.125,
                 "chili_powder": 0,
-                "sesame_sauce": 0.125,
+                "sesame_sauce": 0,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0.125,
                 "fish_sauce": 0.125,
@@ -5832,17 +4960,16 @@
                 "chili_oil": 0,
                 "mala_sauce": 0.125,
                 "lao_gan_ma": 0.125,
-                "mushroom_sauce": 0,
-                "garlic": 0,
+                "mushroom_sauce": 0.125,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
               },
               "servings": {
                 "salt": {
-                  "amount": 1,
+                  "amount": 0,
                   "unit": "shake",
-                  "volume_ml": null
+                  "volume_ml": 0
                 },
                 "white_sesame_seeds": {
                   "amount": 0.125,
@@ -5859,20 +4986,15 @@
                   "unit": "ladle",
                   "volume_ml": 6.25
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0.125,
                   "unit": "ladle",
                   "volume_ml": 3.125
                 },
                 "cooked_minced_pork": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "crushed_chili": {
                   "amount": 0.125,
@@ -5880,9 +5002,9 @@
                   "volume_ml": 3.125
                 },
                 "lime_juice": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "vinegar": {
                   "amount": 0,
@@ -5915,9 +5037,9 @@
                   "volume_ml": 0
                 },
                 "sesame_sauce": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "fried_garlic": {
                   "amount": 0,
@@ -5955,14 +5077,9 @@
                   "volume_ml": 3.125
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chopped_scallions": {
                   "amount": 0,
@@ -6007,13 +5124,12 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0.25,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.125,
                 "lime_juice": 0.5,
                 "vinegar": 0,
-                "crushed_peanuts": 0,
+                "crushed_peanuts": 0.25,
                 "sweet_chili_sauce": 0.125,
                 "sesame_oil_blend": 0,
                 "crushed_garlic": 0.125,
@@ -6022,14 +5138,13 @@
                 "fried_garlic": 0.125,
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
-                "oyster_sauce": 0,
-                "chili_oil": 0.125,
+                "oyster_sauce": 0.125,
+                "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0.125,
                 "chopped_scallions": 0.25,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.25,
                 "sugar": null
               },
               "servings": {
@@ -6052,11 +5167,6 @@
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0.25,
-                  "unit": "tongs",
-                  "volume_ml": 6.25
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
@@ -6084,9 +5194,9 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sweet_chili_sauce": {
                   "amount": 0.125,
@@ -6129,14 +5239,14 @@
                   "volume_ml": 6.25
                 },
                 "oyster_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "chili_oil": {
                   "amount": 0.125,
                   "unit": "ladle",
                   "volume_ml": 3.125
+                },
+                "chili_oil": {
+                  "amount": 0,
+                  "unit": "ladle",
+                  "volume_ml": 0
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -6153,20 +5263,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
-                },
                 "chopped_scallions": {
                   "amount": 0.25,
                   "unit": "tongs",
                   "volume_ml": 6.25
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "sugar": {
                   "amount": 1,
@@ -6187,10 +5292,9 @@
               "samples": 1,
               "units": {
                 "salt": 0,
-                "white_sesame_seeds": 0.25,
+                "white_sesame_seeds": 0.125,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
@@ -6210,9 +5314,8 @@
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0.125,
-                "chopped_cilantro": 0,
+                "chopped_cilantro": 0.125,
                 "sugar": null
               },
               "servings": {
@@ -6222,9 +5325,9 @@
                   "volume_ml": 0
                 },
                 "white_sesame_seeds": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "sichuan_pepper": {
                   "amount": 0,
@@ -6234,11 +5337,6 @@
                 "dark_soy_sauce": {
                   "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
                   "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
@@ -6336,20 +5434,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0.125,
                   "unit": "tongs",
                   "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sugar": {
                   "amount": 1,
@@ -6373,14 +5466,13 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.125,
-                "lime_juice": 0.5,
+                "lime_juice": 0.25,
                 "vinegar": 0,
-                "crushed_peanuts": 0,
-                "sweet_chili_sauce": 0.25,
+                "crushed_peanuts": 0.125,
+                "sweet_chili_sauce": 0.125,
                 "sesame_oil_blend": 0,
                 "crushed_garlic": 0.125,
                 "chili_powder": 0,
@@ -6389,11 +5481,10 @@
                 "fermented_bean_curd": 0,
                 "fish_sauce": 0.25,
                 "oyster_sauce": 0,
-                "chili_oil": 0.125,
+                "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0.125,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": null
@@ -6419,11 +5510,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
-                },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
                   "unit": "ladle",
@@ -6440,9 +5526,9 @@
                   "volume_ml": 3.125
                 },
                 "lime_juice": {
-                  "amount": 0.5,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 12.5
+                  "volume_ml": 6.25
                 },
                 "vinegar": {
                   "amount": 0,
@@ -6450,14 +5536,14 @@
                   "volume_ml": 0
                 },
                 "crushed_peanuts": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sweet_chili_sauce": {
-                  "amount": 0.25,
+                  "amount": 0.125,
                   "unit": "ladle",
-                  "volume_ml": 6.25
+                  "volume_ml": 3.125
                 },
                 "sesame_oil_blend": {
                   "amount": 0,
@@ -6500,9 +5586,9 @@
                   "volume_ml": 0
                 },
                 "chili_oil": {
-                  "amount": 0.125,
+                  "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 0
                 },
                 "mala_sauce": {
                   "amount": 0,
@@ -6518,11 +5604,6 @@
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
-                },
-                "garlic": {
-                  "amount": 0.125,
-                  "unit": "ladle",
-                  "volume_ml": 3.125
                 },
                 "chopped_scallions": {
                   "amount": 0,
@@ -6562,7 +5643,6 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
@@ -6576,15 +5656,14 @@
                 "sesame_sauce": 0,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0,
-                "fish_sauce": 0,
+                "fish_sauce": 0.25,
                 "oyster_sauce": 0,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
-                "chopped_scallions": 0,
-                "chopped_cilantro": 0,
+                "chopped_scallions": 0.125,
+                "chopped_cilantro": 0.125,
                 "sugar": 0
               },
               "servings": {
@@ -6607,11 +5686,6 @@
                   "amount": 0.25,
                   "unit": "ladle",
                   "volume_ml": 6.25
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
@@ -6679,9 +5753,9 @@
                   "volume_ml": 0
                 },
                 "fish_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "squeeze",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "oyster_sauce": {
                   "amount": 0,
@@ -6708,20 +5782,15 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "chopped_cilantro": {
-                  "amount": 0,
+                  "amount": 0.125,
                   "unit": "tongs",
-                  "volume_ml": 0
+                  "volume_ml": 3.125
                 },
                 "sugar": {
                   "amount": 0,
@@ -6742,10 +5811,9 @@
               "samples": 1,
               "units": {
                 "salt": 0,
-                "white_sesame_seeds": 0.125,
+                "white_sesame_seeds": 0.25,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0.25,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0,
@@ -6759,13 +5827,12 @@
                 "sesame_sauce": 0.25,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0,
-                "fish_sauce": 0,
+                "fish_sauce": 0.25,
                 "oyster_sauce": 0,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": 0
@@ -6777,9 +5844,9 @@
                   "volume_ml": 0
                 },
                 "white_sesame_seeds": {
-                  "amount": 0.125,
+                  "amount": 0.25,
                   "unit": "ladle",
-                  "volume_ml": 3.125
+                  "volume_ml": 6.25
                 },
                 "sichuan_pepper": {
                   "amount": 0,
@@ -6790,11 +5857,6 @@
                   "amount": 0.25,
                   "unit": "ladle",
                   "volume_ml": 6.25
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
-                  "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
                   "amount": 0,
@@ -6862,9 +5924,9 @@
                   "volume_ml": 0
                 },
                 "fish_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "squeeze",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "oyster_sauce": {
                   "amount": 0,
@@ -6887,11 +5949,6 @@
                   "volume_ml": 0
                 },
                 "mushroom_sauce": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "garlic": {
                   "amount": 0,
                   "unit": "ladle",
                   "volume_ml": 0
@@ -6928,7 +5985,6 @@
                 "white_sesame_seeds": 0,
                 "sichuan_pepper": 0,
                 "dark_soy_sauce": 0,
-                "cilantro": 0,
                 "chinese_barbecue_sauce": 0,
                 "cooked_minced_pork": 0,
                 "crushed_chili": 0.25,
@@ -6942,13 +5998,12 @@
                 "sesame_sauce": 0,
                 "fried_garlic": 0,
                 "fermented_bean_curd": 0,
-                "fish_sauce": 0,
+                "fish_sauce": 0.25,
                 "oyster_sauce": 0,
                 "chili_oil": 0,
                 "mala_sauce": 0,
                 "lao_gan_ma": 0,
                 "mushroom_sauce": 0,
-                "garlic": 0,
                 "chopped_scallions": 0,
                 "chopped_cilantro": 0,
                 "sugar": 0
@@ -6972,11 +6027,6 @@
                 "dark_soy_sauce": {
                   "amount": 0,
                   "unit": "ladle",
-                  "volume_ml": 0
-                },
-                "cilantro": {
-                  "amount": 0,
-                  "unit": "tongs",
                   "volume_ml": 0
                 },
                 "chinese_barbecue_sauce": {
@@ -7045,9 +6095,9 @@
                   "volume_ml": 0
                 },
                 "fish_sauce": {
-                  "amount": 0,
+                  "amount": 0.25,
                   "unit": "squeeze",
-                  "volume_ml": 0
+                  "volume_ml": 6.25
                 },
                 "oyster_sauce": {
                   "amount": 0,
@@ -7074,11 +6124,6 @@
                   "unit": "ladle",
                   "volume_ml": 0
                 },
-                "garlic": {
-                  "amount": 0,
-                  "unit": "ladle",
-                  "volume_ml": 0
-                },
                 "chopped_scallions": {
                   "amount": 0,
                   "unit": "tongs",
@@ -7101,5 +6146,5 @@
       ]
     }
   ],
-  "dataset_id": "b5db00727d704490cde3"
+  "dataset_id": "77482f658baf2373f099"
 }

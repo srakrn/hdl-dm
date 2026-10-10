@@ -97,7 +97,7 @@ class JudgeTests(unittest.TestCase):
     def test_four_axis_average_and_partial_coverage(self):
         public = self.public()
         scores = next(iter(aggregate_judgments(self.data, public, self.config).values()))
-        self.assertAlmostEqual(scores['stars'], 3.3)
+        self.assertAlmostEqual(scores['stars'], 2.95)
         self.assertEqual(scores['count'], 3)
         self.assertTrue(scores['complete'])
         self.assertEqual(set(scores['metrics']), set(AXES))

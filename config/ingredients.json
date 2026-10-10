@@ -24,12 +24,6 @@
     "flavor": "For this station, homemade soy sauce means dark soy sauce: deep soy savoriness, dark color, and a rounded, sometimes molasses-like sweetness. Saltiness and sweetness vary with the recipe."
   },
   {
-    "id": "cilantro",
-    "name": "Cilantro",
-    "thai_name": "ผักชี",
-    "flavor": "Fresh, leafy, citrusy herbal aroma. Some diners perceive it as soapy. Here this means larger leaf pieces, distinct from the finely chopped option."
-  },
-  {
     "id": "chinese_barbecue_sauce",
     "name": "Barbecue sauce",
     "thai_name": "ซอสบาร์บีคิวจีน",
@@ -142,12 +136,6 @@
     "name": "Shiitake sauce",
     "thai_name": "ซอสเห็ด",
     "flavor": "Finely minced shiitake mushrooms in oil: distinctly salty and savory, with a pronounced shiitake aroma, small mushroom pieces, and an oily texture. Adds mushroom umami and richness rather than a smooth creamy body."
-  },
-  {
-    "id": "garlic",
-    "name": "Garlic",
-    "thai_name": "กระเทียม",
-    "flavor": "Raw garlic pungency and a sharp sulfurous aroma with a firm bite. Here this means small fresh garlic pieces, distinct from crushed garlic and fried garlic."
   },
   {
     "id": "chopped_scallions",

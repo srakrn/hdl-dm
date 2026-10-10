@@ -21,7 +21,6 @@
     "id": "thai_no_vegetables",
     "preferences": "A Thai-style sour, salty, moderately spicy dip for food cooked in plain water. Do not add leafy herbs or green vegetable garnishes: no cilantro (including the station condiment labelled Parsley) or scallions (labelled Minced shallots). In this experiment, no vegetables means no cilantro or scallion pieces; garlic, chili, mushrooms, and prepared sauces remain allowed. Balance umami, acidity, a little sweetness, and garlic aroma.",
     "excluded": [
-      "cilantro",
       "chopped_cilantro",
       "chopped_scallions"
     ]

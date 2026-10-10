@@ -70,7 +70,7 @@ def build_payload(model, profile, unit_ml):
             "flavor_assumptions": "These are draft sensory descriptions for this experiment. Where a station sauce is ambiguous, use the stated assumption rather than inventing a specific product recipe.",
             "preparation": "Minced pork is fully cooked. All condiments are ready to eat. Measure every ingredient by volume with the same measuring spoon.",
             "volume_mapping": f"The experiment maps each Noul directly to volume: 0 = omit, 1 = {unit_ml:g} mL (one unit), 0.5 = half a unit. Do not normalize the sum to one. Noul remains a probability of yes, not a native volume prediction.",
-            "goal": "Evaluate each ingredient for one coherent dip. Balance acidity, saltiness, chili heat, sweetness, aroma, richness, and texture. Not every ingredient is needed. Respect excluded ingredients and avoid redundant additions, especially multiple forms of garlic or cilantro.",
+            "goal": "Evaluate each ingredient for one coherent dip. Balance acidity, saltiness, chili heat, sweetness, aroma, richness, and texture. Not every ingredient is needed. Respect excluded ingredients and avoid redundant additions, while preserving useful complementary flavor layers.",
         },
         "questions": {
             item["id"]: {
@@ -112,8 +112,15 @@ def reject_nonfinite_json(value):
     raise ValueError(f"Non-standard JSON numeric constant: {value}")
 
 
+def wire_payload(payload):
+    # Respan accepts plain text state rather than the structured context object.
+    if payload.get("model", "").startswith("respan/") and isinstance(payload.get("state"), dict):
+        return {**payload, "state": json.dumps(payload["state"], ensure_ascii=True)}
+    return payload
+
+
 def post_decisions(payload, key, timeout, retries):
-    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    body = json.dumps(wire_payload(payload), ensure_ascii=False).encode("utf-8")
     request = Request(ENDPOINT, data=body, headers={
         "Authorization": f"Bearer {key}", "Content-Type": "application/json",
         "X-Title": "Haidilao Decisions Benchmark",
@@ -259,7 +266,7 @@ def main():
         "created_at": datetime.now(timezone.utc).isoformat(), "endpoint": ENDPOINT,
         "models_config": models_config, "selected_models": models, "profiles": profiles,
         "ingredients": list(INGREDIENTS), "repeats": args.repeats, "unit_ml": args.unit_ml,
-        "ingredient_catalog": INGREDIENT_CATALOG, "prompt_version": "7-practical-uncapped-ladle-equivalents" if preparation else "6-noul-with-sugar",
+        "ingredient_catalog": INGREDIENT_CATALOG, "prompt_version": "8-v2-rubric-aware-deduplicated" if preparation else "6-noul-with-sugar",
         "method": args.method, "preparation": preparation,
         "threshold": args.threshold, "seed": args.seed, "timeout": args.timeout,
         "workers": args.workers, "retries": args.retries, "dry_run": args.dry_run, "requests_planned": len(jobs),
@@ -288,6 +295,7 @@ def main():
                     def ask(stage_payload):
                         if stop_requested.is_set():
                             raise InterruptedError("Run interrupted")
+                        stage_payload = wire_payload(stage_payload)
                         stage = {"request": stage_payload}
                         record["stages"].append(stage)
                         result, attempts = post_decisions(stage_payload, key, args.timeout, args.retries)

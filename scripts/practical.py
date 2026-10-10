@@ -28,6 +28,7 @@ def selection_payload(base, config):
     state.pop("volume_mapping", None)
     state["preparation"] = f"Minced pork is fully cooked. Condiments are ready to eat. A station ladle holds approximately {config['ladle_ml']:g} mL; squeeze bottles, shakers, and tongs are also available as specified below."
     state["station"] = config
+    state["evaluation_rubric"] = copy.deepcopy(config["evaluation_rubric"])
     state["selection_rule"] = "Choose a coherent dip without an ingredient-count cap. Complex recipes are allowed when each addition contributes useful flavor, aroma, or texture. Noul means probability of inclusion, never an amount. A separate stage will choose discrete doses."
     return payload
 

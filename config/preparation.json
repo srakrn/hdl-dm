@@ -1,5 +1,5 @@
 {
-  "version": "2-uncapped-ladle-equivalents",
+  "version": "v2-rubric-aware-deduplicated",
   "ladle_ml": 25,
   "ladle_amounts": [
     0,
@@ -16,7 +16,6 @@
     "salt": "shake",
     "sugar": "shake",
     "sichuan_pepper": "shake",
-    "cilantro": "tongs",
     "chopped_cilantro": "tongs",
     "chopped_scallions": "tongs"
   },
@@ -24,5 +23,20 @@
     0,
     1,
     2
-  ]
+  ],
+  "evaluation_rubric": {
+    "weights": {
+      "taste": 0.4,
+      "balance": 0.3,
+      "complexity": 0.15,
+      "novelty": 0.15
+    },
+    "scale": "Each criterion is scored from 0 to 5: 0 fails or has none of the property; 1 poor; 2 needs major improvement; 3 usable; 4 good; 5 exceptional. No consolation points.",
+    "taste": "Predict enjoyable flavor for Thai diners in the requested profile, paired with unseasoned food blanched in plain water. Deliciousness comes first.",
+    "balance": "Seasoning proportions, acidity, salt, sweetness, heat, richness and aroma should cooperate. Not every flavor must be present. Avoid overwhelming or clashing flavors.",
+    "complexity": "Reward distinct, complementary layers of flavor, aroma and texture with useful roles. Ingredient count alone earns nothing; a coherent simple dip can still taste excellent.",
+    "novelty": "Reward an interesting, plausible and edible flavor idea beyond a basic Thai lime-and-fish-sauce dip. Novelty alone must not rescue a bad or unbalanced dip.",
+    "validity": "First assess whether this actually functions as a seasoned dipping sauce for unseasoned food. Lightly seasoned minced pork alone is not a dipping sauce and receives zero across all criteria. A ready-made sauce alone may function as a dip, so one ingredient does not automatically mean failure.",
+    "opportunities": "Mala oil sauce, Shiitake sauce, Flavoured bean sauce, Barbecue sauce (shacha), Chilli oil and Fermented bean curd offer opportunities for distinctive numbing spice, mushroom umami, fermented depth, roasted savoriness or aromatic heat. Use only when allowed by the profile and in suitable doses. These are opportunities, not requirements or automatic complexity/novelty bonuses."
+  }
 }

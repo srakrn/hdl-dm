@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -26,11 +27,14 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--repeats', type=int, default=1)
     parser.add_argument('--workers', type=int, default=3)
+    parser.add_argument('--timeout', type=float, default=180)
     args = parser.parse_args()
+    if not math.isfinite(args.timeout) or args.timeout <= 0:
+        parser.error('timeout must be positive and finite')
     if not 1 <= args.repeats <= 5 or not 1 <= args.workers <= 8:
         parser.error('repeats must be 1–5 and workers must be 1–8')
     result = subprocess.run([sys.executable, str(ROOT / 'scripts/benchmark.py'), '--method', 'practical',
-                             '--out', str(args.out), '--repeats', str(args.repeats), '--workers', str(args.workers), '--retries', '0'])
+                             '--out', str(args.out), '--repeats', str(args.repeats), '--workers', str(args.workers), '--retries', '0', '--timeout', str(args.timeout)])
     if result.returncode not in (0, 1):
         return result.returncode
     try:

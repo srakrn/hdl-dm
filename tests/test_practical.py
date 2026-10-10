@@ -31,6 +31,18 @@ class PracticalTests(unittest.TestCase):
         self.assertFalse(set(selected) & set(self.profile["excluded"]))
         self.assertNotIn("lime_juice", selected)
 
+    def test_v2_rubric_reaches_both_stages_and_catalog_matches_station(self):
+        rubric = self.base['state']['evaluation_rubric']
+        self.assertEqual(rubric['weights'], b.read_json(b.ROOT / 'config/judges.json')['weights'])
+        payload, _ = amount_payload(self.base, 'lime_juice', ['lime_juice'], {}, b.INGREDIENT_CATALOG, self.config)
+        self.assertEqual(payload['state']['evaluation_rubric'], rubric)
+        self.assertEqual(len(b.INGREDIENTS), 26)
+        for removed in ('garlic', 'cilantro'):
+            self.assertNotIn(removed, self.base['questions'])
+            self.assertNotIn(removed, self.config['dispensers'])
+        for profile in b.read_json(b.ROOT / 'config/profiles.json'):
+            self.assertFalse(set(profile['excluded']) - set(b.INGREDIENTS))
+
     def test_selection_threshold_includes_boundary_and_rejects_lower(self):
         config = {**self.config, "selection_threshold": .7}
         noul = {name: 0 for name in b.INGREDIENTS}
