@@ -1,0 +1,29 @@
+[
+  {
+    "id": "thai_spicy",
+    "preferences": "A Thai-style dip for food cooked in plain water: fresh lime acidity, balanced salty umami, a little sweetness, and garlic and herbal aromas. Chili heat is welcome; the diner can eat spicy food. Choose heat, richness, and aromatics that work together without overpowering the food.",
+    "excluded": []
+  },
+  {
+    "id": "thai_mild",
+    "preferences": "A non-spicy Thai-style dip for food cooked in plain water, with balanced acidity and salty umami, a little sweetness, and gentle garlic and sesame aromas. No chili heat or Sichuan-pepper tingling or numbness. Avoid chili-containing condiments, even mildly spicy sweet chili sauce, and keep the dip balanced.",
+    "excluded": [
+      "sichuan_pepper",
+      "crushed_chili",
+      "chili_powder",
+      "sweet_chili_sauce",
+      "chili_oil",
+      "mala_sauce",
+      "lao_gan_ma"
+    ]
+  },
+  {
+    "id": "thai_no_vegetables",
+    "preferences": "A Thai-style sour, salty, moderately spicy dip for food cooked in plain water. Do not add leafy herbs or green vegetable garnishes: no cilantro (including the station condiment labelled Parsley) or scallions (labelled Minced shallots). In this experiment, no vegetables means no cilantro or scallion pieces; garlic, chili, mushrooms, and prepared sauces remain allowed. Balance umami, acidity, a little sweetness, and garlic aroma.",
+    "excluded": [
+      "cilantro",
+      "chopped_cilantro",
+      "chopped_scallions"
+    ]
+  }
+]

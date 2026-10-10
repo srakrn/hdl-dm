@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ed">
+  <meta name="description" content="ชิมสูตรน้ำจิ้มที่โมเดลคิดขึ้น โดยไม่ต้องรู้ว่าใครเป็นคนปรุง เลือกสูตรเผ็ดได้ ไม่เผ็ด หรือไม่ใส่ผัก">
+  <title>Haidilao x Decisions Model</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="brand" href="./">Haidilao x Decisions Model</a>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">ให้เอไอปรุงน้ำจิ้มไหตี่เลา<br><span>อร่อยไหมไม่รู้ ลองเอง</span></h1>
+          <p class="intro">เราให้ AI ตระกูลทำหน้าที่ตัดสินใจ (<a href="https://openrouter.ai/blog/insights/what-is-jev/" target="_blank" rel="noopener noreferrer">decision models</a>) ปรุงน้ำจิ้มไหตี่เลาให้สามสูตร มาลุ้นกันว่าจะอร่อยไหม</p>
+          <div class="hero-stats" id="hero-stats"><span>กำลังเปิดสมุดสูตร…</span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 330 260" class="bowl-art">
+            <ellipse cx="166" cy="220" rx="108" ry="15" fill="#d8dfd0"/>
+            <path d="M223 91 L277 25" stroke="#976845" stroke-width="11" stroke-linecap="round"/>
+            <path d="M242 93 L299 29" stroke="#976845" stroke-width="11" stroke-linecap="round"/>
+            <path d="M58 125 C61 211 100 228 165 228 C229 228 266 200 273 125Z" fill="#f2a08e" stroke="#263d32" stroke-width="3.5"/>
+            <path d="M74 143 C83 183 107 208 149 212" fill="none" stroke="#ffd0bf" stroke-width="7" stroke-linecap="round"/>
+            <ellipse cx="165" cy="126" rx="108" ry="32" fill="#fff9e6" stroke="#263d32" stroke-width="3.5"/>
+            <ellipse cx="165" cy="129" rx="94" ry="23" fill="#d57c46"/>
+            <path d="M99 122 l17 -6 12 8 -17 6Z M187 137 l13 -9 15 3 -8 11Z M213 116 l13 -5 10 7 -14 5Z" fill="#427a51"/>
+            <g fill="#ffe4ad"><ellipse cx="140" cy="122" rx="4" ry="2"/><ellipse cx="167" cy="138" rx="4" ry="2"/><ellipse cx="191" cy="115" rx="4" ry="2"/><ellipse cx="116" cy="137" rx="4" ry="2"/></g>
+            <circle cx="131" cy="174" r="4.5" fill="#263d32"/><circle cx="194" cy="174" r="4.5" fill="#263d32"/>
+            <path d="M153 181 Q163 192 174 181" fill="none" stroke="#263d32" stroke-width="3" stroke-linecap="round"/>
+            <ellipse cx="114" cy="185" rx="10" ry="5" fill="#e77e77"/><ellipse cx="210" cy="185" rx="10" ry="5" fill="#e77e77"/>
+            <path d="M112 70 Q96 51 111 34 M154 63 Q138 41 157 21 M195 69 Q182 52 195 40" fill="none" stroke="#b7c8ae" stroke-width="5" stroke-linecap="round"/>
+            <path d="M45 61 l5 11 12 4 -12 5 -5 12 -4 -12 -12 -5 12 -4Z" fill="#d5a23e"/>
+          </svg>
+        </div>
+      </section>
+      <div id="load-error" class="error-box" role="alert" hidden></div>
+      <div id="workspace" class="workspace" hidden>
+        <aside class="model-panel" aria-label="เลือกโมเดล">
+          <div class="section-heading"><span class="step">01</span><h2>เลือกโมเดล</h2></div>
+          <p class="muted panel-intro">ชื่อเล่นสุ่มไว้ให้แล้ว ไม่มีใบ้ค่ายโมเดล</p>
+          <label class="reveal-toggle"><input id="reveal-toggle" type="checkbox"><span class="switch" aria-hidden="true"></span><span>เปิดเผยชื่อโมเดล</span></label>
+          <p id="reveal-error" class="muted" role="status" hidden></p>
+          <label class="model-select-label" for="model-select">ชื่อเล่นโมเดล</label>
+          <select id="model-select" class="model-select"></select>
+        </aside>
+        <section class="recipe-panel" aria-label="สูตรน้ำจิ้ม">
+          <div class="section-heading"><span class="step">02</span><h2>วันนี้อยากจิ้มแบบไหน?</h2></div>
+          <div id="profiles" class="profile-options" aria-label="เลือกสูตร"></div>
+          <article class="recipe-card">
+            <div class="recipe-card-head">
+              <div><h2 id="recipe-title">สูตรน้ำจิ้ม</h2><p id="recipe-real-name" class="real-name" hidden></p></div>
+            </div>
+            <div class="recipe-tools">
+              <label>ดูผล <select id="round-select" aria-label="เลือกรอบผล benchmark"></select></label>
+              <label id="unit-control">1 หน่วย <input id="unit-ml" type="number" min="0.1" max="100" step="0.1" inputmode="decimal" aria-label="ปริมาตรหนึ่งหน่วยเป็นมิลลิลิตร"> mL</label>
+              <button id="share-button" class="text-button" type="button">คัดลอกลิงก์</button>
+            </div>
+            <p id="share-status" class="muted share-status" role="status"></p>
+            <div id="empty-recipe" class="empty-recipe" hidden><span aria-hidden="true">🥣</span><h3>ถ้วยนี้ยังว่างอยู่</h3><p>โมเดลนี้ยังไม่มีผลสำเร็จสำหรับสูตรที่เลือก<br>ลองชิมสูตรของเพื่อนคนอื่นก่อนได้เลย</p></div>
+            <div id="recipe-content">
+              <p id="preparation-note" class="preparation-note"></p>
+              <div class="ingredient-heading"><span>วัตถุดิบ</span><span>ปริมาณ</span></div>
+              <div id="ingredients" class="ingredient-list"></div>
+              <button id="show-zero" class="text-button zero-button" type="button" aria-expanded="false">ดูวัตถุดิบที่ไม่ใส่</button>
+              <div class="recipe-total"><span id="total-label">รวมหนึ่งถ้วย</span><strong id="total-volume"></strong></div>
+              <p id="constraint-note" class="constraint-note" hidden></p>
+              <p id="recipe-note" class="recipe-note"></p>
+              <details class="technical-details"><summary>ดูรายละเอียดปริมาณ</summary><p id="technical-note"></p></details>
+              <div class="rating-area">
+                <div class="rating-box"><span class="rating-label">LLM BASELINE</span><strong id="llm-stars" class="stars">☆☆☆☆☆</strong><p id="llm-note">ยังไม่มีคะแนนจาก LLM</p></div>
+                <div class="rating-box"><span class="rating-label">คนชิมจริง</span><strong id="human-stars" class="stars">☆☆☆☆☆</strong><p id="human-note">รอเพื่อน ๆ มาชิม</p></div>
+              </div>
+              <a id="form-link" class="form-link" hidden target="_blank" rel="noopener noreferrer">ให้คะแนนสูตรนี้</a>
+              <p id="form-pending" class="form-pending">พื้นที่ให้ดาวเตรียมไว้แล้ว ฟอร์มรีวิวจะตามมาในรอบถัดไป</p>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+    <footer><span>Haidilao x Decisions Model</span><span>อาหารลวกน้ำเปล่า · สูตรจากโมเดล · ความชอบจากคุณ</span></footer>
+  </div>
+  <noscript><p>เปิด JavaScript เพื่อเลือกโมเดลและสูตรน้ำจิ้ม</p></noscript>
+</body>
+</html>

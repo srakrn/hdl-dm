@@ -1,0 +1,170 @@
+[
+  {
+    "id": "salt",
+    "name": "Salt",
+    "thai_name": "เกลือ",
+    "flavor": "Clean, direct saltiness with no sweetness, acidity, heat, or aroma. Intensifies savory flavors but can easily make the dip too salty."
+  },
+  {
+    "id": "white_sesame_seeds",
+    "name": "White sesame seeds",
+    "thai_name": "งาขาว",
+    "flavor": "Mildly nutty with a delicate seed crunch. Toasting increases the roasted aroma; unroasted seeds are gentler."
+  },
+  {
+    "id": "sichuan_pepper",
+    "name": "Sichuan pepper",
+    "thai_name": "พริกไทยเสฉวน",
+    "flavor": "Citrusy, floral aroma and a distinctive tingling, numbing sensation. The numbing effect differs from chili heat."
+  },
+  {
+    "id": "dark_soy_sauce",
+    "name": "Homemade soy sauce",
+    "thai_name": "ซีอิ๊วดำ",
+    "flavor": "For this station, homemade soy sauce means dark soy sauce: deep soy savoriness, dark color, and a rounded, sometimes molasses-like sweetness. Saltiness and sweetness vary with the recipe."
+  },
+  {
+    "id": "cilantro",
+    "name": "Cilantro",
+    "thai_name": "ผักชี",
+    "flavor": "Fresh, leafy, citrusy herbal aroma. Some diners perceive it as soapy. Here this means larger leaf pieces, distinct from the finely chopped option."
+  },
+  {
+    "id": "chinese_barbecue_sauce",
+    "name": "Barbecue sauce",
+    "thai_name": "ซอสบาร์บีคิวจีน",
+    "flavor": "Shacha sauce (Chinese barbecue sauce): savory, roasted, oily, and aromatic, with deep umami and seafood notes. This condiment is confirmed to be shacha, rather than a sweet barbecue sauce."
+  },
+  {
+    "id": "cooked_minced_pork",
+    "name": "Minced pork",
+    "thai_name": "หมูสับ",
+    "flavor": "Meaty savoriness, mild pork sweetness, soft small pieces, and some richness from fat. Assumed fully cooked and only lightly seasoned."
+  },
+  {
+    "id": "crushed_chili",
+    "name": "Ground chili",
+    "thai_name": "พริกบด",
+    "flavor": "Bright chili heat with fresh, grassy pepper notes and a moist texture. Assumed fresh crushed chili without added salt or vinegar."
+  },
+  {
+    "id": "lime_juice",
+    "name": "Lime juice",
+    "thai_name": "น้ำมะนาว",
+    "flavor": "Sharp, fresh sourness with a citrus aroma. Adds brightness and cuts through oily or rich ingredients."
+  },
+  {
+    "id": "vinegar",
+    "name": "Vinegar",
+    "thai_name": "น้ำส้มสายชู",
+    "flavor": "Direct sourness with an acetic aroma, less fresh citrus fragrance than lime. Assumed plain vinegar; rice or dark vinegar would add different notes."
+  },
+  {
+    "id": "crushed_peanuts",
+    "name": "Crushed peanuts",
+    "thai_name": "ถั่วลิสงบด",
+    "flavor": "Roasted nuttiness, mild natural sweetness, and a coarse crunch. Adds body and richness; assumed roasted and unsalted."
+  },
+  {
+    "id": "sweet_chili_sauce",
+    "name": "Thai chicken sauce",
+    "thai_name": "น้ำจิ้มไก่",
+    "flavor": "Sweet first, then gently tangy and mildly spicy, with garlic notes. Its thick, concentrated sugar syrup adds sweetness, gloss, viscosity, and body, thickening the dip."
+  },
+  {
+    "id": "sesame_oil_blend",
+    "name": "Sesame oil blend",
+    "thai_name": "น้ำมันงาผสม",
+    "flavor": "Nutty sesame aroma and a smooth, oily mouthfeel. Assumed a toasted sesame oil blend; aroma strength depends on the blend."
+  },
+  {
+    "id": "crushed_garlic",
+    "name": "Crushed garlic",
+    "thai_name": "กระเทียมบด",
+    "flavor": "Strong raw garlic pungency, sharp sulfurous aroma, and a fine moist texture that spreads through the dip."
+  },
+  {
+    "id": "chili_powder",
+    "name": "Chilli powder",
+    "thai_name": "พริกป่น",
+    "flavor": "Dry chili heat with earthy, sometimes roasted notes and a fine, slightly gritty texture. Assumed ground dried chili without a seasoning blend."
+  },
+  {
+    "id": "sesame_sauce",
+    "name": "Sesame sauce",
+    "thai_name": "ซอสงา",
+    "flavor": "Rich roasted sesame nuttiness, thick creamy body, and a slight bitter edge. Assumed sesame-paste-based sauce; added salt or sugar varies."
+  },
+  {
+    "id": "fried_garlic",
+    "name": "Fried garlic",
+    "thai_name": "กระเทียมเจียว",
+    "flavor": "Toasty, mellow garlic aroma, light sweetness, and crisp texture. Less raw pungency than fresh garlic; may carry some frying oil."
+  },
+  {
+    "id": "fermented_bean_curd",
+    "name": "Fermented bean curd",
+    "thai_name": "เต้าหู้ยี้",
+    "flavor": "Concentrated saltiness, fermented funk, deep savoriness, and a soft creamy texture. Red and white varieties may differ in sweetness and aroma."
+  },
+  {
+    "id": "fish_sauce",
+    "name": "Fish sauce",
+    "thai_name": "น้ำปลา",
+    "flavor": "Intense saltiness and fermented fish umami with a distinctive aroma. Small amounts add savory depth familiar in many Thai dips."
+  },
+  {
+    "id": "oyster_sauce",
+    "name": "Oyster sauce",
+    "thai_name": "น้ำมันหอย",
+    "flavor": "Rounded savory umami, moderate saltiness, some sweetness, and a thick glossy texture. Oyster intensity varies by brand."
+  },
+  {
+    "id": "chili_oil",
+    "name": "Chili oil",
+    "thai_name": "น้ำมันพริก",
+    "flavor": "Chili heat in an oily base, often with toasted chili aroma. Adds richness; assumed no pronounced Sichuan-pepper numbness unless specified."
+  },
+  {
+    "id": "mala_sauce",
+    "name": "Mala oil sauce",
+    "thai_name": "ซอสหมาล่า",
+    "flavor": "Chili heat plus Sichuan-pepper tingling and numbness in an oily sauce, with savory spices. Adds both richness and a numbing sensation; intensity depends on the sauce."
+  },
+  {
+    "id": "lao_gan_ma",
+    "name": "Flavoured bean sauce",
+    "thai_name": "เต้าซี่ปรุงรส",
+    "flavor": "A Lao Gan Ma-style seasoned fermented black bean condiment: salty, deeply savory umami, fermented bean aroma, and soft bean pieces. Oil, chili heat, and roasted aromatics depend on the variety; do not assume it is the chili-crisp variant."
+  },
+  {
+    "id": "mushroom_sauce",
+    "name": "Shiitake sauce",
+    "thai_name": "ซอสเห็ด",
+    "flavor": "Finely minced shiitake mushrooms in oil: distinctly salty and savory, with a pronounced shiitake aroma, small mushroom pieces, and an oily texture. Adds mushroom umami and richness rather than a smooth creamy body."
+  },
+  {
+    "id": "garlic",
+    "name": "Garlic",
+    "thai_name": "กระเทียม",
+    "flavor": "Raw garlic pungency and a sharp sulfurous aroma with a firm bite. Here this means small fresh garlic pieces, distinct from crushed garlic and fried garlic."
+  },
+  {
+    "id": "chopped_scallions",
+    "name": "Minced shallots",
+    "thai_name": "ต้นหอมซอย",
+    "flavor": "The station label Minced shallots refers to chopped scallions (green onions), not bulb shallots. Fresh green onion aroma, gentle onion pungency, a little sweetness, and a light crisp bite."
+  },
+  {
+    "id": "chopped_cilantro",
+    "name": "Parsley",
+    "thai_name": "ผักชีซอย",
+    "flavor": "The station label Parsley refers to finely chopped cilantro (coriander), not European parsley. Fresh, citrusy, leafy herbal aroma distributed through the dip by fine chopping; some diners perceive cilantro as soapy."
+  },
+  {
+    "id": "sugar",
+    "name": "Sugar",
+    "thai_name": "น้ำตาล",
+    "flavor": "Clean sweetness with no acidity, saltiness, heat, or aroma. Fine sugar grains dissolve into the dip, softening sourness and balancing salty seasonings; too much makes the sauce cloying."
+  }
+]

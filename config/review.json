@@ -1,0 +1,15 @@
+{
+  "title": "Haidilao x Decisions Model",
+  "form_url": "https://docs.google.com/forms/d/e/1FAIpQLSfCbf2kd5TMg9KQX0zIuXMk1hy-ZphF_yYVz9ukArBK1PlZMA/viewform?usp=pp_url",
+  "form_fields": {
+    "dataset_id": null,
+    "recipe_id": null,
+    "review_id": "entry.1302023336"
+  },
+  "score_weights": {
+    "overall": 0.5,
+    "food_pairing": 0.3,
+    "balance": 0.2
+  },
+  "expected_llm_judges": 3
+}

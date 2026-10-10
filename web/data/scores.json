@@ -1,0 +1,9 @@
+{
+  "dataset_id": "8addfc43b935cfcd08f5",
+  "weights": {
+    "overall": 0.5,
+    "food_pairing": 0.3,
+    "balance": 0.2
+  },
+  "recipes": {}
+}

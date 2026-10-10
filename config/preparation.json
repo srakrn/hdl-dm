@@ -1,0 +1,28 @@
+{
+  "version": "2-uncapped-ladle-equivalents",
+  "ladle_ml": 25,
+  "ladle_amounts": [
+    0,
+    0.125,
+    0.25,
+    0.5,
+    1,
+    2
+  ],
+  "selection_threshold": 0.5,
+  "dispensers": {
+    "fish_sauce": "squeeze",
+    "fermented_bean_curd": "squeeze",
+    "salt": "shake",
+    "sugar": "shake",
+    "sichuan_pepper": "shake",
+    "cilantro": "tongs",
+    "chopped_cilantro": "tongs",
+    "chopped_scallions": "tongs"
+  },
+  "shake_counts": [
+    0,
+    1,
+    2
+  ]
+}
