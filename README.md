@@ -305,7 +305,7 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory web
 
 | Action | เริ่มเมื่อ | ทำอะไร |
 |---|---|---|
-| **Regenerate Recipes** | กด Run workflow บน `main` | เรียก OpenRouter สร้างสูตร practical ทุกโมเดล/สามโปรไฟล์ ส่งออกข้อมูลเว็บ แล้ว commit และ push เฉพาะ `web/data/` |
+| **Regenerate Recipes** | กด Run workflow บน `main` | เรียก OpenRouter สร้างสูตร practical ทุกโมเดล/สามโปรไฟล์ ให้กรรมการ AI วิจารณ์ แล้ว commit และ push เฉพาะ `web/data/` |
 | **Refresh Site** | ทุก push เข้า `main`, หลัง Regenerate Recipes สำเร็จ หรือกด Run workflow | ดึง CSV รีวิวล่าสุด คำนวณคะแนน และ build เว็บเป็น artifact `review-site` โดยไม่เรียกโมเดล |
 
 ตั้ง repository secret **`OPENROUTER_API_KEY`** ที่ **Settings → Secrets and variables → Actions** ก่อนกด Regenerate Recipes ค่าเริ่มต้นคือหนึ่งรอบต่อโมเดล/โปรไฟล์และสามงานพร้อมกัน ปรับ `repeats` ได้ 1–5 และ `workers` ได้ 1–8 การสร้างสูตรใช้เครดิตจริง ไม่รันอัตโนมัติตอน push
@@ -334,7 +334,7 @@ python3 scripts/build_site.py
 
 ชื่อคอลัมน์จริงของ Sheet ถูก map ใน `review_import.columns`, `review_id_column` และ `response_id_column` ตั้งไว้แล้ว หากแก้คำถามในฟอร์มให้แก้ mapping นี้ด้วย รีวิวชุดสูตรเก่าจะถูกข้าม ส่วนรหัสสูตรผิดของชุดปัจจุบัน คะแนนเกินช่วง และรหัสผู้ประเมินซ้ำใน CSV มาตรฐานจะทำให้ build fail เพื่อไม่เผยแพร่คะแนนผิด เมื่อดึง source ใดใหม่จะคำนวณ source นั้นจากข้อมูลทั้งหมดแทนของเดิม; source ที่ไม่ได้ส่งเข้ามาจะคงคะแนนเดิมไว้ การเปลี่ยน weights ต้องมี raw ratings ครบทุก source ที่มีคะแนน
 
-ดึงรีวิวไม่สำเร็จจะหยุด build และไม่ deploy คะแนนเก่าเป็นข้อมูลใหม่ ไม่บันทึกหรือ upload CSV คำตอบส่วนบุคคลลง artifact เว็บ ส่งออกเฉพาะคะแนนรวมและจำนวนรีวิว ส่วน LLM baseline ยังไม่เปิดใช้
+ดึงรีวิวไม่สำเร็จจะหยุด build และไม่ deploy คะแนนเก่าเป็นข้อมูลใหม่ ไม่บันทึกหรือ upload CSV คำตอบส่วนบุคคลลง artifact เว็บ ส่งออกเฉพาะคะแนนรวมและจำนวนรีวิว ส่วน LLM baseline ใช้บทวิจารณ์ที่บันทึกไว้ ไม่เรียกโมเดลซ้ำตอน Refresh
 
 ทดสอบด้วย CSV ในเครื่องหรือเพิ่ม baseline ที่เตรียมไว้แล้ว:
 
@@ -370,7 +370,7 @@ python3 scripts/refresh_site.py --run-dir results/20261010T062327726884Z
 
 ### คำนวณคะแนนสำหรับขั้นถัดไป
 
-ยังไม่เรียก LLM สามตัวในขั้นนี้ เชื่อมลิงก์ Google Forms สำหรับให้คะแนนแล้ว และเตรียมสัญญาข้อมูลไว้ให้ adapter ของ LLM/Google Forms ส่งออก CSV รูปแบบเดียวกัน:
+เชื่อมลิงก์ Google Forms สำหรับให้คะแนนแล้ว คะแนน offline เดิมยังรองรับ CSV รูปแบบนี้ ส่วนกรรมการ AI สี่ด้านใช้ `judge_recipes.py` และ `judgments.json` ตามหัวข้อถัดไป:
 
 ```csv
 dataset_id,recipe_id,source,judge_id,overall,food_pairing,balance,notes
@@ -400,3 +400,37 @@ python3 scripts/refresh_site.py --ratings .local/llm-ratings.csv .local/human-ra
 Google Forms ที่ผู้ใช้ให้มาเชื่อมแล้วผ่าน `form_fields.review_id = entry.1302023336` ใน `config/review.json` ปุ่ม “ให้คะแนนสูตรนี้” แทนค่า prefill ด้วยสตริง JSON เช่น `{"dataset_id":"…","recipe_id":"176e96f9c165-thai_spicy-average"}` โดย `recipe_id` ระบุ alias โมเดล + สูตร + รอบที่เลือก และ `dataset_id` ระบุชุดข้อมูล ปุ่มเปลี่ยนค่าตามสูตร/รอบที่แสดงเสมอ ชื่อจริงไม่อยู่ในค่าที่ส่ง เพื่อรักษา blind review
 
 เมื่อนำคำตอบกลับมาคำนวณคะแนน ให้ adapter parse JSON ในช่องนี้เพื่อได้ `dataset_id` และ `recipe_id` แล้ว map alias ผ่าน `web/data/reveal.json` เมื่อต้องการชื่อโมเดลจริง ปรับหัวคอลัมน์คะแนนเป็น contract ข้างต้นก่อนเรียก `calculate_scores.py` ยังไม่ได้ส่งคำตอบไปยังฟอร์ม ส่วนการดึงคำตอบอัตโนมัติทำผ่าน `build_site.py` และ Refresh Site แล้ว หากเปลี่ยนฟอร์ม ใส่ `form_url` และ entry ใน config แล้ว refresh; ยังรองรับ `form_fields.dataset_id` / `form_fields.recipe_id` สำหรับฟอร์มที่แยกสองช่อง
+
+
+### กรรมการ AI สามตัว
+
+```bash
+python3 scripts/judge_recipes.py --limit 1   # pilot สูตรแรกด้วยทั้งสามกรรมการ
+python3 scripts/judge_recipes.py             # วิจารณ์สูตรที่เหลือ และใช้ผลที่ทำแล้ว
+python3 scripts/build_site.py               # รวมบทวิจารณ์/ดาวกับรีวิวคนชิม
+```
+
+ใช้ OpenRouter chat completions ผ่าน API key เดิมใน `.env` ไม่ใช้ Decisions endpoint สำหรับข้อความวิจารณ์ [`config/judges.json`](config/judges.json) กำหนดกรรมการ คาแรกเตอร์ และ rubric เดียวกันทั้งสามคน:
+
+- **Claude Haiku Latest**: ป้าหน้าบาร์ — อ่าน catalog แล้วเลือก Haiku รุ่นล่าสุดที่ไม่ใช่ batch (รอบนี้ Haiku 5.5)
+- **GPT-6 Luna**: กรรมการถ้วยทอง — รุ่นที่ผู้ใช้ยืนยันแทนชื่อ GPT-6.1 Luna ซึ่งยังไม่อยู่ใน catalog
+- **Gemini Flash Latest**: นักสืบน้ำจิ้ม — อ่าน catalog แล้วเลือก Flash รุ่นล่าสุด ไม่ใช้ Lite, Preview, Image หรือ batch (รอบนี้ Gemini 3.8 Flash)
+
+ชื่อรุ่นที่ร้องขอและชื่อรุ่นที่ API ตอบจริงถูกบันทึกไว้ ไม่เปลี่ยนไปใช้คนละโมเดลแบบเงียบ ๆ คาแรกเตอร์ต่างกันเฉพาะลีลาการพูด ใช้เกณฑ์ให้คะแนนเดียวกัน:
+
+| ด้าน | น้ำหนัก | สิ่งที่ประเมิน |
+|---|---:|---|
+| ความอร่อย (`taste`) | 40% | รสที่คาดว่าจะถูกปากคนไทยในโปรไฟล์นั้น และเข้ากับอาหารลวกน้ำเปล่า |
+| ความกลมกล่อม (`balance`) | 30% | สัดส่วนเปรี้ยว เค็ม หวาน เผ็ด มัน โดยไม่มีรสหนึ่งท่วมทั้งหมด |
+| ความซับซ้อน (`complexity`) | 20% | ชั้นรสที่มีหน้าที่และเข้ากัน ไม่ใช่นับจำนวนวัตถุดิบ |
+| ความแปลกใหม่ (`novelty`) | 10% | ไอเดียใหม่ที่น่าจะใช้ได้จริง ไม่ให้รางวัลการใส่มั่ว |
+
+แต่ละด้าน 0–5 ดาว แล้วถัวเฉลี่ยตามน้ำหนักเป็นดาวของกรรมการคนนั้น คะแนนรวมเป็นค่าเฉลี่ยของกรรมการที่ตอบสำเร็จ แสดงจำนวน `/3` ชัดเจนเมื่อยังไม่ครบ คะแนนนี้ **คาดการณ์จากการอ่านสูตร ไม่ใช่การชิมจริง** และแยกจากคะแนนคนชิมเสมอ
+
+ส่งชื่อ/รสชาติของวัตถุดิบเป็นอังกฤษ ปริมาณตามช้อนใหญ่ 25 mL รวมขวดบีบที่กะเทียบช้อนและ shaker ที่ยังไม่ทราบ mL ไม่ส่งชื่อจริงหรือชื่อเล่นของโมเดลผู้สร้าง ไม่ส่งคะแนนคนชิมหรือความเห็นของกรรมการคนอื่น คำวิจารณ์ภาษาไทยมีมุกตามคาแรกเตอร์ จุดดี จุดห่วง และข้อเสนอปรับสูตร; ตรวจ JSON ช่วงคะแนน ภาษาไทย และหน่วยที่ไม่รองรับก่อนส่งออก
+
+ผลดิบและ usage เก็บที่ `.local/llm-judging/<dataset_id>/` (หรือ `--out`) ซึ่งถูก ignore แต่ละคำขอมี hash ของ dataset, prompt, rubric, โมเดล และสูตร บันทึกสถานะเริ่มส่งก่อนเรียก API และ flush คำตอบทุกครั้ง รันซ้ำจะใช้ cache ไม่คิดเงินซ้ำ ไม่ retry HTTP/transport/คำตอบผิดรูปแบบอัตโนมัติ ใช้ `--retry-failed` เมื่อเลือกลองคำขอที่ล้มเหลวหรือค้างเอง; การ retry อาจใช้เครดิตเพิ่ม
+
+`web/data/judgments.json` เก็บเฉพาะบทวิจารณ์และคะแนนที่ตรวจแล้ว ผูกกับ `dataset_id` และ prompt version; `build_site.py` คำนวณดาวจากไฟล์นี้ทุกครั้ง หากเปลี่ยนสูตรจะไม่เอาคะแนนชุดเก่ามาติดสูตรใหม่ หากเปลี่ยน rubric ต้องรันกรรมการใหม่ เว็บให้กดอ่านรายกรรมการพร้อมดาวทั้งสี่ด้าน
+
+Regenerate Recipes จะสร้างสูตรและรันกรรมการทั้งสามด้วย secret `OPENROUTER_API_KEY` ใน Action เดิม เก็บผลดิบใน artifact `benchmark-results` หากกรรมการบางคำขอไม่สำเร็จจะเตือนและเก็บเฉพาะบทวิจารณ์ที่ผ่าน Refresh Site ดึงรีวิวคนชิมและรวม baseline ที่บันทึกไว้โดยไม่เรียก LLM เพิ่ม

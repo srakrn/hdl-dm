@@ -45,6 +45,15 @@ jobs:
           REPEATS: ${{ inputs.repeats }}
           WORKERS: ${{ inputs.workers }}
         run: python scripts/regenerate_recipes.py --out results/ci --repeats "$REPEATS" --workers "$WORKERS"
+      - name: Let the three critics judge recipes
+        id: judge
+        continue-on-error: true
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python scripts/judge_recipes.py --out results/ci/judging
+      - name: Report incomplete judging
+        if: steps.judge.outcome == 'failure'
+        run: echo '::warning::LLM judging is incomplete. Successful critiques will be retained; inspect benchmark-results.'
       - name: Save benchmark diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -58,6 +67,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add web/data/recipes.json web/data/reveal.json web/data/ratings-template.csv web/data/scores.json
+          if [ -f web/data/judgments.json ]; then git add web/data/judgments.json; fi
           if ! git diff --cached --quiet; then
             git commit -m 'Regenerate decision model recipes'
             git push origin HEAD:main

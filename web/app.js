@@ -60,8 +60,35 @@ function showScore(source, prefix, recipeId) {
     $(`${prefix}-note`).textContent = source === "llm" ? "ยังไม่มีคะแนนจาก LLM" : "รอเพื่อน ๆ มาชิม";
     return;
   }
-  $(`${prefix}-stars`).textContent = `★ ${format(score.stars)} / 5`;
+  $(`${prefix}-stars`).textContent = `★ ${format(Math.round(score.stars * 10) / 10)} / 5`;
   $(`${prefix}-note`).textContent = source === "llm" ? `ผู้ประเมิน ${score.count}/${score.expected_judges} ตัว${score.complete ? "" : " · ยังไม่ครบ"}` : `จากรีวิว ${score.count} รายการ`;
+}
+function renderJudges(recipeId) {
+  const score = state.scores?.dataset_id === state.data.dataset_id ? state.scores.recipes[recipeId]?.llm : null;
+  const reviews = score?.reviews || [];
+  $("judge-panel").hidden = !reviews.length;
+  $("judge-reviews").replaceChildren(...reviews.map(review => {
+    const details = node("details", "judge-review");
+    const summary = node("summary", "judge-summary");
+    summary.append(node("span", "judge-character", review.character), node("span", "judge-stars", `★ ${format(Math.round(review.stars * 10) / 10)} / 5`));
+    const content = node("div", "judge-content");
+    content.append(node("p", "judge-model", review.judge_label || review.requested_model));
+    content.append(node("p", "judge-critique", review.critique));
+    const metrics = node("dl", "judge-metrics");
+    for (const [axis, label] of Object.entries({taste:"ความอร่อย", balance:"ความกลมกล่อม", complexity:"ความซับซ้อน", novelty:"ความแปลกใหม่"})) {
+      const metric = node("div", "");
+      metric.append(node("dt", "", label), node("dd", "", `${format(review.metrics[axis])} / 5`));
+      metrics.append(metric);
+    }
+    content.append(metrics);
+    for (const [field, label] of Object.entries({strength:"จุดที่เข้าท่า", concern:"จุดที่น่าห่วง", suggestion:"ลองปรับแบบนี้"})) {
+      const paragraph = node("p", "judge-observation");
+      paragraph.append(node("strong", "", `${label}: `), document.createTextNode(review[field]));
+      content.append(paragraph);
+    }
+    details.append(summary, content);
+    return details;
+  }));
 }
 function renderForm(recipeId) {
   const review = state.data.review;
@@ -157,6 +184,7 @@ function renderRecipe() {
   $("constraint-note").textContent = `สูตรนี้ยังให้ปริมาตรกับวัตถุดิบที่โจทย์ไม่ต้องการ: ${excluded.map(i => i.label).join(", ")} เก็บคำตอบโมเดลไว้ตามจริง กรุณาตรวจสูตรก่อนชิม`;
   showScore("llm", "llm", variant.recipe_id);
   showScore("human", "human", variant.recipe_id);
+  renderJudges(variant.recipe_id);
   renderForm(variant.recipe_id);
 }
 function render() {

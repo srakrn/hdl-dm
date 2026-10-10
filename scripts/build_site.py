@@ -16,6 +16,7 @@ from urllib.request import Request, urlopen
 
 from benchmark import ROOT, read_json, write_json
 from calculate_scores import METRICS, calculate_scores
+from judge_recipes import aggregate_judgments
 
 FIELDS = ('dataset_id', 'recipe_id', 'source', 'judge_id', *METRICS, 'notes')
 MAX_CSV_BYTES = 10 * 1024 * 1024
@@ -136,6 +137,15 @@ def main():
         text = args.reviews_csv.read_text(encoding='utf-8-sig') if args.reviews_csv else download_reviews(url) if url else None
         old_path = args.data_dir / 'scores.json'
         scores, skipped = refresh_scores(dataset, config, read_json(old_path) if old_path.exists() else None, args.ratings, text)
+        judgments_path = args.data_dir / 'judgments.json'
+        if judgments_path.exists():
+            judgments = read_json(judgments_path)
+            llm_scores = aggregate_judgments(dataset, judgments, read_json(ROOT / 'config/judges.json'))
+            for sources in scores['recipes'].values():
+                sources.pop('llm', None)
+            for recipe_id, score in llm_scores.items():
+                scores['recipes'].setdefault(recipe_id, {})['llm'] = score
+            scores['recipes'] = {recipe: sources for recipe, sources in scores['recipes'].items() if sources}
         dataset['review'] = {'form_url': config.get('form_url'), 'form_fields': config.get('form_fields', {})}
         write_json(args.data_dir / 'recipes.json', dataset)
         write_json(old_path, scores)
@@ -143,7 +153,7 @@ def main():
         parser.error(str(exc))
     print(f"Built site data: {len(scores['recipes'])} scored recipes; skipped {skipped} retired-dataset reviews")
     if text is None:
-        print('No review export configured; retained existing scores. LLM judging is not enabled.')
+        print('No review export configured; retained existing scores. No model calls were made.')
 
 
 if __name__ == '__main__':

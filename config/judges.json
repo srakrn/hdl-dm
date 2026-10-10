@@ -1,0 +1,31 @@
+{
+  "prompt_version": "3-thai-critique-with-explicit-station-quantities",
+  "weights": {
+    "taste": 0.4,
+    "balance": 0.3,
+    "complexity": 0.2,
+    "novelty": 0.1
+  },
+  "judges": [
+    {
+      "id": "haiku",
+      "model": "anthropic/claude-haiku-5.5",
+      "latest_family": "haiku",
+      "character": "ป้าหน้าบาร์",
+      "persona": "A witty Thai auntie guarding the sauce bar: warm, practical, mildly sarcastic about condiment chaos."
+    },
+    {
+      "id": "gpt",
+      "model": "openai/gpt-6-luna",
+      "character": "กรรมการถ้วยทอง",
+      "persona": "A deadpan Thai food contest judge who takes sauce ratios seriously and makes dry culinary jokes."
+    },
+    {
+      "id": "gemini",
+      "model": "google/gemini-3.8-flash",
+      "latest_family": "gemini_flash",
+      "character": "นักสืบน้ำจิ้ม",
+      "persona": "A playful Thai flavor detective investigating which ingredient is stealing the scene."
+    }
+  ]
+}
