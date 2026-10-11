@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ed">
+  <meta name="description" content="จัดอันดับสูตรน้ำจิ้มไหตี่เลารุ่นล่าสุด แยกเผ็ดได้ ไม่เผ็ด และไม่ใส่ผัก จากคะแนนกรรมการเอไอ">
+  <title>Leaderboard · Haidilao x Decisions Model</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Leaderboard น้ำจิ้มไหตี่เลาจากเอไอ">
+  <meta property="og:description" content="อันดับสูตรรุ่นล่าสุด แยกเผ็ดได้ ไม่เผ็ด และไม่ใส่ผัก">
+  <meta property="og:image" content="https://srakrn.github.io/hdl-dm/assets/sharing-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=39d4e215cee0">
+  <script defer src="./leaderboard.js?v=baf184487e21"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="topbar"><a class="brand" href="./">Haidilao x Decisions Model</a><nav class="site-nav"><a href="./">เลือกสูตร</a><a href="./leaderboard.html" aria-current="page">Leaderboard</a></nav></header>
+    <main>
+      <section class="hero" aria-labelledby="leaderboard-title"><div class="hero-copy">
+        <h1 id="leaderboard-title">Leaderboard</h1>
+        <p class="intro">คะแนนเฉลี่ยกรรมการเอไอ แยกตามสูตร เฉพาะรุ่นล่าสุด <span id="latest-version"></span><br>เอไออ่านสูตรแล้วคาดการณ์รสชาติ ยังไม่ได้ชิมจริง</p>
+      </div></section>
+      <label class="reveal-toggle leaderboard-reveal"><input id="leaderboard-reveal" type="checkbox" disabled><span class="switch" aria-hidden="true"></span><span>เปิดเผยชื่อโมเดล</span></label>
+      <p id="leaderboard-status" class="muted" role="status">กำลังจัดอันดับ…</p>
+      <div id="leaderboard-error" class="error-box" role="alert" hidden></div>
+      <div id="leaderboards" class="leaderboards" hidden></div>
+    </main>
+    <footer><span>Made with no purposes by <a href="https://srakrn.me" target="_blank" rel="noopener noreferrer">@srakrn</a></span></footer>
+  </div>
+  <noscript><p>เปิด JavaScript เพื่อดูอันดับสูตร</p></noscript>
+</body>
+</html>

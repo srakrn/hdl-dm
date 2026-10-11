@@ -36,7 +36,7 @@ jobs:
       - name: Test
         run: python -m unittest discover -s tests -v
       - name: Test model and version selection
-        run: node --test tests/test_model_versions.js
+        run: node --test tests/test_*.js
       - name: Fetch reviews and rebuild scores and site data
         env:
           REVIEW_CSV_URL: ${{ secrets.REVIEW_CSV_URL }}
