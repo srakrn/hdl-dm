@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css?v=473a445fa676">
-  <script defer src="./app.js?v=589534543de7"></script>
+  <script defer src="./app.js?v=718db6ad018a"></script>
 </head>
 <body>
   <div class="page-wrap">
@@ -34,7 +34,7 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <h1 id="hero-title">ให้เอไอปรุงน้ำจิ้มไหตี่เลา<br><span>อร่อยไหมไม่รู้ ลองเอง</span></h1>
-          <p class="intro">เราให้ AI ตระกูลทำหน้าที่ตัดสินใจ (<a href="https://openrouter.ai/blog/insights/what-is-jev/" target="_blank" rel="noopener noreferrer">decision models</a>) ปรุงน้ำจิ้มไหตี่เลาให้สามสูตร มาลุ้นกันว่าจะอร่อยไหม <a id="process-link" href="#recipe-process" aria-haspopup="dialog" aria-controls="recipe-process">ดูว่าสร้างสูตรมาได้ไง</a></p>
+          <p class="intro">เราให้เอไอตระกูลทำหน้าที่ตัดสินใจ (<a href="https://openrouter.ai/blog/insights/what-is-jev/" target="_blank" rel="noopener noreferrer">decision models</a>) ปรุงน้ำจิ้มไหตี่เลาให้สามสูตร มาลุ้นกันว่าจะอร่อยไหม <a id="process-link" href="#recipe-process" aria-haspopup="dialog" aria-controls="recipe-process">ดูว่าสร้างสูตรมาได้ไง</a></p>
         </div>
       </section>
       <p id="loading-status" class="muted" role="status">กำลังเปิดสมุดสูตร…</p>
@@ -56,7 +56,7 @@
               <div><h2 id="recipe-title">สูตรน้ำจิ้ม</h2><p id="recipe-real-name" class="real-name" hidden></p></div>
             </div>
             <div class="recipe-tools">
-              <label>ดูผล <select id="round-select" aria-label="เลือกรอบผล benchmark"></select></label>
+              <label>รุ่นสูตร <select id="round-select" aria-label="เลือกรุ่นสูตร"></select></label>
               <label id="unit-control">1 หน่วย <input id="unit-ml" type="number" min="0.1" max="100" step="0.1" inputmode="decimal" aria-label="ปริมาตรหนึ่งหน่วยเป็นมิลลิลิตร"> mL</label>
               <button id="share-button" class="text-button" type="button">คัดลอกลิงก์</button>
             </div>
@@ -70,12 +70,12 @@
               <div class="recipe-total"><span id="total-label">รวมหนึ่งถ้วย</span><strong id="total-volume"></strong></div>
               <p id="constraint-note" class="constraint-note" hidden></p>
               <div class="rating-area">
-                <div class="rating-box"><span class="rating-label">กรรมการ AI</span><strong id="llm-stars" class="stars">☆☆☆☆☆</strong><p id="llm-note">ยังไม่มีคะแนนจาก LLM</p></div>
+                <div class="rating-box"><span class="rating-label">กรรมการเอไอ</span><strong id="llm-stars" class="stars">☆☆☆☆☆</strong><p id="llm-note">ยังไม่มีคะแนนจาก LLM</p></div>
                 <div class="rating-box"><span class="rating-label">คนชิมจริง</span><strong id="human-stars" class="stars">☆☆☆☆☆</strong><p id="human-note">รอเพื่อน ๆ มาชิม</p></div>
               </div>
               <section id="judge-panel" class="judge-panel" hidden aria-labelledby="judge-title">
                 <h3 id="judge-title">กรรมการขอพูดหน่อย</h3>
-                <p class="judge-disclaimer">AI อ่านสูตรแล้วคาดการณ์รสชาติ ยังไม่ได้ชิมจริง</p>
+                <p class="judge-disclaimer">เอไออ่านสูตรแล้วคาดการณ์รสชาติ ยังไม่ได้ชิมจริง</p>
                 <div id="judge-reviews"></div>
               </section>
               <a id="form-link" class="form-link" hidden target="_blank" rel="noopener noreferrer">ให้คะแนนสูตรนี้</a>
@@ -92,14 +92,14 @@
       <h2 id="process-title">สูตรนี้มาได้ไง?</h2>
       <form method="dialog"><button class="process-close" type="submit" autofocus>ปิด</button></form>
     </div>
-    <p id="process-intro">เริ่มจากบอกโจทย์กับของที่มีที่บาร์น้ำจิ้ม แล้วให้ AI เลือกวัตถุดิบและปริมาณเอง ทีละขั้นแบบนี้เลย</p>
+    <p id="process-intro">เริ่มจากบอกโจทย์กับของที่มีที่บาร์น้ำจิ้ม แล้วให้เอไอเลือกวัตถุดิบและปริมาณเอง ทีละขั้นแบบนี้เลย</p>
     <ol class="process-steps">
-      <li><h3>ซุปที่เราจิ้ม</h3><p>เราบอก AI ว่าอยากได้น้ำจิ้มมากินกับอาหารลวกซุปน้ำเปล่า (ที่ไหตี่เลา ถ้าไม่อยากจ่ายค่าน้ำซุปหม้อไหน สามารถสั่งน้ำเปล่ามาลงช่องนั้นได้นะ) และให้โจทย์น้ำจิ้มสามสูตร คือเผ็ดได้ ไม่เผ็ด และไม่ใส่ผัก</p></li>
+      <li><h3>ซุปที่เราจิ้ม</h3><p>เราบอกเอไอว่าอยากได้น้ำจิ้มมากินกับอาหารลวกซุปน้ำเปล่า (ที่ไหตี่เลา ถ้าไม่อยากจ่ายค่าน้ำซุปหม้อไหน สามารถสั่งน้ำเปล่ามาลงช่องนั้นได้นะ) และให้โจทย์น้ำจิ้มสามสูตร คือเผ็ดได้ ไม่เผ็ด และไม่ใส่ผัก</p></li>
       <li><h3>รายการเครื่องปรุง</h3><p>เราส่งรายชื่อวัตถุดิบเป็นอังกฤษ พร้อมอธิบายรสและเนื้อสัมผัส เช่น น้ำจิ้มไก่ มีรสหวานและข้น ซอสเห็ดมีรส เค็มหอมเห็ด และมีน้ำมัน จะได้มีข้อมูลให้คิดก่อนปรุง (ที่ไหตี่เลา มีน้ำจิ้มสุกี้ และน้ำจิ้มซีฟู้ด แต่เราไม่ให้โมเดลเห็นของสองอย่างนี้ เพราะกินเปล่าๆ ก็อร่อยแล้ว 555555)</p></li>
-      <li><h3>รอบแรกให้เลือกวัตถุดิบ</h3><p>AI ให้ค่าตั้งแต่ 0 ถึง 1 ว่าแต่ละอย่างควรใส่ไหม เราเก็บตัวที่ได้ตั้งแต่ 0.7 ขึ้นไป ตัวเลขนี้ใช้เลือกวัตถุดิบ ยังไม่ใช่จำนวนช้อน ไม่จำกัดว่าต้องใช้กี่อย่าง ใน v2 เราบอกเกณฑ์ให้ AI เห็นทั้งตอนเลือกของและเลือกปริมาณ: อร่อย 40% กลมกล่อม 30% ซับซ้อน 15% และแปลกใหม่ 15% ซอสต่าง ๆ เป็นโอกาสสร้างไอเดียรสใหม่ แต่ใส่แล้วต้องเข้ากันและกินได้จริง ไม่ได้คะแนนเพียงเพราะใส่</p></li>
+      <li><h3>รอบแรกให้เลือกวัตถุดิบ</h3><p>เอไอ ให้ค่าตั้งแต่ 0 ถึง 1 ว่าแต่ละอย่างควรใส่ไหม เราเก็บตัวที่ได้ตั้งแต่ 0.7 ขึ้นไป ตัวเลขนี้ใช้เลือกวัตถุดิบ ยังไม่ใช่จำนวนช้อน ไม่จำกัดว่าต้องใช้กี่อย่าง ใน v2 เราบอกเกณฑ์ให้เอไอเห็นทั้งตอนเลือกของและเลือกปริมาณ: อร่อย 40% กลมกล่อม 30% ซับซ้อน 15% และแปลกใหม่ 15% ซอสต่าง ๆ เป็นโอกาสสร้างไอเดียรสใหม่ แต่ใส่แล้วต้องเข้ากันและกินได้จริง ไม่ได้คะแนนเพียงเพราะใส่</p></li>
       <li><h3>รอบสองค่อยถามว่าจะใส่เท่าไหร่</h3><p>ถามทีละอย่าง โดยให้เห็นปริมาณที่เลือกไปแล้ว เลือกได้ว่าจะไม่ใส่ หรือใส่ ⅛, ¼, ½, 1 หรือ 2 ช้อนใหญ่ ช้อนหนึ่งประมาณ 25 mL ขวดบีบก็กะเทียบช้อน ผักใช้ที่คีบแล้วกะปริมาณ ส่วนเกลือ น้ำตาล และพริกไทยให้เขย่าเบา ๆ 1–2 ครั้ง</p></li>
       <li><h3>เอาคำตอบจริงมาให้ลอง</h3><p>เราแสดงสูตรตรงๆ เลย ไม่มีการลองให้เอไอคิดสูตรสามอันแล้วเฉลี่ย เราตั้งชื่อเล่นสุ่มให้แต่ละโมเดล เพื่อให้เลือกลองโดยไม่ติดชื่อค่าย ถ้าอยากรู้ว่าใครปรุง ค่อยเปิดชื่อจริงได้</p></li>
-      <li><h3>ให้กรรมการอ่าน แล้วให้คุณชิม</h3><p>GPT Sol, Gemini Flash และ DeepSeek อ่านสูตรแล้วให้ดาวเรื่องความอร่อย ความกลมกล่อม ความซับซ้อน และความแปลกใหม่ พร้อมแซวกันนิดหน่อย แต่ AI ยังไม่ได้ชิมจริงนะ รีวิวจากคนลองจิ้มจึงแยกไว้อีกช่อง กดให้คะแนนหลังลองได้เลย</p></li>
+      <li><h3>ให้กรรมการอ่าน แล้วให้คุณชิม</h3><p>GPT Sol, Gemini Flash และ DeepSeek อ่านสูตรแล้วให้ดาวเรื่องความอร่อย ความกลมกล่อม ความซับซ้อน และความแปลกใหม่ พร้อมแซวกันนิดหน่อย แต่เอไอยังไม่ได้ชิมจริงนะ รีวิวจากคนลองจิ้มจึงแยกไว้อีกช่อง กดให้คะแนนหลังลองได้เลย</p></li>
     </ol>
   </dialog>
   <noscript><p>เปิด JavaScript เพื่อเลือกโมเดลและสูตรน้ำจิ้ม</p></noscript>

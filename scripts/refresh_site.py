@@ -11,6 +11,7 @@ import statistics
 
 from benchmark import ROOT, read_json, write_json
 from calculate_scores import calculate_scores
+from recipe_versions import prepare_versions
 
 NICKNAMES = (
     "เมฆม้วน", "ดาวเด้ง", "น้องละมุน", "พุดดิ้งพอง", "ก้อนฟู", "จันทร์จิ๋ว",
@@ -130,7 +131,9 @@ def main():
         args.mapping.parent.mkdir(parents=True, exist_ok=True)
         args.out.mkdir(parents=True, exist_ok=True)
         write_json(args.mapping, mapping)
+        versions = prepare_versions(args.out, public["dataset_id"])
         write_json(args.out / "recipes.json", public)
+        write_json(args.out / "versions.json", versions)
         write_json(args.out / "reveal.json", reveal)
         write_json(args.out / "scores.json", scores)
         with (args.out / "ratings-template.csv").open("w", encoding="utf-8-sig", newline="") as f:

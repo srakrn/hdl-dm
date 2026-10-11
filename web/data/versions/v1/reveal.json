@@ -1,0 +1,24 @@
+{
+  "dataset_id": "b5db00727d704490cde3",
+  "models": {
+    "de50d90918e4": "typesafe/jev-1.13",
+    "176e96f9c165": "openai/gpt-6-luna-decisions",
+    "fabaeb50ea32": "cloudflare/clef-flash",
+    "a96858e72ef7": "cloudflare/clef",
+    "d0bc96d27c78": "perplexity/pplx-decider-v1.1-27b",
+    "5e2aedc981df": "liquid/d1",
+    "0b92686c8bb0": "inception/mercury-decide:free",
+    "11a597701346": "jaredpalmer/kev-4b",
+    "fd3833e5f214": "perplexity/pplx-decider-v1-27b",
+    "845ee390b3c6": "upstage/solar-decide",
+    "66fbeb30f2f0": "respan/span-01",
+    "080e06f4b12c": "togethercomputer/tev1-4b-experimental",
+    "ae4f48945107": "upstage/solar-decide-flash",
+    "afcdb9d1cf88": "respan/span-01-lite",
+    "5bc8b4798ae0": "inception/mercury-decide",
+    "ffd8a477fbc4": "microsoft/microsoft-decision-1",
+    "d3ed2487c74d": "nace-ai/drex-v1.5",
+    "f2353cb78014": "respan/span-01-lite:free",
+    "5a07b4d597e4": "cloudflare/clef-omni"
+  }
+}

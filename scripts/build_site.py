@@ -147,6 +147,23 @@ def main():
             for recipe_id, score in llm_scores.items():
                 scores['recipes'].setdefault(recipe_id, {})['llm'] = score
             scores['recipes'] = {recipe: sources for recipe, sources in scores['recipes'].items() if sources}
+        versions_path = args.data_dir / 'versions.json'
+        if versions_path.exists():
+            versions = read_json(versions_path)
+            for version in versions['versions']:
+                if not version['path']:
+                    if version['dataset_id'] != dataset['dataset_id']:
+                        raise ValueError('Current version points to another dataset')
+                    continue
+                archive = args.data_dir / version['path']
+                historical = read_json(archive / 'recipes.json')
+                if historical['dataset_id'] != version['dataset_id']:
+                    raise ValueError('Archived version points to another dataset')
+                # Historical critics keep their original rubric and scores.
+                archived_scores, _ = refresh_scores(historical, config, read_json(archive / 'scores.json'), [], text)
+                historical['review'] = {'form_url': config.get('form_url'), 'form_fields': config.get('form_fields', {})}
+                write_json(archive / 'scores.json', archived_scores)
+                write_json(archive / 'recipes.json', historical)
         dataset['review'] = {'form_url': config.get('form_url'), 'form_fields': config.get('form_fields', {})}
         write_json(args.data_dir / 'recipes.json', dataset)
         write_json(old_path, scores)

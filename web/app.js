@@ -1,6 +1,6 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
-const state = {data:null, scores:null, reveal:null, model:null, profile:null, round:"r1", showZero:false, unit:25, checked:new Map()};
+const state = {data:null, scores:null, reveal:null, model:null, profile:null, round:"r1", showZero:false, unit:25, checked:new Map(), versions:null, version:null, dataPath:""};
 const format = (value) => new Intl.NumberFormat("th-TH", {maximumFractionDigits:3}).format(value);
 function ladleAmount(value) {
   const eighths = Math.round(value * 8);
@@ -18,7 +18,7 @@ async function readData(file) {
 function node(tag, className, text) {
   const result = document.createElement(tag);
   if (className) result.className = className;
-  if (text !== undefined) result.textContent = text;
+  if (text !== undefined) result.textContent = String(text).replace(/\bAI\b/g, "เอไอ");
   return result;
 }
 function modelName(model) {
@@ -29,6 +29,7 @@ function updateURL() {
   url.searchParams.set("m", state.model);
   url.searchParams.set("p", state.profile);
   url.searchParams.set("r", state.round);
+  url.searchParams.set("v", state.version);
   history.replaceState(null, "", url);
 }
 function renderModels() {
@@ -60,7 +61,7 @@ function showScore(source, prefix, recipeId) {
   const score = state.scores?.dataset_id === state.data.dataset_id ? state.scores.recipes[recipeId]?.[source] : null;
   if (!score) {
     $(`${prefix}-stars`).textContent = "☆☆☆☆☆";
-    $(`${prefix}-note`).textContent = source === "llm" ? "ยังไม่มีคะแนนจาก LLM" : "รอเพื่อน ๆ มาชิม";
+    $(`${prefix}-note`).textContent = source === "llm" ? "ยังไม่มีคะแนนจากเอไอ" : "รอเพื่อน ๆ มาชิม";
     return;
   }
   $(`${prefix}-stars`).textContent = `★ ${format(Math.round(score.stars * 10) / 10)} / 5`;
@@ -118,16 +119,14 @@ function renderRecipe() {
   $("recipe-real-name").hidden = !modelName(model);
   $("empty-recipe").hidden = Boolean(recipe);
   $("recipe-content").hidden = !recipe;
-  $("round-select").disabled = !recipe;
-  $("round-select").replaceChildren();
+  $("round-select").replaceChildren(...state.versions.versions.map(version => {
+    const option = node("option", "", version.label);
+    option.value = version.id;
+    option.selected = version.id === state.version;
+    return option;
+  }));
   if (!recipe) return;
   if (!recipe.variants.some(v => v.id === state.round)) state.round = recipe.variants.find(v => v.id !== "average")?.id || recipe.variants[0].id;
-  for (const variant of recipe.variants) {
-    const option = node("option", "", variant.label);
-    option.value = variant.id;
-    option.selected = variant.id === state.round;
-    $("round-select").append(option);
-  }
   const variant = recipe.variants.find(v => v.id === state.round);
   const practical = state.data.method === "practical";
   $("unit-control").hidden = practical;
@@ -189,18 +188,31 @@ function render() {
   renderModels(); renderProfiles(); renderRecipe(); updateURL();
 }
 
+async function loadVersion(versionId) {
+  const version = state.versions.versions.find(v => v.id === versionId);
+  if (!version) throw new Error("Unknown recipe version");
+  const [data, scores, reveal] = await Promise.all([
+    readData(`${version.path}recipes.json`),
+    readData(`${version.path}scores.json`).catch(() => null),
+    $("reveal-toggle").checked ? readData(`${version.path}reveal.json`) : Promise.resolve(null)
+  ]);
+  if (data.dataset_id !== version.dataset_id || (reveal && reveal.dataset_id !== data.dataset_id)) throw new Error("Stale version data");
+  const available = data.models.filter(m => m.recipes.length);
+  if (!available.length || !data.profiles.length) throw new Error("No data");
+  Object.assign(state, {data, scores, reveal, version:version.id, dataPath:version.path});
+  if (!available.some(m => m.id === state.model)) state.model = available[0].id;
+  if (!data.profiles.some(p => p.id === state.profile)) state.profile = data.profiles[0].id;
+  state.unit = data.unit_ml;
+  $("unit-ml").value = state.unit;
+}
 async function init() {
   try {
-    state.data = await readData("recipes.json");
-    state.scores = await readData("scores.json").catch(() => null);
-    const available = state.data.models.filter(m => m.recipes.length);
-    if (!available.length || !state.data.profiles.length) throw new Error("No data");
+    state.versions = await readData("versions.json");
     const params = new URL(location.href).searchParams;
-    state.model = available.some(m => m.id === params.get("m")) ? params.get("m") : available[0].id;
-    state.profile = state.data.profiles.some(p => p.id === params.get("p")) ? params.get("p") : state.data.profiles[0].id;
+    state.model = params.get("m");
+    state.profile = params.get("p");
     state.round = params.get("r") || "r1";
-    state.unit = state.data.unit_ml;
-    $("unit-ml").value = state.unit;
+    await loadVersion(state.versions.versions.some(v => v.id === params.get("v")) ? params.get("v") : state.versions.current);
     $("loading-status").hidden = true;
     $("workspace").hidden = false;
     render();
@@ -211,7 +223,14 @@ async function init() {
   }
 }
 $("model-select").addEventListener("change", event => {state.model = event.target.value; state.round = "r1"; render();});
-$("round-select").addEventListener("change", event => {state.round = event.target.value; renderRecipe(); updateURL();});
+$("round-select").addEventListener("change", async event => {
+  const version = event.target.value;
+  event.target.disabled = true;
+  $("share-status").textContent = "";
+  try {await loadVersion(version); render();}
+  catch {event.target.value = state.version; $("share-status").textContent = "เปิดสูตรรุ่นนี้ไม่สำเร็จ ลองอีกครั้งได้เลย";}
+  finally {event.target.disabled = false;}
+});
 $("unit-ml").addEventListener("input", event => {
   const value = Number(event.target.value);
   if (Number.isFinite(value) && value >= .1 && value <= 100) {state.unit = value; renderRecipe();}
@@ -227,7 +246,7 @@ $("reveal-toggle").addEventListener("change", async event => {
   if (toggle.checked && !state.reveal) {
     toggle.disabled = true;
     try {
-      const reveal = await readData("reveal.json");
+      const reveal = await readData(`${state.dataPath}reveal.json`);
       if (reveal.dataset_id !== state.data.dataset_id) throw new Error("Stale mapping");
       state.reveal = reveal;
     } catch {
