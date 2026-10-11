@@ -257,15 +257,17 @@ $("reveal-toggle").addEventListener("change", async event => {
   }
   renderModels(); renderRecipe();
 });
-const processDialog = $("recipe-process");
-$("process-link").addEventListener("click", event => {
-  event.preventDefault();
-  if (!processDialog.open) processDialog.showModal();
-});
-processDialog.addEventListener("click", event => {
-  if (event.target !== processDialog) return;
-  const bounds = processDialog.getBoundingClientRect();
-  if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) processDialog.close();
-});
-processDialog.addEventListener("close", () => $("process-link").focus());
+for (const [linkId, dialogId] of [["process-link", "recipe-process"], ["versions-link", "recipe-versions"]]) {
+  const dialog = $(dialogId);
+  $(linkId).addEventListener("click", event => {
+    event.preventDefault();
+    if (!dialog.open) dialog.showModal();
+  });
+  dialog.addEventListener("click", event => {
+    if (event.target !== dialog) return;
+    const bounds = dialog.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
+  });
+  dialog.addEventListener("close", () => $(linkId).focus());
+}
 init();
