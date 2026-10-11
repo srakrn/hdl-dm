@@ -13,6 +13,17 @@ import build_site
 
 
 class RecipeVersionTests(unittest.TestCase):
+    def test_published_v1_is_the_original_fifty_percent_dataset(self):
+        root = ROOT / 'web/data'
+        index = read_json(root / 'versions.json')
+        version = next(v for v in index['versions'] if v['id'] == 'v1')
+        data = read_json(root / version['path'] / 'recipes.json')
+        self.assertEqual(data['preparation']['selection_threshold'], .5)
+        self.assertEqual(version['dataset_id'], '8addfc43b935cfcd08f5')
+        self.assertEqual(data['dataset_id'], version['dataset_id'])
+        for name in ('scores.json', 'judgments.json', 'reveal.json'):
+            self.assertEqual(read_json(root / version['path'] / name)['dataset_id'], data['dataset_id'])
+
     def test_new_dataset_archives_existing_recipes_and_bound_scores(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
