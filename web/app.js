@@ -1,6 +1,6 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
-const state = {data:null, scores:null, reveal:null, model:null, profile:null, round:"r1", showZero:false, unit:25, checked:new Map(), versions:null, version:null, dataPath:""};
+const state = {data:null, scores:null, reveal:null, model:null, profile:null, round:"r1", showZero:false, unit:25, checked:new Map(), versions:null, version:null, dataPath:"", bundles:new Map(), allModels:[], names:new Map()};
 const format = (value) => new Intl.NumberFormat("th-TH", {maximumFractionDigits:3}).format(value);
 function ladleAmount(value) {
   const eighths = Math.round(value * 8);
@@ -22,7 +22,7 @@ function node(tag, className, text) {
   return result;
 }
 function modelName(model) {
-  return $("reveal-toggle").checked ? state.reveal?.models[model.id] : null;
+  return $("reveal-toggle").checked ? state.names.get(model.id) : null;
 }
 function updateURL() {
   const url = new URL(location.href);
@@ -33,9 +33,11 @@ function updateURL() {
   history.replaceState(null, "", url);
 }
 function renderModels() {
-  $("model-select").replaceChildren(...state.data.models.filter(model => model.recipes.length).map(model => {
+  $("model-select").replaceChildren(...state.allModels.map(model => {
     const realName = modelName(model);
-    const scores = state.scores?.dataset_id === state.data.dataset_id ? model.recipes.flatMap(recipe => recipe.variants.map(variant => state.scores.recipes[variant.recipe_id]?.llm)).filter(score => score?.complete && Number.isFinite(score.stars)) : [];
+    const bundle = nearestBundle(model.id, state.version, state.profile);
+    const candidate = bundle.data.models.find(m => m.id === model.id);
+    const scores = bundle.scores?.dataset_id === bundle.data.dataset_id ? candidate.recipes.flatMap(recipe => recipe.variants.map(variant => bundle.scores.recipes[variant.recipe_id]?.llm)).filter(score => score?.complete && Number.isFinite(score.stars)) : [];
     const average = scores.length ? scores.reduce((sum, score) => sum + score.stars, 0) / scores.length : null;
     const rating = average === null ? "ยังไม่มีคะแนนเฉลี่ย" : `★ ${format(Math.round(average * 10) / 10)} / 5`;
     const option = node("option", "", `${model.nickname} · ${rating}${realName ? ` — ${realName}` : ""}`);
@@ -52,7 +54,7 @@ function renderProfiles() {
     button.dataset.profileId = profile.id;
     button.setAttribute("aria-pressed", String(profile.id === state.profile));
     button.textContent = profile.label;
-    button.addEventListener("click", () => {state.profile = profile.id; state.round = "r1"; render();});
+    button.addEventListener("click", async () => {state.profile = profile.id; state.round = "r1"; await loadVersion(state.version); render();});
     return button;
   }));
   if (focused) [...$("profiles").children].find(button => button.dataset.profileId === focused)?.focus({preventScroll:true});
@@ -188,28 +190,44 @@ function render() {
   renderModels(); renderProfiles(); renderRecipe(); updateURL();
 }
 
+function hasRecipe(bundle, modelId, profileId = null) {
+  const model = bundle.data.models.find(m => m.id === modelId);
+  return Boolean(model?.recipes.some(recipe => (!profileId || recipe.profile_id === profileId) && recipe.variants.length));
+}
+function nearestBundle(modelId, versionId, profileId = null) {
+  const requested = Number(versionId.slice(1));
+  const all = [...state.bundles.values()];
+  let candidates = all.filter(bundle => hasRecipe(bundle, modelId, profileId));
+  if (!candidates.length && profileId) candidates = all.filter(bundle => hasRecipe(bundle, modelId));
+  return candidates.sort((a,b) => Math.abs(Number(a.version.id.slice(1)) - requested) - Math.abs(Number(b.version.id.slice(1)) - requested) || Number(b.version.id.slice(1)) - Number(a.version.id.slice(1)))[0];
+}
 async function loadVersion(versionId) {
-  const version = state.versions.versions.find(v => v.id === versionId);
-  if (!version) throw new Error("Unknown recipe version");
-  const [data, scores, reveal] = await Promise.all([
-    readData(`${version.path}recipes.json`),
-    readData(`${version.path}scores.json`).catch(() => null),
-    $("reveal-toggle").checked ? readData(`${version.path}reveal.json`) : Promise.resolve(null)
-  ]);
-  if (data.dataset_id !== version.dataset_id || (reveal && reveal.dataset_id !== data.dataset_id)) throw new Error("Stale version data");
-  const available = data.models.filter(m => m.recipes.length);
-  if (!available.length || !data.profiles.length) throw new Error("No data");
-  Object.assign(state, {data, scores, reveal, version:version.id, dataPath:version.path});
-  if (!available.some(m => m.id === state.model)) state.model = available[0].id;
-  if (!data.profiles.some(p => p.id === state.profile)) state.profile = data.profiles[0].id;
+  const bundle = nearestBundle(state.model, versionId, state.profile);
+  if (!bundle) throw new Error("No recipe for model");
+  const {data, scores, version} = bundle;
+  Object.assign(state, {data, scores, version:version.id, dataPath:version.path});
+  if (!hasRecipe(bundle, state.model, state.profile)) {
+    state.profile = data.models.find(m => m.id === state.model).recipes.find(recipe => recipe.variants.length).profile_id;
+  }
   state.unit = data.unit_ml;
   $("unit-ml").value = state.unit;
 }
 async function init() {
   try {
     state.versions = await readData("versions.json");
+    await Promise.all(state.versions.versions.map(async version => {
+      const [data, scores] = await Promise.all([readData(`${version.path}recipes.json`), readData(`${version.path}scores.json`).catch(() => null)]);
+      if (data.dataset_id !== version.dataset_id) throw new Error("Stale version data");
+      state.bundles.set(version.id, {version, data, scores});
+    }));
+    const models = new Map();
+    for (const bundle of state.bundles.values()) {
+      for (const model of bundle.data.models) if (hasRecipe(bundle, model.id)) models.set(model.id, model);
+    }
+    state.allModels = [...models.values()].sort((a,b) => a.nickname.localeCompare(b.nickname, "th"));
+    if (!state.allModels.length) throw new Error("No data");
     const params = new URL(location.href).searchParams;
-    state.model = params.get("m");
+    state.model = state.allModels.some(m => m.id === params.get("m")) ? params.get("m") : state.allModels[0].id;
     state.profile = params.get("p");
     state.round = params.get("r") || "r1";
     await loadVersion(state.versions.versions.some(v => v.id === params.get("v")) ? params.get("v") : state.versions.current);
@@ -222,7 +240,7 @@ async function init() {
     $("load-error").textContent = "เปิดสมุดสูตรไม่สำเร็จ ลองโหลดหน้าใหม่อีกครั้ง หากเปิดจากไฟล์โดยตรง ให้เปิดเว็บผ่าน HTTP server หรือ GitHub Pages";
   }
 }
-$("model-select").addEventListener("change", event => {state.model = event.target.value; state.round = "r1"; render();});
+$("model-select").addEventListener("change", async event => {state.model = event.target.value; state.round = "r1"; await loadVersion(state.version); render();});
 $("round-select").addEventListener("change", async event => {
   const version = event.target.value;
   event.target.disabled = true;
@@ -243,12 +261,15 @@ $("share-button").addEventListener("click", async () => {
 $("reveal-toggle").addEventListener("change", async event => {
   const toggle = event.target;
   $("reveal-error").hidden = true;
-  if (toggle.checked && !state.reveal) {
+  if (toggle.checked && !state.names.size) {
     toggle.disabled = true;
     try {
-      const reveal = await readData(`${state.dataPath}reveal.json`);
-      if (reveal.dataset_id !== state.data.dataset_id) throw new Error("Stale mapping");
-      state.reveal = reveal;
+      const mappings = await Promise.all([...state.bundles.values()].map(async bundle => {
+        const reveal = await readData(`${bundle.version.path}reveal.json`);
+        if (reveal.dataset_id !== bundle.data.dataset_id) throw new Error("Stale mapping");
+        return reveal.models;
+      }));
+      for (const mapping of mappings) for (const [id, name] of Object.entries(mapping)) state.names.set(id, name);
     } catch {
       toggle.checked = false;
       $("reveal-error").textContent = "เปิดชื่อไม่สำเร็จ ลองอีกครั้งได้เลย";
