@@ -22,8 +22,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=39d4e215cee0">
-  <script defer src="./app.js?v=c2200e5fb18a"></script>
+  <link rel="stylesheet" href="./styles.css?v=4821694a9c42">
+  <script defer src="./app.js?v=169d8c8f02f0"></script>
 </head>
 <body>
   <div class="page-wrap">
@@ -74,6 +74,10 @@
                 <div class="rating-box"><span class="rating-label">กรรมการเอไอ</span><strong id="llm-stars" class="stars">☆☆☆☆☆</strong><p id="llm-note">ยังไม่มีคะแนนจาก LLM</p></div>
                 <div class="rating-box"><span class="rating-label">คนชิมจริง</span><strong id="human-stars" class="stars">☆☆☆☆☆</strong><p id="human-note">รอเพื่อน ๆ มาชิม</p></div>
               </div>
+              <section id="human-panel" class="human-panel" hidden aria-labelledby="human-title">
+                <h3 id="human-title">คนชิมว่าไงบ้าง</h3>
+                <div id="human-reviews"></div>
+              </section>
               <section id="judge-panel" class="judge-panel" hidden aria-labelledby="judge-title">
                 <h3 id="judge-title">กรรมการขอพูดหน่อย</h3>
                 <p class="judge-disclaimer">เอไออ่านสูตรแล้วคาดการณ์รสชาติ ยังไม่ได้ชิมจริง</p>

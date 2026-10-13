@@ -51,7 +51,7 @@ def calculate_scores(dataset, rating_paths, config):
                 if any(not math.isfinite(v) or not low <= v <= high for v in values.values()):
                     raise ValueError("Rating values are outside the configured score range")
                 weighted = sum(values[m] * weights[m] for m in metrics) / sum(weights[m] for m in metrics)
-                grouped.setdefault(recipe_id, {}).setdefault(source, []).append((judge, values, weighted))
+                grouped.setdefault(recipe_id, {}).setdefault(source, []).append((judge, values, weighted, (row.get("notes") or "").strip()))
                 if source == "llm" and len(grouped[recipe_id][source]) > expected:
                     raise ValueError("More LLM judges than expected; update expected_llm_judges in config")
     output = {}
@@ -65,6 +65,10 @@ def calculate_scores(dataset, rating_paths, config):
                 "expected_judges": expected if source == "llm" else None,
                 "complete": len(entries) == expected if source == "llm" else True,
             }
+            if source == "human":
+                output[recipe_id][source]["reviews"] = [
+                    {"stars": entry[2], "text": entry[3]} for entry in entries if entry[3]
+                ]
     return {"dataset_id": dataset["dataset_id"], "weights": weights, "recipes": output}
 
 

@@ -36,7 +36,8 @@ class SiteBuildTests(unittest.TestCase):
         self.assertEqual(human['metrics'], {'overall': 2.5})
         self.assertEqual(human['count'], 2)
         self.assertEqual(skipped, 0)
-        self.assertNotIn('private note', str(scores))
+        self.assertEqual(human['reviews'], [{'stars': 0.0, 'text': 'private note'}])
+        self.assertNotIn('judge_id', str(human['reviews']))
         self.assertNotIn('time1', str(scores))
 
     def test_stale_reviews_skip_but_current_invalid_reference_fails(self):

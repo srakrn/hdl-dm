@@ -69,6 +69,16 @@ function showScore(source, prefix, recipeId) {
   $(`${prefix}-stars`).textContent = `★ ${format(Math.round(score.stars * 10) / 10)} / 5`;
   $(`${prefix}-note`).textContent = source === "llm" ? `ผู้ประเมิน ${score.count}/${score.expected_judges} ตัว${score.complete ? "" : " · ยังไม่ครบ"}` : `จากรีวิว ${score.count} รายการ`;
 }
+function renderHumanReviews(recipeId) {
+  const score = state.scores?.dataset_id === state.data.dataset_id ? state.scores.recipes[recipeId]?.human : null;
+  const reviews = (score?.reviews || []).filter(review => typeof review.text === "string" && review.text.trim());
+  $("human-panel").hidden = !reviews.length;
+  $("human-reviews").replaceChildren(...reviews.map(review => {
+    const card = node("article", "human-review");
+    card.append(node("p", "human-review-stars", `★ ${format(Math.round(review.stars * 10) / 10)} / 5`), node("p", "human-review-text", review.text));
+    return card;
+  }));
+}
 function renderJudges(recipeId) {
   const score = state.scores?.dataset_id === state.data.dataset_id ? state.scores.recipes[recipeId]?.llm : null;
   const reviews = score?.reviews || [];
@@ -183,6 +193,7 @@ function renderRecipe() {
   $("constraint-note").textContent = `สูตรนี้ยังให้ปริมาตรกับวัตถุดิบที่โจทย์ไม่ต้องการ: ${excluded.map(i => i.label).join(", ")} เก็บคำตอบโมเดลไว้ตามจริง กรุณาตรวจสูตรก่อนชิม`;
   showScore("llm", "llm", variant.recipe_id);
   showScore("human", "human", variant.recipe_id);
+  renderHumanReviews(variant.recipe_id);
   renderJudges(variant.recipe_id);
   renderForm(variant.recipe_id);
 }
