@@ -37,13 +37,13 @@ class BenchmarkTests(unittest.TestCase):
     def test_native_contract_and_exact_ingredients(self):
         profile = b.read_json(b.ROOT / "config/profiles.json")[0]
         payload = b.build_payload("typesafe/jev-1.13", profile, 5)
-        self.assertEqual(len(payload["questions"]), 26)
+        self.assertEqual(len(payload["questions"]), 24)
         self.assertTrue(all(q["type"] == "noul" for q in payload["questions"].values()))
         self.assertEqual(set(payload["questions"]), set(b.INGREDIENTS))
         self.assertEqual(b.parse_answers(response())["lime_juice"], .7)
 
     def test_english_prompt_flavors_and_exclusions(self):
-        self.assertEqual(len(set(b.INGREDIENTS)), 26)
+        self.assertEqual(len(set(b.INGREDIENTS)), 24)
         self.assertTrue({"chopped_scallions", "chopped_cilantro", "crushed_garlic"}.issubset(b.INGREDIENTS))
         profiles = b.read_json(b.ROOT / "config/profiles.json")
         for profile in profiles:
@@ -137,7 +137,7 @@ class BenchmarkTests(unittest.TestCase):
             self.assertNotIn("secret-test", (out / "results.jsonl").read_text())
             with (out / "recipes.csv").open(encoding="utf-8-sig") as f:
                 recipes = list(csv.DictReader(f))
-                self.assertEqual(len(recipes), 26)
+                self.assertEqual(len(recipes), 24)
                 self.assertEqual({r["ingredient"] for r in recipes}, set(b.THAI_NAMES.values()))
             recipe = b.read_json(out / "recipes.json")[0]
             self.assertEqual(recipe["volume_ml"]["น้ำมะนาว"], 3.5)

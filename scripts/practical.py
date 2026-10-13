@@ -5,6 +5,17 @@ import math
 
 
 def validate_config(config, ingredient_ids):
+    if config.get("mode") == "volume_parts":
+        value = config["part_ml"]
+        amounts = config["part_amounts"]
+        if type(value) not in (int, float) or not math.isfinite(value) or value <= 0:
+            raise ValueError("part_ml must be positive and finite")
+        if (not isinstance(amounts, list) or any(type(x) not in (int, float) or not math.isfinite(x) for x in amounts)
+                or amounts != [0, .25, .5, .75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.5, 4, 4.5, 5, 6, 7, 8]):
+            raise ValueError("volume_parts requires the agreed 20 dose options")
+        if type(config["selection_threshold"]) not in (int, float) or not 0 <= config["selection_threshold"] <= 1:
+            raise ValueError("selection_threshold must be in [0, 1]")
+        return
     if type(config["ladle_ml"]) not in (int, float) or not math.isfinite(config["ladle_ml"]) or config["ladle_ml"] <= 0:
         raise ValueError("ladle_ml must be positive and finite")
     amounts = config["ladle_amounts"]
@@ -26,8 +37,12 @@ def selection_payload(base, config):
     payload = copy.deepcopy(base)
     state = payload["state"]
     state.pop("volume_mapping", None)
-    state["preparation"] = f"Minced pork is fully cooked. Condiments are ready to eat. A station ladle holds approximately {config['ladle_ml']:g} mL; squeeze bottles, shakers, and tongs are also available as specified below."
-    state["station"] = config
+    if config.get("mode") == "volume_parts":
+        state["preparation"] = "Minced pork is fully cooked. All condiments are ready to eat. Amounts are expressed as parts by volume, not weight. Use the same volume basis for every ingredient."
+        state["station"] = {"mode": "volume_parts", "part_amounts": config["part_amounts"], "selection_threshold": config["selection_threshold"]}
+    else:
+        state["preparation"] = f"Minced pork is fully cooked. Condiments are ready to eat. A station ladle holds approximately {config['ladle_ml']:g} mL; squeeze bottles, shakers, and tongs are also available as specified below."
+        state["station"] = config
     state["evaluation_rubric"] = copy.deepcopy(config["evaluation_rubric"])
     state["selection_rule"] = "Choose a coherent dip without an ingredient-count cap. Complex recipes are allowed when each addition contributes useful flavor, aroma, or texture. Noul means probability of inclusion, never an amount. A separate stage will choose discrete doses."
     return payload
@@ -39,6 +54,10 @@ def shortlist(noul, profile, config):
 
 
 def dose_options(name, config):
+    if config.get("mode") == "volume_parts":
+        return {("omit" if amount == 0 else f"parts_quarters_{int(amount * 4)}"):
+                {"amount": amount, "unit": "part", "volume_ml": amount * config["part_ml"]}
+                for amount in config["part_amounts"]}
     dispenser = config["dispensers"].get(name, "ladle")
     choices = {"omit": {"amount": 0, "unit": dispenser, "volume_ml": 0}}
     if dispenser == "shake":
@@ -58,10 +77,15 @@ def amount_payload(base, name, selected, prepared, catalog, config):
     state = copy.deepcopy(base["state"])
     state.update(selected_ingredients=selected, doses_already_chosen=prepared,
                  dosing_goal="Select a practical dose for this ingredient as part of the whole dip. Omit redundant ingredients. Consider all doses already chosen, strong seasoning, and the ingredients still to come. For squeeze bottles, estimate the dispensed volume against the 25 mL ladle; squeeze counts are not the unit. Shaker shakes have unknown volumes. Use seasoning judiciously; there is no hard cap on ingredient count or total ladle volume.")
+    if config.get("mode") == "volume_parts":
+        state["doses_already_chosen"] = {ingredient: {"amount": dose["amount"], "unit": "part"} for ingredient, dose in prepared.items()}
+        state["dosing_goal"] = "Choose parts by volume in a coherent dipping sauce. Consider strong seasoning, amounts already chosen and remaining ingredients. Omit redundant ingredients. There is no ingredient-count cap or total-parts cap."
     criteria = {}
     for key, dose in options.items():
         if key == "omit":
             description = "Omit this ingredient: unnecessary, redundant, or unsuitable for the current dip."
+        elif dose["unit"] == "part":
+            description = f"Add {dose['amount']:g} parts by volume."
         elif dose["unit"] == "shake":
             description = f"Add {dose['amount']} gentle shaker shake(s). A small uncalibrated seasoning dose, not a 25 mL ladle."
         elif dose["unit"] == "squeeze":
@@ -103,5 +127,5 @@ def generate_recipe(base, profile, catalog, config, ask, parse_noul):
         else:
             dose = parse_choice(ask(payload), name, options)
         prepared[name] = dose
-    servings = {i["id"]: prepared.get(i["id"], {"amount": 0, "unit": config["dispensers"].get(i["id"], "ladle"), "volume_ml": 0}) for i in catalog}
+    servings = {i["id"]: prepared.get(i["id"], {"amount": 0, "unit": ("part" if config.get("mode") == "volume_parts" else config["dispensers"].get(i["id"], "ladle")), "volume_ml": 0}) for i in catalog}
     return noul, selected, servings

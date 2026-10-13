@@ -232,7 +232,7 @@ def main():
             parser.error(str(exc))
         if args.threshold is not None or args.unit_ml != 5:
             parser.error("For practical mode set selection_threshold/ladle_ml in preparation config, not legacy threshold/unit-ml")
-        args.unit_ml = preparation["ladle_ml"]
+        args.unit_ml = preparation["part_ml"] if preparation.get("mode") == "volume_parts" else preparation["ladle_ml"]
     models_config = read_json(args.models_file) if not args.models else {"models": args.models, "source": "CLI"}
     models = list(dict.fromkeys(models_config["models"]))
     if not models or not all(isinstance(m, str) and m.strip() for m in models):
@@ -266,7 +266,7 @@ def main():
         "created_at": datetime.now(timezone.utc).isoformat(), "endpoint": ENDPOINT,
         "models_config": models_config, "selected_models": models, "profiles": profiles,
         "ingredients": list(INGREDIENTS), "repeats": args.repeats, "unit_ml": args.unit_ml,
-        "ingredient_catalog": INGREDIENT_CATALOG, "prompt_version": "8-v2-rubric-aware-deduplicated" if preparation else "6-noul-with-sugar",
+        "ingredient_catalog": INGREDIENT_CATALOG, "prompt_version": ("9-v3-volume-parts" if preparation.get("mode") == "volume_parts" else "8-v2-rubric-aware-deduplicated") if preparation else "6-noul-with-sugar",
         "method": args.method, "preparation": preparation,
         "threshold": args.threshold, "seed": args.seed, "timeout": args.timeout,
         "workers": args.workers, "retries": args.retries, "dry_run": args.dry_run, "requests_planned": len(jobs),

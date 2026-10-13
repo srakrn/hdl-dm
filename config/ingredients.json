@@ -24,12 +24,6 @@
     "flavor": "For this station, homemade soy sauce means dark soy sauce: deep soy savoriness, dark color, and a rounded, sometimes molasses-like sweetness. Saltiness and sweetness vary with the recipe."
   },
   {
-    "id": "chinese_barbecue_sauce",
-    "name": "Barbecue sauce",
-    "thai_name": "ซอสบาร์บีคิวจีน",
-    "flavor": "Shacha sauce (Chinese barbecue sauce): savory, roasted, oily, and aromatic, with deep umami and seafood notes. This condiment is confirmed to be shacha, rather than a sweet barbecue sauce."
-  },
-  {
     "id": "cooked_minced_pork",
     "name": "Minced pork",
     "thai_name": "หมูสับ",
@@ -112,12 +106,6 @@
     "name": "Oyster sauce",
     "thai_name": "น้ำมันหอย",
     "flavor": "Rounded savory umami, moderate saltiness, some sweetness, and a thick glossy texture. Oyster intensity varies by brand."
-  },
-  {
-    "id": "chili_oil",
-    "name": "Chili oil",
-    "thai_name": "น้ำมันพริก",
-    "flavor": "Chili heat in an oily base, often with toasted chili aroma. Adds richness; assumed no pronounced Sichuan-pepper numbness unless specified."
   },
   {
     "id": "mala_sauce",

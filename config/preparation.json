@@ -1,29 +1,6 @@
 {
-  "version": "v2-rubric-aware-deduplicated",
-  "ladle_ml": 25,
-  "ladle_amounts": [
-    0,
-    0.125,
-    0.25,
-    0.5,
-    1,
-    2
-  ],
+  "version": "v3-volume-parts",
   "selection_threshold": 0.7,
-  "dispensers": {
-    "fish_sauce": "squeeze",
-    "fermented_bean_curd": "squeeze",
-    "salt": "shake",
-    "sugar": "shake",
-    "sichuan_pepper": "shake",
-    "chopped_cilantro": "tongs",
-    "chopped_scallions": "tongs"
-  },
-  "shake_counts": [
-    0,
-    1,
-    2
-  ],
   "evaluation_rubric": {
     "weights": {
       "taste": 0.4,
@@ -37,6 +14,30 @@
     "complexity": "Reward distinct, complementary layers of flavor, aroma and texture with useful roles. Ingredient count alone earns nothing; a coherent simple dip can still taste excellent.",
     "novelty": "Reward an interesting, plausible and edible flavor idea beyond a basic Thai lime-and-fish-sauce dip. Novelty alone must not rescue a bad or unbalanced dip.",
     "validity": "First assess whether this actually functions as a seasoned dipping sauce for unseasoned food. Lightly seasoned minced pork alone is not a dipping sauce and receives zero across all criteria. A ready-made sauce alone may function as a dip, so one ingredient does not automatically mean failure.",
-    "opportunities": "Mala oil sauce, Shiitake sauce, Flavoured bean sauce, Barbecue sauce (shacha), Chilli oil and Fermented bean curd offer opportunities for distinctive numbing spice, mushroom umami, fermented depth, roasted savoriness or aromatic heat. Use only when allowed by the profile and in suitable doses. These are opportunities, not requirements or automatic complexity/novelty bonuses."
-  }
+    "opportunities": "Mala oil sauce, Shiitake sauce, Flavoured bean sauce and Fermented bean curd offer opportunities for distinctive numbing spice, mushroom umami, fermented depth, roasted savoriness or aromatic heat. Use only when allowed by the profile and in suitable doses. These are opportunities, not requirements or automatic complexity/novelty bonuses."
+  },
+  "mode": "volume_parts",
+  "part_ml": 5,
+  "part_amounts": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1,
+    1.25,
+    1.5,
+    1.75,
+    2,
+    2.25,
+    2.5,
+    2.75,
+    3,
+    3.5,
+    4,
+    4.5,
+    5,
+    6,
+    7,
+    8
+  ]
 }

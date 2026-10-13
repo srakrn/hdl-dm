@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -30,6 +31,16 @@ class JudgeTests(unittest.TestCase):
         self.data = read_json(ROOT / 'web/data/recipes.json')
         self.catalog = read_json(ROOT / 'config/ingredients.json')
         self.config = read_json(ROOT / 'config/judges.json')
+        ids = {i['id'] for i in self.catalog}
+        self.data['ingredients'] = [i for i in self.data['ingredients'] if i['id'] in ids]
+        for profile in self.data['profiles']:
+            profile['excluded'] = [i for i in profile['excluded'] if i in ids]
+        for model in self.data['models']:
+            for recipe in model['recipes']:
+                for variant in recipe['variants']:
+                    variant['units'] = {k:v for k,v in variant['units'].items() if k in ids}
+                    variant['servings'] = {k:v for k,v in variant['servings'].items() if k in ids}
+
 
     def test_inputs_are_blind_thai_bilingual_and_preserve_station_doses(self):
         recipe_id, recipe = next(recipe_inputs(self.data, self.catalog))
@@ -38,20 +49,20 @@ class JudgeTests(unittest.TestCase):
         self.assertNotIn('nickname', raw)
         for true_model in read_json(ROOT / 'web/data/reveal.json')['models'].values():
             self.assertNotIn(true_model, raw)
-        self.assertEqual(recipe['ladle_ml'], 25)
+        self.assertEqual(recipe['ladle_ml'], self.data['unit_ml'])
         self.assertTrue(all(i['name'] and i['flavor'] for i in recipe['ingredients']))
         for ingredient in recipe['ingredients']:
             if ingredient['unit'] == 'shake':
                 self.assertIsNone(ingredient['approximate_volume_ml'])
             else:
-                self.assertEqual(ingredient['approximate_volume_ml'], ingredient['amount'] * 25)
+                self.assertEqual(ingredient['approximate_volume_ml'], ingredient['amount'] * self.data['unit_ml'])
         by_id = {i['id']: i for i in self.catalog}
         for ingredient in recipe['allowed_ingredients']:
             item = by_id[ingredient['id']]
             self.assertEqual(ingredient['name'], f"{item['thai_name']} ({item['name']})")
             self.assertRegex(ingredient['flavor'], r'[ก-๙]')
         self.assertRegex(recipe['cooking_context'], r'[ก-๙]')
-        self.assertTrue(all('ช้อนใหญ่' in i['measurement_explanation'] or 'เขย่า' in i['measurement_explanation'] for i in recipe['ingredients']))
+        self.assertTrue(all('ช้อนตวง' in i['measurement_explanation'] or 'ช้อนใหญ่' in i['measurement_explanation'] or 'เขย่า' in i['measurement_explanation'] for i in recipe['ingredients']))
         payload = build_payload(self.config['judges'][0], recipe)
         self.assertEqual(payload['response_format']['type'], 'json_schema')
         self.assertIn('ภาษาไทย', payload['messages'][0]['content'])
@@ -140,7 +151,8 @@ class JudgeTests(unittest.TestCase):
                 judge['model'] = f'test/model{index}'
             write_json(path / 'config.json', config)
             catalog = [{'id': j['model'], 'name': j['model'], 'created': 1} for j in config['judges']]
-            arguments = ['judge_recipes.py', '--config', str(path / 'config.json'), '--limit', '1',
+            write_json(path / 'data.json', self.data)
+            arguments = ['judge_recipes.py', '--data', str(path / 'data.json'), '--config', str(path / 'config.json'), '--limit', '1',
                          '--out', str(path / 'run'), '--public', str(path / 'public.json')]
             def model_catalog(*args, **kwargs):
                 return io.BytesIO(json.dumps({'data': catalog}).encode())
@@ -148,6 +160,14 @@ class JudgeTests(unittest.TestCase):
                     patch('judge_recipes.urlopen', side_effect=model_catalog), \
                     patch('judge_recipes.post', side_effect=lambda payload, key, timeout: response(model=payload['model'])) as api:
                 self.assertEqual(judge_recipes.main(), 0)
+                # An older completed DeepSeek critique remains valid after a budget increase.
+                log_path = path / 'run/results.jsonl'
+                records = [json.loads(line) for line in log_path.read_text().splitlines()]
+                for record in records:
+                    if record['judge_id'] == 'deepseek':
+                        record['request']['max_tokens'] = 1800
+                        record['request_sha256'] = hashlib.sha256(json.dumps([self.data['dataset_id'], config['prompt_version'], config['weights'], record['request']], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+                log_path.write_text(''.join(json.dumps(r,ensure_ascii=False)+'\n' for r in records))
                 self.assertEqual(judge_recipes.main(), 0)
                 self.assertEqual(api.call_count, 3)
             public = read_json(path / 'public.json')
@@ -158,6 +178,30 @@ class JudgeTests(unittest.TestCase):
             self.assertEqual(read_json(path / 'run/summary.json')['reported_cost_usd'], .003)
             self.assertIn('started', raw)
             self.assertIn('usage', raw)
+
+    def test_exhausted_reasoning_recovers_only_failed_review_and_reuses_it(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)
+            config = copy.deepcopy(self.config)
+            for judge in config['judges']:
+                judge.pop('latest_family', None)
+                judge['model'] = 'deepseek/deepseek-v4.1-flash' if judge['id'] == 'deepseek' else f"test/{judge['id']}"
+            write_json(path / 'config.json', config)
+            write_json(path / 'data.json', self.data)
+            catalog = [{'id': j['model'], 'name': j['model'], 'created': 1} for j in config['judges']]
+            arguments = ['judge_recipes.py', '--data', str(path / 'data.json'), '--config', str(path / 'config.json'), '--limit', '1', '--out', str(path / 'run'), '--public', str(path / 'public.json')]
+            def post(payload, *args):
+                if payload['model'].startswith('deepseek/') and payload['reasoning'].get('enabled') is not False:
+                    return {'choices': [{'finish_reason': 'length', 'message': {'content': ''}}], 'usage': {'completion_tokens_details': {'reasoning_tokens': 8192}}}
+                return response(model=payload['model'])
+            with patch('judge_recipes.get_api_key', return_value='fake'), patch('judge_recipes.urlopen', side_effect=lambda *a, **k: io.BytesIO(json.dumps({'data': catalog}).encode())), patch('judge_recipes.post', side_effect=post) as api:
+                with patch.object(sys, 'argv', arguments):
+                    self.assertEqual(judge_recipes.main(), 1)
+                with patch.object(sys, 'argv', arguments + ['--retry-failed']):
+                    self.assertEqual(judge_recipes.main(), 0)
+                with patch.object(sys, 'argv', arguments):
+                    self.assertEqual(judge_recipes.main(), 0)
+                self.assertEqual(api.call_count, 4)
 
 
 if __name__ == '__main__':

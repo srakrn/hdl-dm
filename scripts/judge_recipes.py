@@ -113,7 +113,9 @@ def recipe_inputs(dataset, catalog):
                             continue
                         quantity = {'amount': amount, 'unit': 'legacy_volume_unit', 'approximate_volume_ml': amount * dataset['unit_ml']}
                     item = by_id[ingredient]
-                    if quantity['unit'] == 'shake':
+                    if quantity['unit'] == 'part':
+                        quantity['measurement_explanation'] = f"{quantity['amount']} ช้อนตวง ช้อนตวงหนึ่งเท่ากับ 5 mL รวม {quantity['approximate_volume_ml']} mL"
+                    elif quantity['unit'] == 'shake':
                         quantity['measurement_explanation'] = f"เขย่าเบา ๆ {quantity['amount']} ครั้ง ไม่ทราบปริมาตร ไม่ใช่ช้อนชา"
                     else:
                         quantity['measurement_explanation'] = f"กะเทียบ {quantity['amount']} ช้อนใหญ่ ประมาณ {quantity['approximate_volume_ml']} mL ไม่ใช่จำนวนครั้งที่บีบ"
@@ -125,6 +127,7 @@ def recipe_inputs(dataset, catalog):
                         'thai_mild': 'ไม่เผ็ด: น้ำจิ้มรสไทย ไม่เผ็ดพริกและไม่ชาลิ้นจากพริกไทยเสฉวน',
                         'thai_no_vegetables': 'ไม่ใส่ผัก: งดผักชีซอยและต้นหอมซอย แต่ใช้กระเทียมบด กระเทียมเจียว พริก เห็ด และซอสได้'}[recipe['profile_id']],
                     'excluded_ingredients': [describe(by_id[i]) for i in profile['excluded']], 'ladle_ml': dataset.get('preparation', {}).get('ladle_ml', dataset['unit_ml']),
+                    'measurement_mode': dataset.get('preparation', {}).get('mode', 'legacy'),
                     'recipe_note': 'รายการ ingredients ด้านล่างคือวัตถุดิบที่ใส่จริงทั้งหมด พร้อมปริมาณครบ ไม่มีรายการอื่นแอบใส่; allowed_ingredients ใช้เสนอเติมเท่านั้น',
                     'ingredients': ingredients,
                     'allowed_ingredients': [describe(i) for i in catalog if i['id'] not in profile['excluded']],
@@ -132,10 +135,16 @@ def recipe_inputs(dataset, catalog):
 
 
 def build_payload(judge, recipe):
+    system = SYSTEM
+    if recipe.get('measurement_mode') == 'volume_parts':
+        start = system.index('ช้อนใหญ่คือ')
+        end = system.index('ตอบ JSON', start)
+        system = system[:start] + 'ทุกวัตถุดิบใช้ช้อนตวง 5 mL รวมเกลือ น้ำตาล พริกไทย ผัก และของในขวดบีบ ไม่มีหน่วยเขย่าหรือจำนวนครั้งบีบ อย่าเปลี่ยนสัดส่วนในสูตร ตัวเลือกช้อนตวงคือ 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.5, 4, 4.5, 5, 6, 7, 8\ncritique, strength และ concern ให้พูดสัดส่วนเชิงคุณภาพ ไม่ทวนตัวเลขปริมาณ suggestion ใช้ช้อนตวงตามตัวเลือกข้างต้น ห้ามเดาหน่วยอื่น\n' + system[end:]
+        system = system.replace(' ซอสบาร์บีคิวจีน น้ำมันพริก', '')
     return {'model': judge['model'], 'messages': [
-        {'role': 'system', 'content': SYSTEM + '\nบทบาทของคุณ: ' + judge['persona'] + '\nตอบข้อความทุกช่องเป็นภาษาไทยเท่านั้น (คะแนนเป็นตัวเลข) ชื่อคาแรกเตอร์ของคุณคือ ' + judge['character']},
+        {'role': 'system', 'content': system + '\nบทบาทของคุณ: ' + judge['persona'] + '\nตอบข้อความทุกช่องเป็นภาษาไทยเท่านั้น (คะแนนเป็นตัวเลข) ชื่อคาแรกเตอร์ของคุณคือ ' + judge['character']},
         {'role': 'user', 'content': json.dumps(recipe, ensure_ascii=False, allow_nan=False)}],
-        'max_tokens': 1800, 'reasoning': {'effort': 'low', 'exclude': True},
+        'max_tokens': 8192 if judge.get('id') == 'deepseek' else 1800, 'reasoning': {'effort': 'low', 'exclude': True},
         'response_format': {'type': 'json_schema', 'json_schema': {'name': 'sauce_critique', 'strict': True, 'schema': SCHEMA}},
         'provider': {'require_parameters': True}}
 
@@ -248,6 +257,24 @@ def main():
                     continue
                 payload = build_payload(judge, recipe)
                 digest = hashlib.sha256(json.dumps([dataset['dataset_id'], config['prompt_version'], config['weights'], payload], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+                # Retain valid critiques already completed with the smaller output budget.
+                if judge['id'] == 'deepseek':
+                    legacy_payload = {**payload, 'max_tokens': 1800}
+                    legacy_digest = hashlib.sha256(json.dumps([dataset['dataset_id'], config['prompt_version'], config['weights'], legacy_payload], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+                    if cached.get(legacy_digest, {}).get('status') == 'ok':
+                        payload, digest = legacy_payload, legacy_digest
+                prior = cached.get(digest, {})
+                response = prior.get('response', {})
+                reasoning_tokens = response.get('usage', {}).get('completion_tokens_details', {}).get('reasoning_tokens', 0)
+                if (judge['model'] == 'deepseek/deepseek-v4.1-flash' and prior.get('status') == 'error'
+                        and any(c.get('finish_reason') == 'length' for c in response.get('choices', []))
+                        and reasoning_tokens >= payload['max_tokens']):
+                    # This model supports disabling reasoning; preserve successes and only
+                    # recover the response whose entire budget produced no visible output.
+                    recovered_payload = {**payload, 'reasoning': {'enabled': False, 'exclude': True}}
+                    recovered_digest = hashlib.sha256(json.dumps([dataset['dataset_id'], config['prompt_version'], config['weights'], recovered_payload], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+                    if args.retry_failed or cached.get(recovered_digest, {}).get('status') == 'ok':
+                        payload, digest = recovered_payload, recovered_digest
                 job = (recipe_id, judge, payload, digest)
                 all_jobs.append(job)
                 if judge['id'] in selected and (args.limit is None or recipe_id in {r[0] for r in recipes[:args.limit]}):

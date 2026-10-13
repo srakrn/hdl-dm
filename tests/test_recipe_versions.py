@@ -31,9 +31,12 @@ class RecipeVersionTests(unittest.TestCase):
             score = {'dataset_id': 'old', 'stars': 4}
             write_json(root / 'recipes.json', old)
             write_json(root / 'scores.json', score)
+            write_json(root / 'judgments.json', {'dataset_id': 'old', 'recipes': {}})
             index = prepare_versions(root, 'new')
             self.assertEqual(read_json(root / 'versions/v1/recipes.json'), old)
             self.assertEqual(read_json(root / 'versions/v1/scores.json'), score)
+            self.assertEqual(read_json(root / 'versions/v1/judgments.json')['dataset_id'], 'old')
+            self.assertFalse((root / 'judgments.json').exists())
             self.assertEqual(index['current'], 'v2')
             self.assertEqual([v['label'] for v in index['versions']], ['รุ่นที่ 1', 'รุ่นที่ 2'])
             write_json(root / 'versions.json', index)

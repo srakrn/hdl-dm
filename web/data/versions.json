@@ -1,5 +1,5 @@
 {
-  "current": "v2",
+  "current": "v3",
   "versions": [
     {
       "id": "v1",
@@ -10,8 +10,14 @@
     {
       "id": "v2",
       "label": "รุ่นที่ 2",
-      "path": "",
+      "path": "versions/v2/",
       "dataset_id": "77482f658baf2373f099"
+    },
+    {
+      "id": "v3",
+      "label": "รุ่นที่ 3",
+      "path": "",
+      "dataset_id": "b6ccfb29d14336f3f62e"
     }
   ]
 }

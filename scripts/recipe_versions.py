@@ -22,6 +22,11 @@ def prepare_versions(data_dir, dataset_id):
         source = data_dir / name
         if source.exists():
             shutil.copy2(source, archive / name)
+    # The old critiques are now archived; never bind them to the new recipes if
+    # the judging API fails before it can write a replacement.
+    judgments = data_dir / 'judgments.json'
+    if judgments.exists():
+        judgments.unlink()
     current['path'] = f"versions/{current['id']}/"
     number = max(int(v['id'][1:]) for v in index['versions']) + 1
     version = {'id': f'v{number}', 'label': f'รุ่นที่ {number}', 'path': '', 'dataset_id': dataset_id}

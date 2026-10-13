@@ -12,6 +12,8 @@ test('original portions convert to small spoons for every measured dispenser',()
       assert.equal(doseLabel({amount:old,unit,volume_ml:old*25}),`${action} ${converted} ช้อนเล็ก`);
     }
   }
+  assert.equal(doseLabel({amount:2.75,unit:'part',volume_ml:13.75}),'ตัก 2 ¾ ช้อนตวง');
+  assert.equal(doseLabel({amount:.25,unit:'part',volume_ml:1.25}),'ตัก ¼ ช้อนตวง');
   assert.equal(smallSpoonAmount(1.375),'5 ½');
   assert.equal(doseLabel({amount:0,unit:'ladle',volume_ml:0}),'ไม่ใส่');
   assert.equal(doseLabel({amount:2,unit:'shake',volume_ml:null}),'เขย่าเบา ๆ 2 ครั้ง');
@@ -24,8 +26,8 @@ test('both published versions convert without changing original answers or revie
     let converted=0;
     for(const model of data.models) for(const recipe of model.recipes) for(const variant of recipe.variants) {
       for(const dose of Object.values(variant.servings)) {
-        if(dose.amount>0 && ['ladle','squeeze','tongs'].includes(dose.unit) && dose.volume_ml!==null) {
-          assert.equal(doseLabel(dose).includes('ช้อนเล็ก'),true);converted++;
+        if(dose.amount>0 && ['part','ladle','squeeze','tongs'].includes(dose.unit) && dose.volume_ml!==null) {
+          assert.equal(doseLabel(dose).includes(dose.unit==='part' ? 'ช้อนตวง' : 'ช้อนเล็ก'),true);converted++;
         }
       }
     }

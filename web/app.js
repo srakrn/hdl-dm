@@ -14,6 +14,7 @@ function ladleAmount(value) {
 const smallSpoonAmount = largeSpoons => ladleAmount(largeSpoons * 4);
 function doseLabel(dose) {
   if (!dose.amount) return "ไม่ใส่";
+  if (dose.unit === "part") return `ตัก ${ladleAmount(dose.amount)} ช้อนตวง`;
   if (dose.unit === "shake") return `เขย่าเบา ๆ ${dose.amount} ครั้ง`;
   if (dose.unit === "squeeze" && dose.volume_ml === null) return `บีบสั้น ๆ ${dose.amount} ครั้ง`;
   const action = dose.unit === "squeeze" ? "บีบประมาณ" : dose.unit === "tongs" ? "คีบประมาณ" : "ตัก";
@@ -151,12 +152,13 @@ function renderRecipe() {
   if (!recipe.variants.some(v => v.id === state.round)) state.round = recipe.variants.find(v => v.id !== "average")?.id || recipe.variants[0].id;
   const variant = recipe.variants.find(v => v.id === state.round);
   const practical = state.data.method === "practical";
+  const parts = state.data.preparation?.mode === "volume_parts";
   $("unit-control").hidden = practical;
-  $("preparation-note").textContent = practical ? "ช้อนเล็กในที่นี้ คือช้อนเล็กที่ใช้ตักส่วนผสมบาร์น้ำจิ้ม แต่ในบางสาขา ช้อนของน้ำจิ้มงาจะใหญ่กว่าเพื่อน ให้กะให้เท่าช้อนเล็กที่ใช้ตวงเครื่องปรุงอื่นๆ (ใส่แล้วติ๊กไว้ได้ จะได้ไม่ต้องจำเอง)" : "ผลการทดลองเดิม แสดงปริมาณเป็นหน่วย";
+  $("preparation-note").textContent = parts ? "หนึ่งช้อนตวง = 5 mL ใช้ตวงทุกวัตถุดิบด้วยช้อนเดียวกัน (ใส่แล้วติ๊กไว้ได้ จะได้ไม่ต้องจำเอง)" : practical ? "ช้อนเล็กในที่นี้ คือช้อนเล็กที่ใช้ตักส่วนผสมบาร์น้ำจิ้ม แต่ในบางสาขา ช้อนของน้ำจิ้มงาจะใหญ่กว่าเพื่อน ให้กะให้เท่าช้อนเล็กที่ใช้ตวงเครื่องปรุงอื่นๆ (ใส่แล้วติ๊กไว้ได้ จะได้ไม่ต้องจำเอง)" : "ผลการทดลองเดิม แสดงปริมาณเป็นหน่วย";
   const items = state.data.ingredients.map(i => ({...i, units:variant.units[i.id], dose:practical ? variant.servings[i.id] : null}));
   const included = item => practical ? item.dose.amount > 0 : item.units > 0;
   if (practical) {
-    const order = {ladle:0, squeeze:1, shake:2, tongs:3};
+    const order = {part:0, ladle:0, squeeze:1, shake:2, tongs:3};
     items.sort((a,b) => order[a.dose.unit] - order[b.dose.unit] || b.dose.amount - a.dose.amount || a.label.localeCompare(b.label,"th"));
   } else items.sort((a,b) => b.units - a.units || a.label.localeCompare(b.label, "th"));
   const checkKey = `${state.data.dataset_id}:${variant.recipe_id}`;
@@ -185,8 +187,8 @@ function renderRecipe() {
   $("show-zero").setAttribute("aria-expanded", String(state.showZero));
   if (practical) {
     const measured = items.filter(i => i.dose.volume_ml !== null).reduce((sum,i) => sum + i.dose.volume_ml / state.data.unit_ml,0);
-    $("total-label").textContent = "รวมส่วนที่กะเป็นช้อน";
-    $("total-volume").textContent = `${smallSpoonAmount(measured)} ช้อนเล็ก`;
+    $("total-label").textContent = parts ? "รวมปริมาณที่ตวง" : "รวมส่วนที่กะเป็นช้อน";
+    $("total-volume").textContent = parts ? `${ladleAmount(measured)} ช้อนตวง` : `${smallSpoonAmount(measured)} ช้อนเล็ก`;
   } else {
     $("total-label").textContent = "รวมหนึ่งถ้วย";
     $("total-volume").textContent = `${format(items.reduce((sum,i) => sum + i.units * state.unit, 0))} mL`;

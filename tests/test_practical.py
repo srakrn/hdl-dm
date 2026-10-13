@@ -15,7 +15,9 @@ from refresh_site import build_dataset
 
 class PracticalTests(unittest.TestCase):
     def setUp(self):
-        self.config = b.read_json(b.ROOT / "config/preparation.json")
+        self.config = b.read_json(b.ROOT / "web/data/versions/v1/recipes.json")["preparation"]
+        self.config["dispensers"] = {k:v for k,v in self.config["dispensers"].items() if k in b.INGREDIENTS}
+        self.config["evaluation_rubric"] = b.read_json(b.ROOT / "config/preparation.json")["evaluation_rubric"]
         self.profile = b.read_json(b.ROOT / "config/profiles.json")[1]
         self.base = selection_payload(b.build_payload("test/model", self.profile, 25), self.config)
 
@@ -36,7 +38,7 @@ class PracticalTests(unittest.TestCase):
         self.assertEqual(rubric['weights'], b.read_json(b.ROOT / 'config/judges.json')['weights'])
         payload, _ = amount_payload(self.base, 'lime_juice', ['lime_juice'], {}, b.INGREDIENT_CATALOG, self.config)
         self.assertEqual(payload['state']['evaluation_rubric'], rubric)
-        self.assertEqual(len(b.INGREDIENTS), 26)
+        self.assertEqual(len(b.INGREDIENTS), 24)
         for removed in ('garlic', 'cilantro'):
             self.assertNotIn(removed, self.base['questions'])
             self.assertNotIn(removed, self.config['dispensers'])
@@ -109,11 +111,11 @@ class PracticalTests(unittest.TestCase):
             self.assertEqual(record["api_calls"], 3)
             self.assertEqual(record["attempts"], 3)
             self.assertAlmostEqual(record["usage"]["cost"], .03)
-            self.assertEqual(record["volume_ml"]["fish_sauce"], 3.125)
-            self.assertEqual(record["volume_ml"]["lime_juice"], 3.125)
+            self.assertEqual(record["volume_ml"]["fish_sauce"], 1.25)
+            self.assertEqual(record["volume_ml"]["lime_juice"], 1.25)
             self.assertEqual(len(record["stages"]), 3)
             recipe = b.read_json(out / "recipes.json")[0]
-            self.assertEqual(recipe["servings"]["น้ำปลา"]["unit"], "squeeze")
+            self.assertEqual(recipe["servings"]["น้ำปลา"]["unit"], "part")
             self.assertNotIn("test-key", (out / "results.jsonl").read_text())
 
     def test_parallel_recipes_keep_selection_and_stages_isolated(self):
