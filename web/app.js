@@ -152,8 +152,7 @@ function renderRecipe() {
   const variant = recipe.variants.find(v => v.id === state.round);
   const practical = state.data.method === "practical";
   $("unit-control").hidden = practical;
-  $("preparation-note").textContent = practical ? "ใช้ช้อนเล็กตวง · ตักอย่างน้อย ½ ช้อน · ติ๊กเมื่อใส่แล้ว" : "ผลการทดลองเดิม แสดงปริมาณเป็นหน่วย";
-  $("spoon-note").hidden = !practical;
+  $("preparation-note").textContent = practical ? "ช้อนเล็กในที่นี้ คือช้อนเล็กที่ใช้ตักส่วนผสมบาร์น้ำจิ้ม แต่ในบางสาขา ช้อนของน้ำจิ้มงาจะใหญ่กว่าเพื่อน ให้กะให้เท่าช้อนเล็กที่ใช้ตวงเครื่องปรุงอื่นๆ (ใส่แล้วติ๊กไว้ได้ จะได้ไม่ต้องจำเอง)" : "ผลการทดลองเดิม แสดงปริมาณเป็นหน่วย";
   const items = state.data.ingredients.map(i => ({...i, units:variant.units[i.id], dose:practical ? variant.servings[i.id] : null}));
   const included = item => practical ? item.dose.amount > 0 : item.units > 0;
   if (practical) {
