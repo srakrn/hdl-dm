@@ -10,6 +10,16 @@ function ladleAmount(value) {
   return whole ? `${whole}${fraction ? " " + fraction : ""}` : fraction || "0";
 }
 
+// Original model answers use large-spoon units; display each as four small spoons.
+const smallSpoonAmount = largeSpoons => ladleAmount(largeSpoons * 4);
+function doseLabel(dose) {
+  if (!dose.amount) return "ไม่ใส่";
+  if (dose.unit === "shake") return `เขย่าเบา ๆ ${dose.amount} ครั้ง`;
+  if (dose.unit === "squeeze" && dose.volume_ml === null) return `บีบสั้น ๆ ${dose.amount} ครั้ง`;
+  const action = dose.unit === "squeeze" ? "บีบประมาณ" : dose.unit === "tongs" ? "คีบประมาณ" : "ตัก";
+  return `${action} ${smallSpoonAmount(dose.amount)} ช้อนเล็ก`;
+}
+
 async function readData(file) {
   const response = await fetch(`./data/${file}`, {cache:"no-cache"});
   if (!response.ok) throw new Error(`Cannot load ${file}`);
@@ -142,14 +152,8 @@ function renderRecipe() {
   const variant = recipe.variants.find(v => v.id === state.round);
   const practical = state.data.method === "practical";
   $("unit-control").hidden = practical;
-  $("preparation-note").textContent = practical ? `ช้อนใหญ่ ≈ ${format(state.data.unit_ml)} mL · ตักอย่างน้อย ⅛ ช้อน · ติ๊กเมื่อใส่แล้ว` : "ผลการทดลองเดิม ยังไม่ได้สร้างสูตรตามช้อนใหญ่ 25 mL";
-  const amountLabel = dose => {
-    if (!dose.amount) return "ไม่ใส่";
-    if (dose.unit === "squeeze" && dose.volume_ml === null) return `บีบสั้น ๆ ${dose.amount} ครั้ง`;
-    if (dose.unit === "squeeze") return `บีบประมาณ ${ladleAmount(dose.amount)} ช้อนใหญ่`;
-    if (dose.unit === "shake") return `เขย่าเบา ๆ ${dose.amount} ครั้ง`;
-    return `${dose.unit === "tongs" ? "คีบประมาณ" : "ตัก"} ${ladleAmount(dose.amount)} ช้อนใหญ่`;
-  };
+  $("preparation-note").textContent = practical ? "ใช้ช้อนเล็กตวง · ตักอย่างน้อย ½ ช้อน · ติ๊กเมื่อใส่แล้ว" : "ผลการทดลองเดิม แสดงปริมาณเป็นหน่วย";
+  $("spoon-note").hidden = !practical;
   const items = state.data.ingredients.map(i => ({...i, units:variant.units[i.id], dose:practical ? variant.servings[i.id] : null}));
   const included = item => practical ? item.dose.amount > 0 : item.units > 0;
   if (practical) {
@@ -171,7 +175,7 @@ function renderRecipe() {
       name.prepend(checkbox);
     }
     if (profile.excluded.includes(item.id) && included(item)) name.append(node("span", "excluded-tag", "โจทย์ไม่ใช้"));
-    const amount = node("div", "ingredient-amount", practical ? amountLabel(item.dose) : `${format(item.units)} หน่วย`);
+    const amount = node("div", "ingredient-amount", practical ? doseLabel(item.dose) : `${format(item.units)} หน่วย`);
     if (!practical) amount.append(node("small", "", `${format(item.units * state.unit)} mL`));
     row.append(name, amount);
     return row;
@@ -183,7 +187,7 @@ function renderRecipe() {
   if (practical) {
     const measured = items.filter(i => i.dose.volume_ml !== null).reduce((sum,i) => sum + i.dose.volume_ml / state.data.unit_ml,0);
     $("total-label").textContent = "รวมส่วนที่กะเป็นช้อน";
-    $("total-volume").textContent = `${ladleAmount(measured)} ช้อนใหญ่`;
+    $("total-volume").textContent = `${smallSpoonAmount(measured)} ช้อนเล็ก`;
   } else {
     $("total-label").textContent = "รวมหนึ่งถ้วย";
     $("total-volume").textContent = `${format(items.reduce((sum,i) => sum + i.units * state.unit, 0))} mL`;
